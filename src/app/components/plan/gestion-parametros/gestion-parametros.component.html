@@ -1,0 +1,63 @@
+<mat-card class="card-oas" [style.width.%]="97">
+	<div class="container-border">
+		<mat-card-header>
+			<mat-card-title>Gestión de Parámetros</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+			<u class="textGuide">
+				En esta sección usted podrá visualizar los parámetros asociados al sistema SISGPLAN,
+				con sus características y acciones para cada uno de ellos.
+			</u>
+		</mat-card-content>
+		<mat-card-content>
+			<mat-form-field [style.width.%]="50">
+				<mat-label>Búsqueda</mat-label>
+				<input matInput (keyup)="applyFilter($event)" placeholder="Ej. Parámetro" #input>
+			</mat-form-field>
+			<div class="mat-elevation-z8">
+				<table mat-table [dataSource]="dataSource" matSort>
+					<ng-container matColumnDef="Id">
+						<th mat-header-cell *matHeaderCellDef> Id </th>
+						<td mat-cell *matCellDef="let row"> {{row.Id}} </td>
+					</ng-container>
+					<ng-container matColumnDef="Nombre">
+						<th mat-header-cell *matHeaderCellDef> Concepto </th>
+						<td mat-cell *matCellDef="let row"> {{row.ParametroId.Nombre}} </td>
+					</ng-container>
+					<ng-container matColumnDef="Valor">
+						<th mat-header-cell *matHeaderCellDef> Valor </th>
+						<td mat-cell *matCellDef="let row"> {{row.Valor}} </td>
+					</ng-container>
+					<ng-container matColumnDef="Vigencia">
+						<th mat-header-cell *matHeaderCellDef> Vigencia </th>
+						<td mat-cell *matCellDef="let row"> {{row.PeriodoId.Nombre}} </td>
+					</ng-container>
+					<ng-container matColumnDef="actions">
+						<th mat-header-cell *matHeaderCellDef class="tituloAcciones">Acciones</th>
+						<td mat-cell *matCellDef="let row" class="botonesAcciones">
+							<button mat-icon-button (click)="editar(row)"><mat-icon>edit</mat-icon></button>
+							<button mat-icon-button (click)="inactivar(row)"><mat-icon>delete_outline</mat-icon></button>
+						</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+					<tr class="mat-row" *matNoDataRow>
+						<td class="mat-cell" colspan="5">No se han encontrado resultados para la búsqueda "{{input.value}}"</td>
+					</tr>
+				</table>
+				<mat-paginator class="paginator" [pageSizeOptions]="[20, 30, 50, 100]" [pageSize]="10" aria-label="Select page of users"></mat-paginator>
+			</div>
+			<div class="botonAgregarParametro">
+				<button mat-raised-button color="primary" (click)="onChange('agregarParametro')">Agregar Parámetro</button>
+			</div>
+		</mat-card-content>
+	</div>
+</mat-card>
+<div>
+	<ng-container *ngIf="banderaAdicion==true">
+		<app-form-parametros [banderaAdicion]="true" [vigencias]="vigencias" (limpiar)="ocultarComponenteHijo()"></app-form-parametros>
+	</ng-container>
+	<ng-container *ngIf="banderaEdicion==true">
+		<app-form-parametros [banderaEdicion]="true" [vigencias]="vigencias" [parametroPeriodoEdicion]="parametroPeriodoEdicion" (limpiar)="ocultarComponenteHijo()"></app-form-parametros>
+	</ng-container>
+</div>

@@ -1,0 +1,35 @@
+.container-border {
+    margin: 3% 0% 0% 0%;
+    border: 1px solid var(--primary);
+    padding: 1%;
+    border-radius: 15px 15px 15px 15px;
+  }
+  
+  .textGuide {
+    background-color: #ffff;
+    border: 1px solid var(--primary);
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: var(--primary) 3px 4px 0;
+    color: #0a0a0a;
+    display: inline-block;
+    font-size: 1.1em;
+    padding: 1%;
+    text-decoration: none;
+    margin-bottom: 1%;
+    width: 77%;
+  }
+  
+  th {
+    color: white;
+    text-align: center !important;
+    padding: 0px !important;
+  }
+  
+  td {
+      text-align: center !important;
+    padding: 0px !important;
+  }
+  
+  .mat-raised-button {
+    margin-top: 2%;
+  }

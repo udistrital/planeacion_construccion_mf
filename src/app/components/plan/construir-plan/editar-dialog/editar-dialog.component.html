@@ -1,0 +1,121 @@
+<mat-card class="card-dialog">
+  <mat-card-header>
+    <mat-card-title *ngIf="data.ban == 'nivel'">Editar Nivel {{data.nivel}}</mat-card-title>
+    <mat-card-title *ngIf="data.ban == 'plan'">Editar Plan</mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="formEditar">
+    <mat-card-content>
+      <mat-form-field appearance="fill" [style.width.%]="100">
+        <mat-label id="nombre-input-label">Nombre</mat-label>
+        <input type="text" matInput formControlName="nombre" placeholder="Ingrese un nombre" required>
+        <mat-icon matSuffix>create</mat-icon>
+        <mat-error *ngIf="formEditar.get('nombre').invalid">
+          {{getErrorMessage(formEditar.get('nombre'))}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" [style.width.%]="100">
+        <mat-label id="desc-input-label">Descripción / Objetivo</mat-label>
+        <textarea matInput formControlName="descripcion" placeholder="Realice una descripción o digite el objetivo"
+          required></textarea>
+        <mat-icon matSuffix>create</mat-icon>
+        <mat-error *ngIf="formEditar.get('descripcion').invalid">
+          {{getErrorMessage(formEditar.get('descripcion'))}}
+        </mat-error>
+      </mat-form-field>
+      <ng-container *ngIf="vTipoPlan">
+        <mat-form-field [style.width.%]="40">
+          <mat-label id="tipo-input-label">Tipo</mat-label>
+          <mat-select formControlName="tipo_plan_id" (selectionChange)="onChange($event.value)" required>
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let tipo of tiposPlanes" [value]="tipo._id">
+              {{tipo.nombre}}
+            </mat-option>
+          </mat-select>
+          <mat-hint>Seleccione el tipo de proyecto o plan</mat-hint>
+        </mat-form-field>
+      </ng-container>
+      <ng-container *ngIf="data">
+        <mat-label id="tipo-radio-group-label">Estado</mat-label>
+        <mat-radio-group formControlName="activo" class="example-radio-group"
+          aria-labelledby="example-radio-group-label" required>
+          <mat-radio-button class="example-radio-button" value="true">Activo</mat-radio-button>
+          <mat-radio-button class="example-radio-button" value="false">Inactivo</mat-radio-button>
+        </mat-radio-group>
+      </ng-container>
+      <ng-container *ngIf="vFormato">
+        <mat-label id="tipo-radio-group-label">Formato</mat-label>
+        <mat-radio-group formControlName="formato" class="example-radio-group"
+          aria-labelledby="example-radio-group-label" required>
+          <mat-radio-button class="example-radio-button" value="true">Sí</mat-radio-button>
+          <mat-radio-button class="example-radio-button" value="false">No</mat-radio-button>
+        </mat-radio-group>
+      </ng-container>
+      <ng-container *ngIf="vTipo">
+        <mat-label id="tipo-radio-group-label">Parámetros</mat-label>
+        <mat-radio-group formControlName="parametro" class="example-radio-group"
+          aria-labelledby="example-radio-group-label" (change)="verificarNivel($event)" required>
+          <mat-radio-button class="example-radio-button" value="true">Sí</mat-radio-button>
+          <mat-radio-button class="example-radio-button" value="false">No</mat-radio-button>
+        </mat-radio-group>
+        <ng-container *ngIf="vBandera">
+          <mat-label id="tipo-radio-group-label">Campo en tabla resumen</mat-label>
+          <mat-radio-group formControlName="banderaTabla" class="example-radio-group"
+            aria-labelledby="example-radio-group-label" (change)="verificarBandera($event.value)" required>
+            <mat-radio-button class="example-radio-button" value="true">Sí</mat-radio-button>
+            <mat-radio-button class="example-radio-button" value="false">No</mat-radio-button>
+          </mat-radio-group>
+        </ng-container>
+        <ng-container *ngIf="vParametros">
+          <mat-form-field appearance="fill" [style.width.%]="30">
+            <mat-label>Tipo de dato </mat-label>
+            <mat-select formControlName="tipoDato" (selectionChange)="onChange($event.value)" required>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let tipo of tipos" [value]="tipo.value">
+                {{tipo.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <ng-container *ngIf="opt">
+            <mat-form-field appearance="fill" [style.width.%]="100">
+              <mat-label id="opciones-input-label">Opciones</mat-label>
+              <p><i>Ingrese las opciones para la lista de selección separadas por coma, sin puntos al final y sin
+                  espacios al comienzo o al final. Ejemplo: valor1,valor2,...,valorN</i></p>
+              <input type="text" matInput formControlName="opciones"
+                placeholder="Ingrese las opciones para la lista de selección separadas por coma y sin espacios. Ejemplo: valor1,valor2,...,valorN"
+                required>
+              <mat-icon matSuffix>create</mat-icon>
+              <mat-error *ngIf="formEditar.get('opciones').invalid">
+                {{getErrorMessage(formEditar.get('opciones'))}}
+              </mat-error>
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="vObligatorio">
+            <mat-label class="requerido-radio-group-label">Obligatorio:</mat-label>
+            <mat-radio-group formControlName="requerido" class="requerido-radio-group"
+              aria-labelledby="example-radio-group-label" required>
+              <mat-radio-button class="requerido-radio-button" value="true">Sí</mat-radio-button>
+              <mat-radio-button class="requerido-radio-button" value="false">No</mat-radio-button>
+            </mat-radio-group>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </mat-card-content>
+    <mat-card-actions style="text-align: center;">
+      <ng-container>
+        <button [disabled]="!isFormularioModificado()" mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3"
+          [mat-dialog-close]="formEditar.value">
+          Guardar
+        </button>
+      </ng-container>
+      <br><br>
+      <ng-container>
+        <button mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3" (click)="deshacer()">
+          Deshacer
+        </button>
+        <button mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3" (click)="close()">
+          Cancelar
+        </button>
+      </ng-container>
+    </mat-card-actions>
+  </form>
+</mat-card>

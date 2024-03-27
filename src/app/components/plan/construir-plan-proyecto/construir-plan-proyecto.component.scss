@@ -1,0 +1,48 @@
+.mat-card{
+    background-color: #F1F5F8;
+  }
+  
+  
+  table {
+      width: 100%;
+    }
+  
+  th {
+      color: white;
+      text-align: center !important;
+  }
+  
+  
+  .td-align-right{
+    text-align: right;
+    justify-content: flex-end;
+  }
+  
+  .header-align-right{
+    display: flex;
+    padding: 21px 0;
+    justify-content: flex-end;
+  }
+  
+  .textGuide{
+    background-color: #ffff;
+    border: 1px solid var(--primary);
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: var(--primary) 3px 4px 0;
+    color: #0a0a0a;
+    display: inline-block;
+    font-size: 1.1em;
+    padding: 1%;
+    text-decoration: none;
+    margin-bottom: 1%;
+    width: 97%;
+  }
+  
+  
+  .mat-row:nth-child(even){
+    background-color:#E7D6D6;
+  }
+        
+  .mat-row:nth-child(odd){
+    background-color: white;
+  }

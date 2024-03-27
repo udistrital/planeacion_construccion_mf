@@ -1,0 +1,53 @@
+.mat-card {
+    background-color: #f1f5f8;
+  }
+  
+  table,
+  .paginator {
+    width: 80%;
+    margin-left: 10%;
+  }
+  
+  th {
+    color: white;
+    text-align: center !important;
+    padding: 0px !important;
+  }
+  
+  .botonesAcciones {
+    width: 20%;
+    text-align: center;
+    justify-content: center;
+  }
+  
+  .tituloAcciones {
+    padding-right: 0px;
+    width: fit-content;
+    justify-content: center;
+  }
+  
+  .textGuide {
+    background-color: #ffff;
+    border: 1px solid var(--primary);
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: var(--primary) 3px 4px 0;
+    color: #0a0a0a;
+    display: inline-block;
+    font-size: 1.1em;
+    padding: 1%;
+    text-decoration: none;
+    margin-bottom: 1%;
+    width: 77%;
+  }
+  
+  .mat-row:nth-child(even) {
+    background-color: #e7d6d6;
+  }
+  
+  .mat-row:nth-child(odd) {
+    background-color: white;
+  }
+  
+  .mat-raised-button {
+    margin: 2% 0% 2% 2%;
+  }

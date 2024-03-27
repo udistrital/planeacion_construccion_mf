@@ -1,0 +1,39 @@
+<mat-card class="card-oas">
+    <mat-card-header>
+      <mat-card-title>Construcción Plan / Proyecto</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <u class="textGuide">
+        Para iniciar la etapa de construcción usted deberá seleccionar un elemento del siguiente listado y posterior a ello agregar un nivel
+      </u>
+    </mat-card-content>
+    <mat-card-content>
+      <mat-form-field appearance="fill" [style.width.%]="100">
+        <mat-label id="tipo-input-label">{{nombrePlan}}</mat-label>
+          <mat-select>
+            <mat-option>{{nombrePlan}}</mat-option>
+          </mat-select>
+      </mat-form-field>
+      <br> <br>
+      <u class="textGuide">
+        En la siguiente tabla usted podrá encontrar los elementos creados identificados por NIVELES
+      </u>
+      <br> <br>
+      <app-arbol [tipoPlanId]="tipo_plan_id" [idPlan]="planId" [consulta]="false" (grupo)="receiveMessage($event)" [updateSignal]="eventChange"></app-arbol>
+    </mat-card-content>
+    <mat-card-footer *ngIf="tipo_plan_id != '611af8464a34b3599e3799a2' && tipo_plan_id != undefined" style="text-align: center;">
+      <ng-container>
+        <button mat-raised-button color="primary" (click)="agregarSub(1)">
+          Agregar Nivel
+        </button>
+      </ng-container>
+      <br><br>
+    </mat-card-footer>
+    <mat-card-actions>
+      <div style="margin: 1rem;">
+          <button mat-raised-button color="primary" (click)="volver()" class="col-3 mt-2 mb-3">
+              Regresar
+          </button>
+      </div>
+  </mat-card-actions>
+  </mat-card>
