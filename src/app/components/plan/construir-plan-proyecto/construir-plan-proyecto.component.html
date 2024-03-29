@@ -1,0 +1,57 @@
+<mat-card class="card-oas">
+    <mat-card-header>
+        <mat-card-title>Listar planes</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <u class="textGuide">
+            En esta sección usted podrá visualizar los planes construidos, con sus características y acciones para cada uno de ellos
+        </u>
+    </mat-card-content>
+    <mat-card-content>
+        <mat-form-field [style.width.%]="50">
+            <mat-label>Búsqueda</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Plan" #input>
+        </mat-form-field>
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef > Nombre </th>
+                    <td mat-cell *matCellDef="let row"> {{row.nombre}} </td>
+                </ng-container>
+            <ng-container matColumnDef="descripcion">
+                <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                <td mat-cell *matCellDef="let row"> {{row.descripcion}} </td>
+            </ng-container>
+            <ng-container matColumnDef="tipo_plan">
+                <th mat-header-cell *matHeaderCellDef> Tipo de plan </th>
+                <td mat-cell *matCellDef="let row"> {{row.nombre_tipo_plan}} </td>
+            </ng-container>
+            <ng-container matColumnDef="activo">
+                <th mat-header-cell *matHeaderCellDef > Estado </th>
+                <td mat-cell *matCellDef="let row"> {{row.activo}} </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef class="header-align-right"> Acciones </th>
+                <td mat-cell *matCellDef="let row" class="td-align-right">
+                    <button mat-icon-button (click)="construirPlan(row._id, row.nombre, row.tipo_plan_id)"><mat-icon>input</mat-icon></button>
+                    <button mat-icon-button (click)="editar(row)"><mat-icon>edit</mat-icon></button>
+                    <button mat-icon-button (click)="inactivar(row)"><mat-icon>delete_outline</mat-icon></button>
+               </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="5">No se han encontrado resultados para la búsqueda "{{input.value}}"</td>
+            </tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+          </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <div style="margin: 1rem; text-align: center;">
+            <button mat-raised-button color="primary" (click)="definir()" >
+                Definir nuevo plan/proyecto
+            </button>
+        </div>
+    </mat-card-actions>
+</mat-card>

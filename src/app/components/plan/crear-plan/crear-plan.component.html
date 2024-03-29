@@ -1,0 +1,111 @@
+<mat-card class="card-dialog">
+    <mat-card-header>
+        <mat-card-title>Definir Plan / Proyecto</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <u class="textGuide">
+            En esta sección usted podrá agregar características de base al documento o formato
+        </u>
+    </mat-card-content>
+    <form [formGroup]="formCrearPlan">
+        <mat-card-content>
+            <mat-grid-list [appOasGridCols]="{xs: 1, sm: 2, md: 2, lg: 2, xl: 4}" rowHeight="170px" gutterSize="25px">
+                <mat-grid-tile>
+                    <mat-form-field appearance="fill" [style.width.%]="200">
+                        <mat-label id="tipo-input-label">Tipo</mat-label>
+                        <mat-select formControlName="tipo" (selectionChange)="select($event.value)" required>
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let tipo of tipos" [value]="tipo">
+                                {{tipo.nombre}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="formCrearPlan.get('tipo').invalid">
+                            {{getErrorMessage(formCrearPlan.get('tipo'))}}
+                        </mat-error>
+                        <mat-hint>Seleccione el tipo de proyecto o plan</mat-hint>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <mat-form-field appearance="fill" [style.width.%]="200">
+                        <mat-label id="nombre-input-label">Nombre</mat-label>
+                        <input type="text" matInput formControlName="nombre"
+                            placeholder="Escriba el nombre del proyecto o plan" required>
+                        <mat-icon matSuffix>create</mat-icon>
+                        <mat-error *ngIf="formCrearPlan.get('nombre').invalid">
+                            {{getErrorMessage(formCrearPlan.get('nombre'))}}
+                        </mat-error>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <mat-form-field appearance="fill" [style.width.%]="200">
+                        <mat-label id="desc-input-label">Descripción</mat-label>
+                        <textarea matInput formControlName="desc"
+                            placeholder="Realice una descripción del proyecto o plan" required></textarea>
+                        <mat-icon matSuffix>create</mat-icon>
+                        <mat-error *ngIf="formCrearPlan.get('desc').invalid">
+                            {{getErrorMessage(formCrearPlan.get('desc'))}}
+                        </mat-error>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <mat-label id="tipo-radio-group-label">Estado</mat-label>
+                    <mat-radio-group formControlName="radioEstado" class="example-radio-group"
+                        aria-labelledby="example-radio-group-label" required>
+                        <mat-radio-button class="example-radio-button" value="true">Activo</mat-radio-button>
+                        <mat-radio-button class="example-radio-button" value="false">Inactivo</mat-radio-button>
+                    </mat-radio-group>
+                </mat-grid-tile>
+                <mat-grid-tile *ngIf="banderaFormato == true && nombrePlan != 'Proyecto Universitario Institucional'">
+                    <mat-label id="tipo-radio-group-label">Establecer como plantilla</mat-label>
+
+                    <mat-radio-group formControlName="radioFormato" class="example-radio-group"
+                        aria-labelledby="example-radio-group-label" required>
+                        <mat-radio-button class="example-radio-button" value="true">Sí</mat-radio-button>
+                        <mat-radio-button class="example-radio-button" value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                </mat-grid-tile>
+                <ng-container *ngIf="nombrePlan == 'Proyecto Universitario Institucional' || nombrePlan == 'Proyecto'">
+                    <mat-grid-tile>
+                        <mat-form-field appearance="fill" [style.width.%]="200">
+                            <mat-label id="tipo-input-label">Vigencia</mat-label>
+                            <mat-select formControlName="vigencia" required>
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let vigencia of vigencias" [value]="vigencia">
+                                    {{vigencia.Nombre}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint>Seleccione la vigencia</mat-hint>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <label class="width-label-upload">
+                            <input type="file" (change)="onChangeDocumento($event.target)">
+                            Adjuntar Documento...
+                        </label>
+                        <ng-container *ngIf="documento != undefined">
+                            <textarea class="width-text-documento" id="documento" placeholder="Documento Seleccionado"
+                                readonly>{{documento.name}}
+                            </textarea>
+                            <button class="icon-documento" mat-icon-button (click)="eliminarDocumento()">
+                                <mat-icon>delete_outline</mat-icon>
+                            </button>
+                        </ng-container>
+                    </mat-grid-tile>
+                </ng-container>
+            </mat-grid-list>
+        </mat-card-content>
+        <mat-card-content>
+            <u class="textGuide">
+                Active el siquiente botón cuando desee guardar la información ingresada
+            </u>
+        </mat-card-content>
+        <mat-card-actions>
+            <div style="margin: 1rem;">
+                <button [disabled]="!formCrearPlan.valid" mat-raised-button color="primary" (click)="createPlan()"
+                    class="col-3 mt-2 mb-3">
+                    Guardar
+                </button>
+            </div>
+        </mat-card-actions>
+    </form>
+</mat-card>

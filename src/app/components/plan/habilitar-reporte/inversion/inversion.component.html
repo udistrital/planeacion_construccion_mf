@@ -1,0 +1,135 @@
+<mat-card class="card-oas">
+    <mat-card-content>
+      <form [formGroup]="formFechas">
+        <div class="container-border">
+          <h2 class="titulo">Planes de Acción de Inversión</h2>
+          <mat-form-field appearance="fill" [style.width.%]="100">
+            <mat-label id="tipo-input-label">Seleccione la Vigencia</mat-label>
+            <mat-select (selectionChange)="onChangeVigencia($event.value)" [formControl]="selectVigencia">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let vigencia of vigencias" [value]="vigencia">
+                {{vigencia.Nombre}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill" [style.width.%]="100">
+            <mat-label id="tipo-input-label">Formulación / Seguimiento</mat-label>
+            <mat-select (selectionChange)="onChangeProceso($event.value)" [formControl]="selectTipo">
+              <mat-option value="formulaciones">Formulación</mat-option>
+              <mat-option value="seguimientos">Seguimiento</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <ng-container *ngIf="tipo=='seguimientos' && vigenciaSelected">
+          <div class="container-border">
+            <h4>Período 1</h4>
+            <mat-label class="label-fecha">Desde: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="30">
+              <mat-label>Seleccione una fecha</mat-label>
+              <input matInput [matDatepicker]="picker1" formControlName="fecha11">
+              <mat-hint>DD/MM/AAAA</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+            <mat-label class="label-fecha">Hasta: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="30">
+              <mat-label>Seleccione una fecha</mat-label>
+              <input matInput [matDatepicker]="picker2" formControlName="fecha12">
+              <mat-hint>DD/MM/AAAA</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="container-border">
+            <h4>Período 2</h4>
+            <mat-label class="label-fecha">Desde: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="30">
+              <mat-label>Seleccione una fecha</mat-label>
+              <input matInput [matDatepicker]="picker3" formControlName="fecha13">
+              <mat-hint>DD/MM/AAAA</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+            <mat-label class="label-fecha">Hasta: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="30">
+              <mat-label>Seleccione una fecha</mat-label>
+              <input matInput [matDatepicker]="picker4" formControlName="fecha14">
+              <mat-hint>DD/MM/AAAA</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+              <mat-datepicker #picker4></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="container-border">
+            <h4>Período 3</h4>
+            <mat-label class="label-fecha">Desde: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="30">
+              <mat-label>Seleccione una fecha</mat-label>
+              <input matInput [matDatepicker]="picker5" formControlName="fecha15">
+              <mat-hint>DD/MM/AAAA</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+              <mat-datepicker #picker5></mat-datepicker>
+            </mat-form-field>
+            <mat-label class="label-fecha">Hasta: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="30">
+              <mat-label>Seleccione una fecha</mat-label>
+              <input matInput [matDatepicker]="picker6" formControlName="fecha16">
+              <mat-hint>DD/MM/AAAA</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+              <mat-datepicker #picker6></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="container-border">
+            <h4>Período 4</h4>
+            <mat-label class="label-fecha">Desde: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="30">
+              <mat-label>Seleccione una fecha</mat-label>
+              <input matInput [matDatepicker]="picker7" formControlName="fecha17">
+              <mat-hint>DD/MM/AAAA</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+              <mat-datepicker #picker7></mat-datepicker>
+            </mat-form-field>
+            <mat-label class="label-fecha">Hasta: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="30">
+              <mat-label>Seleccione una fecha</mat-label>
+              <input matInput [matDatepicker]="picker8" formControlName="fecha18">
+              <mat-hint>DD/MM/AAAA</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
+              <mat-datepicker #picker8></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="tipo=='formulaciones' && vigenciaSelected">
+          <div class="container-border-for">
+            <h4>Período de Formulación</h4>
+            <mat-label class="label-fecha">Desde: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="30">
+              <mat-label>Seleccione una fecha</mat-label>
+              <input matInput [matDatepicker]="picker9" formControlName="fecha19">
+              <mat-hint>DD/MM/AAAA</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker9"></mat-datepicker-toggle>
+              <mat-datepicker #picker9></mat-datepicker>
+            </mat-form-field>
+            <mat-label class="label-fecha">Hasta: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="30">
+              <mat-label>Seleccione una fecha</mat-label>
+              <input matInput [matDatepicker]="picker10" formControlName="fecha20">
+              <mat-hint>DD/MM/AAAA</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker10"></mat-datepicker-toggle>
+              <mat-datepicker #picker10></mat-datepicker>
+            </mat-form-field>
+          </div>
+  
+        </ng-container>
+      </form>
+    </mat-card-content>
+    
+  
+    <mat-card-footer *ngIf="!reporteHabilitado && tipoSelected" style="text-align: center;">
+      <button mat-raised-button color="primary" [disabled]="guardarDisabled" (click)="guardar()">
+        Guardar
+      </button>
+      <button mat-raised-button color="primary" (click)="limpiarForm()">
+        Limpiar
+      </button>
+    </mat-card-footer>
+  </mat-card>

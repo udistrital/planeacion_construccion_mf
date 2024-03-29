@@ -1,0 +1,47 @@
+<div class="container-border">
+    <h2 class="titulo">Unidades a asignar</h2>
+    <mat-form-field [style.width.%]="50">
+      <mat-label>Búsqueda</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Unidad" #input/>
+    </mat-form-field>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- index -->
+      <ng-container matColumnDef="index" class="num">
+        <th mat-header-cell *matHeaderCellDef class="num">No.</th>
+        <td mat-cell *matCellDef="let element" class="num">
+          {{ element.posicion }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef class="footer">
+          <!--{{ step.footer }}-->
+        </td>
+      </ng-container>
+      <!-- Unidad Column -->
+      <ng-container matColumnDef="Nombre" class="nombre-unidad">
+        <th mat-header-cell *matHeaderCellDef>Unidad</th>
+        <td mat-cell *matCellDef="let element">{{ element.Nombre }}</td>
+      </ng-container>
+  
+      <!-- Seleccionar -->
+      <ng-container matColumnDef="actions" class="col-seleccion">
+        <th mat-header-cell *matHeaderCellDef>Seleccionar</th>
+        <td mat-cell *matCellDef="let row" class="mat-column-actions">
+          <button mat-icon-button (click)="changeIcon(row)">
+            <mat-icon>{{ row.iconSelected }}</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="5">No se han encontrado resultados para la búsqueda "{{input.value}}"</td>
+      </tr>
+    </table>
+    <mat-paginator class="paginator"
+      [pageSizeOptions]="[10, 20, 30]"
+      aria-label="Select page of Unidades"
+      showFirstLastButtons
+    ></mat-paginator>
+    <button mat-raised-button color="primary" [disabled]="banderaTodosSeleccionados" (click)="seleccionarTodos()">Seleccionar Todos</button>
+    <button mat-raised-button color="primary" [disabled]="unidadesInteres.length==0" (click)="borrarSeleccion()">Borrar selección</button>
+  </div>
