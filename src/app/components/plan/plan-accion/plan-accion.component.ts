@@ -7,6 +7,7 @@ import { ImplicitAutenticationService } from 'src/app/@core/utils/implicit_auten
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
+import * as singleSpa from 'single-spa'
 
 @Component({
   selector: 'app-plan-accion',
@@ -257,18 +258,18 @@ export class PlanAccionComponent implements OnInit, AfterViewInit{
   consultar(plan: ResumenPlan | any) {
     // SE DEBE DE ACTUALIZAR LAS RUTAS CUANDO SE CREEN LOS OTROS MF
     if (plan.fase.includes('Formulación')) {
-      this.router.navigate([
-        'formulacion/' + plan.dependencia_id
+      singleSpa.navigateToUrl(
+        '/formulacion/' + plan.dependencia_id
         + "/" + plan.nombre
         + "/" + plan.vigencia_id
         + "/" + plan.version
-      ]);
+      );
     } else if (plan.fase == 'Seguimiento') {
-      this.router.navigate([
-        'seguimiento/listar-plan-accion-anual/' + plan.vigencia_id
+      singleSpa.navigateToUrl(
+        '/seguimiento/listar-plan-accion-anual/' + plan.vigencia_id
         + "/" + plan.nombre
         + "/" + plan.dependencia_id
-      ]);
+      );
     }
   }
 }

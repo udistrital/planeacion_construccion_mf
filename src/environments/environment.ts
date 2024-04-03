@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    apiUrl:"http://localhost:4203/",
+    apiUrl:"http://localhost:4206/",
     PLANES_CRUD: 'http://pruebasapi2.intranetoas.udistrital.edu.co:8523/',
     PLANES_MID: 'http://pruebasapi2.intranetoas.udistrital.edu.co:8524/v1/',
     PARAMETROS_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8510/v1/',
