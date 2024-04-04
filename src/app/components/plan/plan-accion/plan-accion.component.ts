@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import * as singleSpa from 'single-spa'
+import { VerificarFormulario } from '../../services/verificarFormulario';
 
 @Component({
   selector: 'app-plan-accion',
@@ -35,7 +36,8 @@ export class PlanAccionComponent implements OnInit, AfterViewInit{
   constructor(
     private request: RequestManager,
     private autenticationService: ImplicitAutenticationService,
-    private router: Router
+    private router: Router,
+    private verificarFormulario: VerificarFormulario,
   ) {
     let roles: any = this.autenticationService.getRole();
     if (roles.__zone_symbol__value.find((x: any) => x == 'PLANEACION')) {
@@ -256,20 +258,23 @@ export class PlanAccionComponent implements OnInit, AfterViewInit{
     });
   }
   consultar(plan: ResumenPlan | any) {
-    // SE DEBE DE ACTUALIZAR LAS RUTAS CUANDO SE CREEN LOS OTROS MF
-    if (plan.fase.includes('Formulación')) {
-      singleSpa.navigateToUrl(
-        '/formulacion/' + plan.dependencia_id
-        + "/" + plan.nombre
-        + "/" + plan.vigencia_id
-        + "/" + plan.version
-      );
-    } else if (plan.fase == 'Seguimiento') {
-      singleSpa.navigateToUrl(
-        '/seguimiento/listar-plan-accion-anual/' + plan.vigencia_id
-        + "/" + plan.nombre
-        + "/" + plan.dependencia_id
-      );
-    }
+    this.request.get(environment.OIKOS_SERVICE, `dependencia_tipo_dependencia?query=DependenciaId:` + plan.dependencia_id).subscribe((dataUnidad: any) => {
+      this.request.get(environment.PARAMETROS_SERVICE, `periodo?query=Id:` + plan.vigencia_id).subscribe((dataVigencia: any) =>{
+        if (plan.fase.includes('Formulación')) {
+          this.verificarFormulario.setCookie("plan", JSON.stringify(plan));
+          this.verificarFormulario.setCookie("vigencia", JSON.stringify(dataVigencia.Data[0]));
+          this.verificarFormulario.setCookie("unidad", JSON.stringify(dataUnidad[0]['DependenciaId']));
+          singleSpa.navigateToUrl(`/formulacion/`);
+      
+          } else if (plan.fase == 'Seguimiento') {
+            singleSpa.navigateToUrl(
+              '/seguimiento/listar-plan-accion-anual/' + plan.vigencia_id
+              + "/" + plan.nombre
+              + "/" + plan.dependencia_id
+            );
+          }
+      });
+    });
+    
   }
 }
