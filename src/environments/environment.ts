@@ -4,11 +4,13 @@
 
 export const environment = {
     production: false,
-    apiUrl:"http://localhost:4203/",
+    apiUrl:"http://localhost:4206/",
+    SECRET_KEY: 'MySecretKey',
     PLANES_CRUD: 'http://pruebasapi2.intranetoas.udistrital.edu.co:8523/',
     PLANES_MID: 'http://pruebasapi2.intranetoas.udistrital.edu.co:8524/v1/',
     PARAMETROS_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8510/v1/',
     GESTOR_DOCUMENTAL_MID: 'http://pruebasapi2.intranetoas.udistrital.edu.co:8199/v1/',
+    OIKOS_SERVICE: 'http://api.intranetoas.udistrital.edu.co:8087/v1/',
     CONFIGURACION_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/configuracion_crud_api/v1/',
     CONF_MENU_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/configuracion_crud_api/v1/menu_opcion_padre/ArbolMenus/',
     TERCEROS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/terceros_crud/v1/',
