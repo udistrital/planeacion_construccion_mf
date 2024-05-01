@@ -31,6 +31,8 @@ import { TablaUnidadesComponent } from './components/plan/habilitar-reporte/tabl
 import { GestionParametrosComponent } from './components/plan/gestion-parametros/gestion-parametros.component';
 import { FormParametrosComponent } from './components/plan/gestion-parametros/form-parametros/form-parametros.component';
 import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.component';
+import { GestionUsuariosComponent } from './components/plan/gestion-usuarios/gestion-usuarios.component';
+import { FormUsuariosComponent } from './components/plan/gestion-usuarios/form-usuarios/form-usuarios.component';
 
 
 @NgModule({
@@ -51,7 +53,9 @@ import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.c
     TablaUnidadesComponent,
     GestionParametrosComponent,
     FormParametrosComponent,
-    PlanAccionComponent
+    PlanAccionComponent,
+    GestionUsuariosComponent,
+    FormUsuariosComponent
   ],
   imports: [
     BrowserModule,
