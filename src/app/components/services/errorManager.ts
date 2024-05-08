@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +22,7 @@ export class HttpErrorManager {
     return throwError({
       status: error.status?error.status:'Error',
       message: 'Something bad happened; please try again later.',
+      error: error.error,
     });
   };
 }

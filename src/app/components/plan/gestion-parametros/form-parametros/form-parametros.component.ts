@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Vigencia } from '../../habilitar-reporte/utils/habilitar-reportes.models';
+import { Vigencia } from '../../habilitar-reporte/utils/habilitar-reporte.models';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AreaTipo, Parametro, ParametroPeriodo, TipoParametro } from '../utils/gestion-parametros.models';
 import { RequestManager } from 'src/app/components/services/requestManager';

@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { RequestManager } from '../../services/requestManager';
 import { Router } from '@angular/router';
 import { MatDialog} from '@angular/material/dialog';
-import { PeriodoSeguimiento } from '../habilitar-reporte/utils/habilitar-reportes.models';
+import { PeriodoSeguimiento } from '../habilitar-reporte/utils/habilitar-reporte.models';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { EditarDialogComponent } from '../construir-plan/editar-dialog/editar-dialog.component';

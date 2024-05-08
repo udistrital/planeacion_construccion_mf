@@ -19,6 +19,13 @@
               <mat-option value="seguimientos">Seguimiento</mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-form-field appearance="fill" [style.width.%]="100">
+            <mat-label id="tipo-input-label">Filtro</mat-label>
+            <mat-select (selectionChange)="onChangeFiltro($event.value)" [formControl]="selectFiltro">
+              <mat-option value="unidad">Unidad</mat-option>
+              <mat-option value="plan">Plan/Proyecto</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
         <ng-container *ngIf="tipo=='seguimientos' && vigenciaSelected">
           <div class="container-border">
@@ -118,12 +125,52 @@
               <mat-datepicker #picker10></mat-datepicker>
             </mat-form-field>
           </div>
-  
         </ng-container>
+        <div *ngIf="filtroUnidad">
+          <div class="btnUnidades-PlanesProyectos">
+            <button mat-raised-button matPrefix color="primary" [disabled]="tipo !== 'seguimientos' && tipo !== 'formulaciones'"
+              (click)="banderaTabla('unidades')">Unidades a las que desea asignar el proceso
+            </button>
+            <button mat-raised-button matPrefix color="primary" [disabled]="tipo !== 'seguimientos' && tipo !== 'formulaciones'"
+              (click)="banderaTabla('planes_proyectos')" >Planes/proyectos a las que desea asignar el proceso
+            </button>
+          </div>
+          <!-- Tabla Unidades de interés -->
+          <mat-card class="card-oas" [style.width.%]="97"
+          *ngIf="(tipo=='seguimientos' || tipo == 'formulaciones') && vigenciaSelected && banderaUnidadesInteres">
+            <app-tabla-unidades (unidadesInteresSeleccionadas)="manejarCambiosUnidadesInteres($event)" [filtroPlan]="false"></app-tabla-unidades>
+          </mat-card>
+          <!-- Tabla Planes/Proyectos de interés -->
+          <mat-card class="card-oas" [style.width.%]="97"
+            *ngIf="(tipo=='seguimientos' || tipo == 'formulaciones') && vigenciaSelected && banderaPlanesInteres">
+              <app-listar-plan [banderaPlanesAccionFuncionamiento]="true" (planesInteresSeleccionados)="manejarCambiosPlanesInteres($event)"
+              [periodoSeguimiento]="periodoSeguimientoListarPlan" [filtroPlan]="false"></app-listar-plan>
+          </mat-card>
+        </div>
+        <div *ngIf="filtroPlan">
+          <div class="btnUnidades-PlanesProyectos">
+            <button mat-raised-button matPrefix color="primary" [disabled]="tipo !== 'seguimientos' && tipo !== 'formulaciones'"
+              (click)="banderaTabla('planes_proyectos')" >Planes/proyectos a las que desea asignar el proceso
+            </button>
+            <button mat-raised-button matPrefix color="primary" [disabled]="tipo !== 'seguimientos' && tipo !== 'formulaciones'" 
+              (click)="banderaTabla('unidades')">Unidades a las que desea asignar el proceso
+            </button>
+          </div>
+          <!-- Tabla Planes/Proyectos de interés -->
+          <mat-card class="card-oas" [style.width.%]="97"
+            *ngIf="(tipo=='seguimientos' || tipo == 'formulaciones') && vigenciaSelected && banderaPlanesInteres">
+              <app-listar-plan [banderaPlanesAccionFuncionamiento]="true" (planesInteresSeleccionados)="manejarCambiosPlanesInteres($event)"
+              [periodoSeguimiento]="periodoSeguimientoListarPlan" [filtroPlan]="true"></app-listar-plan>
+          </mat-card>
+          <!-- Tabla Unidades de interés -->
+          <mat-card class="card-oas" [style.width.%]="97"
+          *ngIf="(tipo=='seguimientos' || tipo == 'formulaciones') && vigenciaSelected && banderaUnidadesInteres">
+            <app-tabla-unidades (unidadesInteresSeleccionadas)="manejarCambiosUnidadesInteres($event)"
+            [filtroPlan]="true" [periodoSeguimiento]="periodoSeguimientoListarUnidades"></app-tabla-unidades>
+          </mat-card>
+        </div>
       </form>
     </mat-card-content>
-    
-  
     <mat-card-footer *ngIf="!reporteHabilitado && tipoSelected" style="text-align: center;">
       <button mat-raised-button color="primary" [disabled]="guardarDisabled" (click)="guardar()">
         Guardar

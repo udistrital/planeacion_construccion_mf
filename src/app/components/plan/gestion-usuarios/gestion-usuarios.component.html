@@ -56,7 +56,7 @@
 					</u>
 				</mat-card-content>
 				<div [hidden]="!banderaTabla">
-					<mat-form-field appearance="standard" [style.width.%]="50">
+					<mat-form-field appearance="fill" [style.width.%]="50">
 						<mat-label>Búsqueda</mat-label>
 						<input matInput (keyup)="applyFilter($event)" placeholder="Ej. correo@udistrital.edu.co" #input>
 					</mat-form-field>
