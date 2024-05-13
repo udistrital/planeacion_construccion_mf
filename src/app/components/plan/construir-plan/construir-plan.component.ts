@@ -59,7 +59,7 @@ export class ConstruirPlanComponent implements OnInit{
             Swal.showLoading();
           },
         })
-        this.request.put(environment.PLANES_MID, 'formulacion/estructura_planes', null, this.planId).subscribe(
+        this.request.put(environment.PLANES_FORMULACION_MID, 'formulacion/estructura_planes', null, this.planId).subscribe(
           (data: any) => {
             if (data) {
               Swal.close()
@@ -256,7 +256,7 @@ export class ConstruirPlanComponent implements OnInit{
         this.request.put(environment.PLANES_CRUD, `subgrupo-detalle`, subgrupoDetalle, data.Data[0]._id).subscribe((data: any) => {
           this.request.put(environment.PLANES_CRUD, `subgrupo`, subgrupo, this.uid).subscribe((data: any) => {
             if (data.Data.activo == false) {
-              this.request.delete(environment.PLANES_MID, `arbol/desactivar_nodo`, this.uid).subscribe((data: any) => {
+              this.request.delete(environment.PLANES_ARBOL_MID, `arbol/nodo/` + this.uid + `/desactivar`, ``).subscribe((data: any) => {
                 if (data) {
                   Swal.fire({
                     title: 'Actualización correcta',
@@ -270,7 +270,7 @@ export class ConstruirPlanComponent implements OnInit{
                 }
               })
             } else {
-              this.request.put(environment.PLANES_MID, `arbol/activar_nodo`, subgrupo, this.uid).subscribe((data: any) => {
+              this.request.put(environment.PLANES_ARBOL_MID, `arbol/nodo/` + this.uid + `/activar`, subgrupo, ``).subscribe((data: any) => {
                 if (data) {
                   Swal.fire({
                     title: 'Actualización correcta',

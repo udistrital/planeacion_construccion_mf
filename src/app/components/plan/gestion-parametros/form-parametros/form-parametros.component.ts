@@ -60,7 +60,7 @@ export class FormParametrosComponent implements OnInit, OnChanges{
   }
 
   loadAreaTipo() {
-    this.request.get(environment.PARAMETROS_SERVICE, `/area_tipo?query=CodigoAbreviacion%3APL_SISGPLAN`).subscribe(
+    this.request.get(environment.PARAMETROS_SERVICE, `area_tipo?query=CodigoAbreviacion%3APL_SISGPLAN`).subscribe(
       (data: DataRequest) => {
         if (data) {
           this.areaTipo = data.Data[0];

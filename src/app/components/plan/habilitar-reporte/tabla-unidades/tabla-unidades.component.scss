@@ -1,7 +1,5 @@
-table,
-.paginator {
+table, .mat-mdc-paginator-container {
   width: 80%;
-  margin-left: 10%;
 }
 
 th {
@@ -104,8 +102,15 @@ th {
   font-style: oblique;
 }
 
-.mat-raised-button {
+.botones button{
   margin: 2% 0% 2% 2%;
+  color: white;
+  background-color: var(--primary);
+  padding: 10px;
+}
+
+.botones button:disabled {
+  background-color: rgb(197, 191, 191);
 }
 
 .label-fecha {
@@ -115,4 +120,12 @@ th {
 .num, .col-seleccion {
   width: 10%;
   text-align: center !important;
+}
+
+.mat-mdc-row:nth-child(even), .mat-mdc-row:nth-child(even) button{
+  background-color:#E7D6D6!important;
+}
+        
+.mat-mdc-row:nth-child(odd), .mat-mdc-row:nth-child(odd) button{
+  background-color: white!important;
 }

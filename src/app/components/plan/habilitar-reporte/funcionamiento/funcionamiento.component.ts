@@ -318,7 +318,7 @@ export class FuncionamientoComponent implements OnInit{
             periodo_seguimiento_formulacion.planes_interes = JSON.stringify(this.planesInteres);
             periodo_seguimiento_formulacion.usuario_modificacion = this.user.userService.documento ? this.user.userService.documento : '';
             periodo_seguimiento_formulacion.activo = true;
-            this.request.post(environment.PLANES_MID, 'formulacion/habilitar_fechas_funcionamiento', periodo_seguimiento_formulacion)
+            this.request.post(environment.PLANES_FORMULACION_MID, 'formulacion/habilitar_fechas_funcionamiento', periodo_seguimiento_formulacion)
             .subscribe(
               (data: DataRequest) => {
                 if (data && data.Success) {
@@ -444,7 +444,7 @@ export class FuncionamientoComponent implements OnInit{
     periodo_seguimiento_seguimiento.usuario_modificacion = this.user.userService.documento ? this.user.userService.documento : '';
     periodo_seguimiento_seguimiento.activo = true;
 
-    this.request.post(environment.PLANES_MID, `formulacion/habilitar_fechas_funcionamiento`, periodo_seguimiento_seguimiento).subscribe((data: DataRequest) => {
+    this.request.post(environment.PLANES_FORMULACION_MID, `formulacion/habilitar_fechas_funcionamiento`, periodo_seguimiento_seguimiento).subscribe((data: DataRequest) => {
       if (data) {
         Swal.fire({
           title: 'Fechas Actualizadas',

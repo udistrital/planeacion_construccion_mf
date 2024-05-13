@@ -50,12 +50,12 @@ export class TablaUnidadesComponent implements OnInit{
       },
     });
     await this.request
-      .get(environment.PLANES_MID, `formulacion/get_unidades`)
+      .get(environment.PLANES_FORMULACION_MID, `formulacion/unidades`)
       .subscribe((data: any) => {
         try {
           if (data) {
-            if (data.Data.length != 0) {
-              this.dataUnidades = data.Data;
+            if (data.data.length != 0) {
+              this.dataUnidades = data.data;
               if (
                 this.unidadesInteres.length == 0 ||
                 this.unidadesInteres.length == undefined ||

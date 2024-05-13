@@ -1,3 +1,12 @@
+*{
+    font-family: 'Raleway', 'Open Sans', sans-serif;
+}
+
+mat-hint {
+    color: gray;
+    font-size: 70%;
+}
+
 .example-radio-group {
     display: flex;
     flex-direction: column;
@@ -26,6 +35,21 @@
     font-size: 1.1em;
     padding: 1%;
     text-decoration: none;
-    margin-bottom: 1%;
+    margin-bottom: 1%!important;
     width: 97%;
+}
+
+mat-card-actions {
+    justify-content: center;
+}
+
+mat-card-actions button{
+  background-color: var(--primary);
+  color: white;
+  padding: 10px;
+  margin: 10px;
+}
+
+#tipo-radio-group-label {
+    color: var(--primary);
 }

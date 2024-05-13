@@ -13,9 +13,9 @@ export class FormUsuariosComponent implements OnInit{
 
   rolesUsuario: Rol[] = [];
   rolesSistema: Rol[] = [
-    { rol: ROL_PLANEACION, selected: false },
-    { rol: ROL_JEFE_UNIDAD_PLANEACION, selected: false },
-    { rol: ROL_JEFE_DEPENDENCIA, selected: false },
+    //{ rol: ROL_PLANEACION, selected: false },
+    //{ rol: ROL_JEFE_UNIDAD_PLANEACION, selected: false },
+    //{ rol: ROL_JEFE_DEPENDENCIA, selected: false },
     { rol: ROL_ASISTENTE_DEPENDENCIA, selected: false },
   ];
 

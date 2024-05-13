@@ -1,0 +1,56 @@
+* {
+    font-family: 'Raleway', 'Open Sans', sans-serif!important;
+}
+
+.mat-mdc-card {
+    background-color: #f1f5f8;
+}
+
+.titulo, h4 {
+    width: 23%;
+    color: var(--primary);
+    font-size: 16px;
+    margin-top: -23px;
+    margin-left: 7px;
+    padding-left: 8px;
+    background-color: #f1f5f8!important;
+    position: relative;
+}
+
+.container-border, .container-border-for {
+    margin: 3% 0% 0% 0%;
+    border: 1px solid var(--primary);
+    padding: 1%;
+    border-radius: 15px 15px 15px 15px;
+}
+
+.label-fecha {
+    margin: 0% 2% 0% 3%;
+    color: var(--primary);
+}
+
+.mat-mdc-form-field-hint {
+    color: var(--primary);
+}
+
+.btnUnidades-PlanesProyectos {
+    text-align: center;
+}
+
+.btnUnidades-PlanesProyectos button, mat-card-footer button {
+    background-color: var(--primary);
+    padding: 10px;
+}
+
+.btnUnidades-PlanesProyectos button, mat-card-footer button:enabled {
+    background-color: var(--primary);
+    color: white;
+}
+
+mat-card-footer button:disabled {
+    background-color: rgb(197, 191, 191);
+}
+
+.btnUnidades-PlanesProyectos button, button {
+    margin: 15px!important;
+}
