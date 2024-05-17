@@ -34,3 +34,16 @@ table tbody tr td:nth-child(n + 2) {
 button {
     border: none;
 }
+
+.mat-mdc-select-value {
+    padding: 7px;
+}
+
+.mat-calendar-content .mat-calendar-table {
+    height: 250px !important;
+    border-collapse: unset;
+}
+
+.mat-mdc-text-field-wrapper{
+    padding-top: 10px!important;
+}

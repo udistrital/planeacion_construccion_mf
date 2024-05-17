@@ -14,7 +14,7 @@
       </mat-form-field>
       <mat-form-field appearance="fill" [style.width.%]="100">
         <mat-label id="desc-input-label">Descripción / Objetivo</mat-label>
-        <textarea matInput formControlName="descripcion" placeholder="Realice una descripción o digite el objetivo"required rows="3"></textarea>
+        <textarea matInput formControlName="descripcion" placeholder="Realice una descripción o digite el objetivo"required rows="4"></textarea>
         <mat-error *ngIf="formEditar.get('descripcion').invalid">
           {{getErrorMessage(formEditar.get('descripcion'))}}
         </mat-error>

@@ -39,7 +39,7 @@
                     <mat-form-field appearance="fill" [style.width.%]="200">
                         <mat-label id="desc-input-label">Descripción</mat-label>
                         <textarea matInput formControlName="desc"
-                            placeholder="Realice una descripción del proyecto o plan" required></textarea>
+                            placeholder="Realice una descripción del proyecto o plan" required rows="4"></textarea>
                         <mat-error *ngIf="formCrearPlan.get('desc').invalid">
                             {{getErrorMessage(formCrearPlan.get('desc'))}}
                         </mat-error>

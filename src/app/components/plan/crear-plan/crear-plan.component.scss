@@ -103,6 +103,15 @@ form {
     width: 51%;
 }
 
+mat-label {
+    color: var(--primary);
+}
+
+mat-form-field {
+    margin-top: 10px!important;
+    margin-bottom: 10px!important;
+}
+
 mat-card-actions button{
     background-color: var(--primary);
     padding: 10px;

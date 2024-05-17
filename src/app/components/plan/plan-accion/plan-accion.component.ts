@@ -108,9 +108,9 @@ export class PlanAccionComponent implements OnInit, AfterViewInit{
     });
     await new Promise((resolve, reject) => {
       if (this.rol == 'PLANEACION' || this.rol == 'JEFE_DEPENDENCIA') {
-        this.request.get(environment.PLANES_MID, `planes_accion`).subscribe(
+        this.request.get(environment.PLANES_FORMULACION_MID, `/formulacion/planes_accion`).subscribe(
           (data) => {
-            const allData: ResumenPlan[] = data.Data;
+            const allData: ResumenPlan[] = data.data;
             this.planes = allData.filter(plan => plan.fase === "Formulación");
             if (this.planes.length != 0) {
               Swal.close();
@@ -187,8 +187,8 @@ export class PlanAccionComponent implements OnInit, AfterViewInit{
                         idDependencia = data.Data['DependenciaId'];
                         this.request
                           .get(
-                            environment.PLANES_MID,
-                            `planes_accion/${idDependencia}`
+                            environment.PLANES_FORMULACION_MID,
+                            `/formulacion/planes_accion/${idDependencia}`
                           )
                           .subscribe(
                             (data) => {
