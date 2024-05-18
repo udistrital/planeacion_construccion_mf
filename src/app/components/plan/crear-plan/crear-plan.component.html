@@ -30,7 +30,6 @@
                         <mat-label id="nombre-input-label">Nombre</mat-label>
                         <input type="text" matInput formControlName="nombre"
                             placeholder="Escriba el nombre del proyecto o plan" required>
-                        <mat-icon matSuffix>create</mat-icon>
                         <mat-error *ngIf="formCrearPlan.get('nombre').invalid">
                             {{getErrorMessage(formCrearPlan.get('nombre'))}}
                         </mat-error>
@@ -40,8 +39,7 @@
                     <mat-form-field appearance="fill" [style.width.%]="200">
                         <mat-label id="desc-input-label">Descripción</mat-label>
                         <textarea matInput formControlName="desc"
-                            placeholder="Realice una descripción del proyecto o plan" required></textarea>
-                        <mat-icon matSuffix>create</mat-icon>
+                            placeholder="Realice una descripción del proyecto o plan" required rows="4"></textarea>
                         <mat-error *ngIf="formCrearPlan.get('desc').invalid">
                             {{getErrorMessage(formCrearPlan.get('desc'))}}
                         </mat-error>

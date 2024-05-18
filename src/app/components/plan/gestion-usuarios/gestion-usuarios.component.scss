@@ -1,8 +1,18 @@
+* {
+  font-family: 'Raleway', 'Open Sans', sans-serif!important;
+}
+
 .container-border {
-  margin: 3% 0% 0% 0%;
+  margin: 0% 0% 0% 0%;
   border: 1px solid var(--primary);
   padding: 1%;
   border-radius: 15px 15px 15px 15px;
+}
+  
+.mat-elevation-z8, .paginator {
+  width: 70%;
+  margin: auto;
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.2);
 }
   
 .textGuide {
@@ -31,24 +41,16 @@ td {
 }
   
 .mat-raised-button {
-  margin-top: 2%;
+  margin: 2% 0% 0% 2%;
 }
 
-.mat-mdc-row:nth-child(even), .mat-mdc-row:nth-child(even) button{
-  background-color:#E7D6D6!important;
-}
-        
-.mat-mdc-row:nth-child(odd), .mat-mdc-row:nth-child(odd) button{
-  background-color: white!important;
-}
-
-.botonAgregarParametro {
-  margin: 10px;
-  text-align: center;
-}
-
-.botonAgregarParametro button{
+.botones button{
   background-color: var(--primary);
   color: white;
   padding: 10px;
+  margin: 10px;
+}
+
+.botones button:disabled {
+    background-color: rgb(197, 191, 191);
 }

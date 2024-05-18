@@ -6,6 +6,13 @@ describe('InversionComponent', () => {
   let component: InversionComponent;
   let fixture: ComponentFixture<InversionComponent>;
 
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ InversionComponent ]
+    })
+    .compileComponents();
+  });
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [InversionComponent]

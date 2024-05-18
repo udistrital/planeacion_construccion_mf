@@ -3,7 +3,7 @@ import { ParametroPeriodo } from './utils/gestion-parametros.models';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Vigencia } from '../habilitar-reporte/utils/habilitar-reportes.models';
+import { Vigencia } from '../habilitar-reporte/utils/habilitar-reporte.models';
 import { RequestManager } from '../../services/requestManager';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';

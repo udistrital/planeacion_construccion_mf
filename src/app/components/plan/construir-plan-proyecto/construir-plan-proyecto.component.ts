@@ -133,7 +133,7 @@ export class ConstruirPlanProyectoComponent implements OnInit{
       cancelButtonText: `No`,
     }).then((result) => {
         if (result.isConfirmed) {
-          this.request.delete(environment.PLANES_MID, `arbol/desactivar_plan/`, this.uid).subscribe((data: any) => {
+          this.request.delete(environment.PLANES_ARBOL_MID, `arbol/plan/` + this.uid + `/desactivar`, ``).subscribe((data: any) => {
             if(data){
               Swal.fire({
                 title: 'Cambio realizado', 
@@ -171,10 +171,10 @@ export class ConstruirPlanProyectoComponent implements OnInit{
   loadData(){
     this.mostrarMensajeCarga();
 
-    this.request.get(environment.PLANES_MID, `formulacion/planes`).subscribe(
+    this.request.get(environment.PLANES_FORMULACION_MID, `formulacion/planes`).subscribe(
       (data: any) => {
         if (data){
-          this.planes = data.Data;
+          this.planes = data.data;
           this.ajustarData();
           this.cerrarMensajeCarga();
         }

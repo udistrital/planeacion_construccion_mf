@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 import { RequestManager } from '../../services/requestManager';
 import { environment } from 'src/environments/environment';
-import { Vigencia } from './utils/habilitar-reportes.models';
+import { Vigencia } from './utils/habilitar-reporte.models';
 import { DataRequest } from 'src/app/@core/interfaces/DataRequest.interface';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class HabilitarReporteService {
     private request: RequestManager,
   ) { }
 
-  loadTrimestres(vigencia: Vigencia) {
+   async loadTrimestres(vigencia: Vigencia) {
     Swal.fire({
       title: 'Cargando períodos',
       timerProgressBar: true,
@@ -26,12 +26,14 @@ export class HabilitarReporteService {
         Swal.showLoading();
       },
     })
-    this.request.get(environment.PLANES_MID, `seguimiento/get_periodos/` + vigencia.Id).subscribe((data: DataRequest) => {
-      if (data) {
+    this.request.get(environment.PLANES_SEGUIMIENTO_MID, `periodos/` + vigencia.Id).subscribe((data: DataRequest) => {
+      if (data.Data != null) {
         this.trimestresSubject.next(data);
+      } else {
+        this.trimestresSubject.next(null);
       }
     }, (error) => {
-      this.trimestresSubject.next(null);
+      this.trimestresSubject.next(error);
     });
   }
 

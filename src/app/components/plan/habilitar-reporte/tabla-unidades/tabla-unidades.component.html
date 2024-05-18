@@ -42,6 +42,8 @@
       aria-label="Select page of Unidades"
       showFirstLastButtons
     ></mat-paginator>
-    <button mat-raised-button color="primary" [disabled]="banderaTodosSeleccionados" (click)="seleccionarTodos()">Seleccionar Todos</button>
+    <div class="botones">
+      <button mat-raised-button color="primary" [disabled]="banderaTodosSeleccionados" (click)="seleccionarTodos()">Seleccionar Todos</button>
     <button mat-raised-button color="primary" [disabled]="unidadesInteres.length==0" (click)="borrarSeleccion()">Borrar selección</button>
+    </div>
   </div>

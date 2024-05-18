@@ -1,7 +1,12 @@
-.mat-card {
-    background-color: #F1F5F8;
+*{
+    font-family: 'Raleway', 'Open Sans', sans-serif;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
+mat-radio-button {
+    font-family: 'Raleway', 'Open Sans', sans-serif;
+}
 
 .crear-content {
     margin-left: 1rem;
@@ -92,4 +97,31 @@ input[type="file"] {
     border-radius: 8px 8px 8px 8px;
     outline: none;
     overflow: hidden;
+}
+
+form {
+    width: 51%;
+}
+
+mat-label {
+    color: var(--primary);
+}
+
+mat-form-field {
+    margin-top: 10px!important;
+    margin-bottom: 10px!important;
+}
+
+mat-card-actions button{
+    background-color: var(--primary);
+    padding: 10px;
+}
+
+mat-card-actions button:enabled{
+    background-color: var(--primary);
+    color: white;
+}
+
+mat-card-actions button:disabled {
+    background-color: rgb(197, 191, 191);
 }

@@ -153,7 +153,7 @@ export class ArbolComponent implements OnInit {
         Swal.showLoading();
       },
     })
-    this.request.get(environment.PLANES_MID, `arbol/` + this.idPlan).subscribe((data: any) => {
+    this.request.get(environment.PLANES_ARBOL_MID, `arbol/` + this.idPlan).subscribe((data: any) => {
       Swal.close();
       if (data.Data !== null) {
         this.mostrar = true;

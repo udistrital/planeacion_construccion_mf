@@ -1,1 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
+b {
+    color: var(--primary)
+}
+
+.mat-mdc-card-title {
+    font-family: 'Raleway', 'Open Sans', sans-serif!important;
+    color: var(--primary);
+    margin: 10px!important;
+}
+
+.mat-mdc-paginator-container, .mat-mdc-select-trigger, mat-option, mat-error, mat-label{
+    font-family: 'Raleway', 'Open Sans', sans-serif;
+}
+
+th {
+    background-color: var(--primary)!important;
+    font-family: 'Raleway', 'Open Sans', sans-serif;
+}
+
+table thead tr th:nth-child(n + 2) {
+    background-color: var(--primary)!important;
+    border-left: none;
+}
+
+table tbody tr td {
+    font-family: 'Raleway', 'Open Sans', sans-serif ;
+}
+
+table tbody tr td:nth-child(n + 2) {
+    border-left: none;
+}
+
+button {
+    border: none;
+}
+
+.mat-mdc-select-value {
+    padding: 7px;
+}
+
+.mat-calendar-content .mat-calendar-table {
+    height: 250px !important;
+    border-collapse: unset;
+}
+
+.mat-mdc-text-field-wrapper{
+    padding-top: 10px!important;
+}

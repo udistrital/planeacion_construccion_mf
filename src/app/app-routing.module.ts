@@ -11,6 +11,7 @@ import { CrearPlanComponent } from './components/plan/crear-plan/crear-plan.comp
 import { HabilitarReporteComponent } from './components/plan/habilitar-reporte/habilitar-reporte.component';
 import { GestionParametrosComponent } from './components/plan/gestion-parametros/gestion-parametros.component';
 import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.component';
+import { GestionUsuariosComponent } from './components/plan/gestion-usuarios/gestion-usuarios.component';
 
 const routes: Routes = [
   {
@@ -44,6 +45,10 @@ const routes: Routes = [
   {
     path: 'consultar-plan',
     component: PlanAccionComponent,
+  },
+  {
+    path: 'gestion-usuarios',
+    component: GestionUsuariosComponent,
   }
 ];
 
