@@ -429,7 +429,7 @@ export class InversionComponent implements OnInit{
               showConfirmButton: false,
               timer: 2500,
             });
-            this.limpiarForm()
+            this.limpiarForm();
           } else {
             Swal.fire({
               title: 'Error en la operación',

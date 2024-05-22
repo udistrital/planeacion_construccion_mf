@@ -225,7 +225,7 @@ export class ListarPlanComponent implements OnInit{
     this.request.get(environment.PLANES_FORMULACION_MID, `formulacion/planes`).subscribe(
       (data: any) => {
         if (data) {
-          this.planes = data.data;
+          this.planes = data.Data;
           this.ajustarData();
           this.cerrarMensajeCarga();
         }

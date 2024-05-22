@@ -241,7 +241,7 @@ export class FuncionamientoComponent implements OnInit{
     }
   }
 
-   async loadTrimestres(vigencia: Vigencia) {
+  async loadTrimestres(vigencia: Vigencia) {
     await this.habilitarReporteService.loadTrimestres(vigencia);
     this.habilitarReporteService.getTrimestresSubject().subscribe(
       (data: any) => {
@@ -251,7 +251,7 @@ export class FuncionamientoComponent implements OnInit{
           Swal.close();
           Swal.fire({
             title: 'Error en la operación',
-            text: `No se encontraron datos registrados: ${data.error.Data}, por favor comunicarse con computo@udistrital.edu.co`,
+            text: `No se encontraron trimestres para esta vigencia, por favor comunicarse con computo@udistrital.edu.co`,
             icon: 'warning',
             showConfirmButton: false,
             timer: 3000
