@@ -3,19 +3,18 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ResumenPlan } from 'src/app/@core/models/plan/resumen_plan';
 import { RequestManager } from '../../services/requestManager';
-import { ImplicitAutenticationService } from 'src/app/@core/utils/implicit_autentication.service';
+import { ImplicitAutenticationService, ServiceCookies } from '@udistrital/planeacion-utilidades-module';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import * as singleSpa from 'single-spa'
-import { VerificarFormulario } from '../../services/verificarFormulario';
 
 @Component({
   selector: 'app-plan-accion',
   templateUrl: './plan-accion.component.html',
   styleUrls: ['./plan-accion.component.scss']
 })
-export class PlanAccionComponent implements OnInit, AfterViewInit{
+export class PlanAccionComponent implements OnInit, AfterViewInit {
   columnasMostradas: string[] = [
     'dependencia',
     'vigencia',
@@ -33,13 +32,14 @@ export class PlanAccionComponent implements OnInit, AfterViewInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  private autenticationService = new ImplicitAutenticationService();
+  private serviceCookies = new ServiceCookies();
+
   constructor(
     private request: RequestManager,
-    private autenticationService: ImplicitAutenticationService,
     private router: Router,
-    private verificarFormulario: VerificarFormulario,
   ) {
-    let roles: any = this.autenticationService.getRole();
+    let roles: any = this.autenticationService.getRoles();
     if (roles.__zone_symbol__value.find((x: any) => x == 'PLANEACION')) {
       this.rol = 'PLANEACION';
     } else if (
@@ -142,7 +142,7 @@ export class PlanAccionComponent implements OnInit, AfterViewInit{
         );
       } else {
         // 'JEFE_DEPENDENCIA'
-        //let documento: string = this.autenticationService.getDocument()['__zone_symbol__value'];
+        //let documento: string = this.autenticationService.getDocumento()['__zone_symbol__value'];
         let documento: string =
           this.autenticationService.getPayload()['documento'];
         let idTercero: number;
@@ -260,22 +260,22 @@ export class PlanAccionComponent implements OnInit, AfterViewInit{
   }
   consultar(plan: ResumenPlan | any) {
     this.request.get(environment.OIKOS_SERVICE, `dependencia_tipo_dependencia?query=DependenciaId:` + plan.dependencia_id).subscribe((dataUnidad: any) => {
-      this.request.get(environment.PARAMETROS_SERVICE, `periodo?query=Id:` + plan.vigencia_id).subscribe((dataVigencia: any) =>{
+      this.request.get(environment.PARAMETROS_SERVICE, `periodo?query=Id:` + plan.vigencia_id).subscribe((dataVigencia: any) => {
         if (plan.fase.includes('Formulación')) {
-          this.verificarFormulario.setCookie("plan", JSON.stringify(plan));
-          this.verificarFormulario.setCookie("vigencia", JSON.stringify(dataVigencia.Data[0]));
-          this.verificarFormulario.setCookie("unidad", JSON.stringify(dataUnidad[0]['DependenciaId']));
+          this.serviceCookies.setCookie("plan", JSON.stringify(plan));
+          this.serviceCookies.setCookie("vigencia", JSON.stringify(dataVigencia.Data[0]));
+          this.serviceCookies.setCookie("unidad", JSON.stringify(dataUnidad[0]['DependenciaId']));
           singleSpa.navigateToUrl(`/formulacion/`);
-      
-          } else if (plan.fase == 'Seguimiento') {
-            singleSpa.navigateToUrl(
-              '/seguimiento/listar-plan-accion-anual/' + plan.vigencia_id
-              + "/" + plan.nombre
-              + "/" + plan.dependencia_id
-            );
-          }
+
+        } else if (plan.fase == 'Seguimiento') {
+          singleSpa.navigateToUrl(
+            '/seguimiento/listar-plan-accion-anual/' + plan.vigencia_id
+            + "/" + plan.nombre
+            + "/" + plan.dependencia_id
+          );
+        }
       });
     });
-    
+
   }
 }
