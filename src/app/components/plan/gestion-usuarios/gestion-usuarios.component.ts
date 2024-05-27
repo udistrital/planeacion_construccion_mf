@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Usuario } from './utils/gestion-usuarios.models';
-import { ROL_ASISTENTE_DEPENDENCIA, ROL_JEFE_DEPENDENCIA, ROL_JEFE_UNIDAD_PLANEACION, ROL_PLANEACION } from './utils';
+import { Dependencia, ROL_ASISTENTE_DEPENDENCIA, ROL_JEFE_DEPENDENCIA, ROL_PLANEACION, Usuario, Vinculacion } from './utils';
+import { Vigencia } from '../habilitar-reporte/utils';
 import { RequestManager } from '../../services/requestManager';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
@@ -28,6 +28,7 @@ export class GestionUsuariosComponent implements OnInit{
   dataSource!: MatTableDataSource<any>;
   banderaFormEdicion!: boolean;
   errorEnPeticion!: boolean;
+  vinculacionesUsuario!: Vinculacion[];
 
   constructor(
     private request: RequestManager,
@@ -39,13 +40,14 @@ export class GestionUsuariosComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.displayedColumns = ['Usuario', 'Roles', 'actions'];
-    this.roles = [ROL_PLANEACION, ROL_JEFE_UNIDAD_PLANEACION, ROL_JEFE_DEPENDENCIA, ROL_ASISTENTE_DEPENDENCIA];
+    this.displayedColumns = ['Usuario', 'Roles', 'Vinculacion', 'actions'];
+    this.roles = [ROL_PLANEACION, ROL_JEFE_DEPENDENCIA, ROL_ASISTENTE_DEPENDENCIA];
     this.usuarios = [];
     this.banderaTabla = false;
     this.rolSelected = false;
     this.banderaFormEdicion = false;
     this.errorEnPeticion = false;
+    this.vinculacionesUsuario = [];
   }
 
   mostrarMensajeCarga(): void {
@@ -61,6 +63,10 @@ export class GestionUsuariosComponent implements OnInit{
 
   cerrarMensajeCarga(): void {
     this.banderaTabla = true;
+    this.usuarios[0].Vinculacion = this.vinculacionesUsuario;
+    this.usuarios.forEach(row => {
+      row.VinculacionSeleccionadaId = undefined;
+    });
     this.dataSource = new MatTableDataSource(this.usuarios);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -89,7 +95,56 @@ export class GestionUsuariosComponent implements OnInit{
           if (data != null && data != undefined && data != "") {
             this.usuarios = [];
             this.usuarios.push(data);
-            this.cerrarMensajeCarga()
+            this.request.get(environment.PLANES_FORMULACION_MID, `formulacion/vinculacion_tercero_email/${this.formUsuarios.get('correo').value}`).subscribe(
+              (data: any) => {
+                if (data != null && data != undefined && data != "") {
+                  if(data.Data && data.Data != null && data.Data != undefined && data.Data != "") {
+                    this.vinculacionesUsuario = data.Data;
+                    for (const vinculacion of this.vinculacionesUsuario) {
+                      this.request.get(environment.PARAMETROS_SERVICE, `periodo?query=Activo:true,Id:${vinculacion.PeriodoId}`).subscribe((data: any) => {
+                          if (data != null && data != undefined && data != "") {
+                            let vigencia: Vigencia = data.Data[0];
+                            const vinculacionEncontrada = this.vinculacionesUsuario.find(vinculacionUsuario => vinculacionUsuario.Id == vinculacion.Id);
+                            if (vinculacionEncontrada) {
+                                vinculacionEncontrada.Periodo = vigencia.Nombre;
+                            }
+                            this.cerrarMensajeCarga()
+                          }
+                        }, (error) => {
+                          Swal.fire({
+                            title: 'Error en la operación',
+                            text: 'No se encontraron datos registrados',
+                            icon: 'warning',
+                            showConfirmButton: false,
+                            timer: 2500
+                          })
+                        }
+                      );
+                      this.request.get(environment.OIKOS_SERVICE, `dependencia_tipo_dependencia?query=DependenciaId:` + vinculacion.DependenciaId).subscribe((dataUnidad: any) => {
+                        if (dataUnidad) {
+                          let unidad: Dependencia = dataUnidad[0];
+                          const vinculacionEncontrada = this.vinculacionesUsuario.find(vinculacionUsuario => vinculacionUsuario.Id == vinculacion.Id);
+                          if (vinculacionEncontrada && vinculacionEncontrada.DependenciaId) {
+                              vinculacionEncontrada.Dependencia = unidad.DependenciaId.Nombre;
+                          }
+                          Swal.close();
+                        }
+                      })
+                    }
+                  } else {
+                    this.cerrarMensajeCarga()
+                  }
+                }
+              }, (error) => {
+                Swal.fire({
+                  title: 'Error en la operación',
+                  text: 'No se encontraron datos registrados',
+                  icon: 'warning',
+                  showConfirmButton: false,
+                  timer: 2500
+                })
+              }
+            );
           }
         }, (error) => {
           Swal.fire({
@@ -150,5 +205,9 @@ export class GestionUsuariosComponent implements OnInit{
 
   recibirErrorPeticion(error: any) {
     this.errorEnPeticion = error;
+  }
+
+  capturarVinculacion(row: any): void {
+    this.usuario.VinculacionSeleccionadaId = row.Id;
   }
 }
