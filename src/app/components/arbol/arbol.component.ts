@@ -11,7 +11,7 @@ import {
 import { RequestManager } from '../services/requestManager';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
-import { ImplicitAutenticationService } from 'src/app/@core/utils/implicit_autentication.service';
+import { ImplicitAutenticationService } from '@udistrital/planeacion-utilidades-module';
 
 interface Subgrupo {
   activo: string;
@@ -107,13 +107,14 @@ export class ArbolComponent implements OnInit {
   @Input() estado: string = "";
   @Input() updateSignal!: Observable<String[]>;
   @Output() grupo = new EventEmitter<any>();
+
+  private autenticationService = new ImplicitAutenticationService();
+
   constructor(
     private formBuilder: FormBuilder,
     private request: RequestManager,
-    private autenticationService: ImplicitAutenticationService
-
   ) {
-    let roles: any = this.autenticationService.getRole();
+    let roles: any = this.autenticationService.getRoles();
     if (roles.__zone_symbol__value.find((x: any) => x == 'JEFE_DEPENDENCIA' || x == 'ASISTENTE_DEPENDENCIA')) {
       this.rol = 'JEFE_DEPENDENCIA'
     } else if (roles.__zone_symbol__value.find((x: any) => x == 'PLANEACION')) {

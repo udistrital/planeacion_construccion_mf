@@ -5,15 +5,13 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
-import { UserService } from '../../services/userService';
-import { UtilService } from '../../services/utilService';
 
 @Component({
   selector: 'app-crear-plan',
   templateUrl: './crear-plan.component.html',
   styleUrls: ['./crear-plan.component.scss'],
 })
-export class CrearPlanComponent implements OnInit{
+export class CrearPlanComponent implements OnInit {
   formCrearPlan: any;
   tipos!: any[]
   tipoPlan: any;
@@ -25,8 +23,6 @@ export class CrearPlanComponent implements OnInit{
 
   constructor(
     private request: RequestManager,
-    private userService: UserService,
-    private utilService: UtilService,
     private router: Router,
     private formBuilder: FormBuilder,
     private diagog: MatDialog,
@@ -69,7 +65,8 @@ export class CrearPlanComponent implements OnInit{
                   this.dialogRef.close();
                   this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
                     this.router.navigate(['pages/plan/construir-plan-proyecto']);
-                  });                }
+                  });
+                }
               })
             }
           }),
