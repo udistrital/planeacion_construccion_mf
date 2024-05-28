@@ -54,8 +54,8 @@ export class TablaUnidadesComponent implements OnInit{
       .subscribe((data: any) => {
         try {
           if (data) {
-            if (data.data.length != 0) {
-              this.dataUnidades = data.data;
+            if (data.Data.length != 0) {
+              this.dataUnidades = data.Data;
               if (
                 this.unidadesInteres.length == 0 ||
                 this.unidadesInteres.length == undefined ||

@@ -17,7 +17,7 @@ export class HabilitarReporteService {
     private request: RequestManager,
   ) { }
 
-   async loadTrimestres(vigencia: Vigencia) {
+  loadTrimestres(vigencia: Vigencia) {
     Swal.fire({
       title: 'Cargando períodos',
       timerProgressBar: true,

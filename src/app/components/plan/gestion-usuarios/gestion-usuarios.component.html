@@ -25,7 +25,7 @@
 								Por favor, introduce un correo electrónico válido.
 						</mat-error>
 						</mat-form-field>
-						<mat-form-field appearance="fill" [style.width.%]="100">
+						<!-- <mat-form-field appearance="fill" [style.width.%]="100">
 							<mat-label id="tipo-input-label">Seleccione el Rol</mat-label>
 							<mat-select (selectionChange)="onChangeRol($event.value)" formControlName="selectRol">
 								<mat-option>--</mat-option>
@@ -36,7 +36,7 @@
 							<mat-error *ngIf="formUsuarios.get('selectRol').invalid">
 								El campo Rol es obligatorio.
 							</mat-error>
-						</mat-form-field>
+						</mat-form-field> -->
 					</form>
 				</mat-card-content>
 			</div>
@@ -70,6 +70,19 @@
 						<ng-container matColumnDef="Roles">
 							<th mat-header-cell *matHeaderCellDef> Roles </th>
 							<td mat-cell *matCellDef="let row"> {{formatearRoles(row.role)  || 'Sin roles asociados a SISGPLAN'}} </td>
+						</ng-container>
+						<ng-container matColumnDef="Vinculacion">
+							<th mat-header-cell *matHeaderCellDef> Vinculación </th>
+							<td mat-cell *matCellDef="let row">
+								<mat-form-field>
+									<mat-select [(value)]="row.VinculacionSeleccionadaId" (ngModelChange)="capturarVinculacion(row)">
+										<mat-option>--</mat-option>
+										<mat-option *ngFor="let vinculacion of row.Vinculacion" [value]="vinculacion.Id">
+											{{ vinculacion.Periodo }} - {{ vinculacion.Dependencia }}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</td>
 						</ng-container>
 						<ng-container matColumnDef="actions">
 							<th mat-header-cell *matHeaderCellDef class="tituloAcciones">Acciones</th>

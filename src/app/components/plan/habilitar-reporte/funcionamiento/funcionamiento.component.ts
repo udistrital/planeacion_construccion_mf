@@ -241,7 +241,7 @@ export class FuncionamientoComponent implements OnInit{
     }
   }
 
-   async loadTrimestres(vigencia: Vigencia) {
+  async loadTrimestres(vigencia: Vigencia) {
     await this.habilitarReporteService.loadTrimestres(vigencia);
     this.habilitarReporteService.getTrimestresSubject().subscribe(
       (data: any) => {
@@ -251,7 +251,7 @@ export class FuncionamientoComponent implements OnInit{
           Swal.close();
           Swal.fire({
             title: 'Error en la operación',
-            text: `No se encontraron datos registrados: ${data.error.Data}, por favor comunicarse con computo@udistrital.edu.co`,
+            text: `No se encontraron trimestres para esta vigencia, por favor comunicarse con computo@udistrital.edu.co`,
             icon: 'warning',
             showConfirmButton: false,
             timer: 3000
@@ -318,7 +318,7 @@ export class FuncionamientoComponent implements OnInit{
             periodo_seguimiento_formulacion.planes_interes = JSON.stringify(this.planesInteres);
             periodo_seguimiento_formulacion.usuario_modificacion = this.user.userService.documento ? this.user.userService.documento : '';
             periodo_seguimiento_formulacion.activo = true;
-            this.request.post(environment.PLANES_FORMULACION_MID, 'formulacion/habilitar_fechas_funcionamiento', periodo_seguimiento_formulacion)
+            this.request.post(environment.PLANES_FORMULACION_MID, 'formulacion/habilitar_fechas', periodo_seguimiento_formulacion)
             .subscribe(
               (data: DataRequest) => {
                 if (data && data.Success) {
@@ -444,7 +444,7 @@ export class FuncionamientoComponent implements OnInit{
     periodo_seguimiento_seguimiento.usuario_modificacion = this.user.userService.documento ? this.user.userService.documento : '';
     periodo_seguimiento_seguimiento.activo = true;
 
-    this.request.post(environment.PLANES_FORMULACION_MID, `formulacion/habilitar_fechas_funcionamiento`, periodo_seguimiento_seguimiento).subscribe((data: DataRequest) => {
+    this.request.post(environment.PLANES_FORMULACION_MID, `formulacion/habilitar_fechas`, periodo_seguimiento_seguimiento).subscribe((data: DataRequest) => {
       if (data) {
         Swal.fire({
           title: 'Fechas Actualizadas',

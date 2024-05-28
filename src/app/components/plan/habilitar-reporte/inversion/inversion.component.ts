@@ -363,7 +363,7 @@ export class InversionComponent implements OnInit{
             periodo_seguimiento_inversion.usuario_modificacion = this.user.userService.documento ? this.user.userService.documento : '';
             periodo_seguimiento_inversion.activo = true;
     
-            this.request.post(environment.PLANES_FORMULACION_MID, 'formulacion/habilitar_fechas_funcionamiento', periodo_seguimiento_inversion).subscribe((data: DataRequest) => {
+            this.request.post(environment.PLANES_FORMULACION_MID, 'formulacion/habilitar_fechas', periodo_seguimiento_inversion).subscribe((data: DataRequest) => {
               if (data) {
                 Swal.fire({
                   title: 'Fechas Actualizadas',
@@ -429,7 +429,7 @@ export class InversionComponent implements OnInit{
               showConfirmButton: false,
               timer: 2500,
             });
-            this.limpiarForm()
+            this.limpiarForm();
           } else {
             Swal.fire({
               title: 'Error en la operación',
@@ -488,7 +488,7 @@ export class InversionComponent implements OnInit{
     periodo_seguimiento_seguimiento.usuario_modificacion = this.user.userService.documento ? this.user.userService.documento : '';
     periodo_seguimiento_seguimiento.activo = true;
 
-    this.request.post(environment.PLANES_FORMULACION_MID, `formulacion/habilitar_fechas_funcionamiento`, periodo_seguimiento_seguimiento).subscribe((data: DataRequest) => {
+    this.request.post(environment.PLANES_FORMULACION_MID, `formulacion/habilitar_fechas`, periodo_seguimiento_seguimiento).subscribe((data: DataRequest) => {
       if (data) {
         Swal.fire({
           title: 'Fechas Actualizadas',

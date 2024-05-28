@@ -48,10 +48,6 @@ export class PlanAccionComponent implements OnInit, AfterViewInit {
       )
     ) {
       this.rol = 'JEFE_DEPENDENCIA';
-    } else if (
-      roles.__zone_symbol__value.find((x: any) => x == 'JEFE_UNIDAD_PLANEACION')
-    ) {
-      this.rol = 'JEFE_UNIDAD_PLANEACION';
     }
   }
 
