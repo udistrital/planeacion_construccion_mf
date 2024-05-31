@@ -12,6 +12,7 @@ import { HabilitarReporteComponent } from './components/plan/habilitar-reporte/h
 import { GestionParametrosComponent } from './components/plan/gestion-parametros/gestion-parametros.component';
 import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.component';
 import { GestionUsuariosComponent } from './components/plan/gestion-usuarios/gestion-usuarios.component';
+import { PlanAccionFormulacionComponent } from './components/plan/plan-accion/plan-accion-formulacion/plan-accion-formulacion.component';
 
 const routes: Routes = [
   {
@@ -43,7 +44,11 @@ const routes: Routes = [
     component: GestionParametrosComponent
   },
   {
-    path: 'consultar-plan',
+    path: 'consultar-plan-formulacion',
+    component: PlanAccionFormulacionComponent,
+  },
+  {
+    path: 'consultar-plan-seguimiento',
     component: PlanAccionComponent,
   },
   {

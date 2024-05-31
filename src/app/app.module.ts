@@ -34,6 +34,8 @@ import { FormParametrosComponent } from './components/plan/gestion-parametros/fo
 import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.component';
 import { GestionUsuariosComponent } from './components/plan/gestion-usuarios/gestion-usuarios.component';
 import { FormUsuariosComponent } from './components/plan/gestion-usuarios/form-usuarios/form-usuarios.component';
+import { PlanAccionFormulacionComponent } from './components/plan/plan-accion/plan-accion-formulacion/plan-accion-formulacion.component';
+import { PlanAccionSeguimientoComponent } from './components/plan/plan-accion/plan-accion-seguimiento/plan-accion-seguimiento.component';
 
 
 @NgModule({
@@ -56,7 +58,9 @@ import { FormUsuariosComponent } from './components/plan/gestion-usuarios/form-u
     FormParametrosComponent,
     PlanAccionComponent,
     GestionUsuariosComponent,
-    FormUsuariosComponent
+    FormUsuariosComponent,
+    PlanAccionFormulacionComponent,
+    PlanAccionSeguimientoComponent
   ],
   imports: [
     BrowserModule,
