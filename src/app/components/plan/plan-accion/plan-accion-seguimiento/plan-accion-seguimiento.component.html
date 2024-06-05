@@ -1,11 +1,11 @@
-<!-- <mat-card class="card-oas">
+<mat-card class="card-oas">
   <mat-card-header>
     <mat-card-title>Tabla de procesos de seguimiento realizados</mat-card-title>
   </mat-card-header>
   <mat-card-content>
 
     <div class="funtionsContainer">
-      <mat-select *ngIsGranted="['PLANEACION']" class="input-search" placeholder="Seleccione la Unidad" (selectionChange)="ajustarData($event)">
+      <mat-select *ngIf="rol=='PLANEACION'" class="input-search" placeholder="Seleccione la Unidad" (selectionChange)="ajustarData($event)">
         <mat-option>--</mat-option>
         <mat-option *ngFor="let unidad of auxUnidades" [value]="unidad.Nombre">
           {{unidad.Nombre}}
@@ -95,4 +95,4 @@
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </div>
   </mat-card-content>
-</mat-card> -->
+</mat-card>

@@ -106,7 +106,7 @@ export class PlanAccionFormulacionComponent implements OnInit, AfterViewInit {
       if (this.rol == 'PLANEACION' || this.rol == 'JEFE_DEPENDENCIA') {
         this.request.get(environment.PLANES_FORMULACION_MID, `/formulacion/planes_accion`).subscribe(
           (data) => {
-            const allData: ResumenPlan[] = data.data;
+            const allData: ResumenPlan[] = data.Data;
             this.planes = allData.filter(plan => plan.fase === "Formulación");
             if (this.planes.length != 0) {
               Swal.close();
