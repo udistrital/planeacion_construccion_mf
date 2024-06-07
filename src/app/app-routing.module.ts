@@ -10,8 +10,10 @@ import { ConstruirPlanComponent } from './components/plan/construir-plan/constru
 import { CrearPlanComponent } from './components/plan/crear-plan/crear-plan.component';
 import { HabilitarReporteComponent } from './components/plan/habilitar-reporte/habilitar-reporte.component';
 import { GestionParametrosComponent } from './components/plan/gestion-parametros/gestion-parametros.component';
-import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.component';
+// import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.component';
 import { GestionUsuariosComponent } from './components/plan/gestion-usuarios/gestion-usuarios.component';
+import { PlanAccionFormulacionComponent } from './components/plan/plan-accion/plan-accion-formulacion/plan-accion-formulacion.component';
+import { PlanAccionSeguimientoComponent } from './components/plan/plan-accion/plan-accion-seguimiento/plan-accion-seguimiento.component';
 
 const routes: Routes = [
   {
@@ -43,8 +45,12 @@ const routes: Routes = [
     component: GestionParametrosComponent
   },
   {
-    path: 'consultar-plan',
-    component: PlanAccionComponent,
+    path: 'consultar-plan-formulacion',
+    component: PlanAccionFormulacionComponent,
+  },
+  {
+    path: 'consultar-plan-seguimiento',
+    component: PlanAccionSeguimientoComponent,
   },
   {
     path: 'gestion-usuarios',

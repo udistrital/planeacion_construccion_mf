@@ -2,19 +2,19 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ResumenPlan } from 'src/app/@core/models/plan/resumen_plan';
-import { RequestManager } from '../../services/requestManager';
 import { ImplicitAutenticationService, ServiceCookies } from '@udistrital/planeacion-utilidades-module';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import * as singleSpa from 'single-spa'
+import { RequestManager } from 'src/app/components/services/requestManager';
 
 @Component({
-  selector: 'app-plan-accion',
-  templateUrl: './plan-accion.component.html',
-  styleUrls: ['./plan-accion.component.scss']
+  selector: 'app-plan-accion-formulacion',
+  templateUrl: './plan-accion-formulacion.component.html',
+  styleUrls: ['./plan-accion-formulacion.component.scss']
 })
-export class PlanAccionComponent implements OnInit, AfterViewInit {
+export class PlanAccionFormulacionComponent implements OnInit, AfterViewInit {
   columnasMostradas: string[] = [
     'dependencia',
     'vigencia',
@@ -106,7 +106,7 @@ export class PlanAccionComponent implements OnInit, AfterViewInit {
       if (this.rol == 'PLANEACION' || this.rol == 'JEFE_DEPENDENCIA') {
         this.request.get(environment.PLANES_FORMULACION_MID, `/formulacion/planes_accion`).subscribe(
           (data) => {
-            const allData: ResumenPlan[] = data.data;
+            const allData: ResumenPlan[] = data.Data;
             this.planes = allData.filter(plan => plan.fase === "Formulación");
             if (this.planes.length != 0) {
               Swal.close();

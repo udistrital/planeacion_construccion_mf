@@ -15,6 +15,7 @@ export const environment = {
   PLANES_CRUD: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/planes_crud/',
   PLANES_FORMULACION_MID: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/planeacion_formulacion_mid/v1/',
   PLANES_SEGUIMIENTO_MID: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/planeacion_seguimiento_mid/v1/',
+  PLANES_EVALUACION_MID: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/planeacion_evaluacion_mid/v1/',
   PLANES_ARBOL_MID: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/planeacion_arbol_mid/v1/',
   PARAMETROS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/parametros/v1/',
   GESTOR_DOCUMENTAL_MID: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/gestor_documental_mid/v1/',

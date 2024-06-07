@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Dependencia, ROL_ASISTENTE_DEPENDENCIA, ROL_JEFE_DEPENDENCIA, ROL_PLANEACION, Usuario, Vinculacion } from './utils';
+import { Dependencia, ROL_ASISTENTE_DEPENDENCIA, ROL_ASISTENTE_PLANEACION, ROL_JEFE_DEPENDENCIA, ROL_PLANEACION, Usuario, Vinculacion } from './utils';
 import { Vigencia } from '../habilitar-reporte/utils';
 import { RequestManager } from '../../services/requestManager';
 import Swal from 'sweetalert2';
@@ -41,7 +41,7 @@ export class GestionUsuariosComponent implements OnInit{
 
   ngOnInit(): void {
     this.displayedColumns = ['Usuario', 'Roles', 'Vinculacion', 'actions'];
-    this.roles = [ROL_PLANEACION, ROL_JEFE_DEPENDENCIA, ROL_ASISTENTE_DEPENDENCIA];
+    this.roles = [ROL_PLANEACION, ROL_JEFE_DEPENDENCIA, ROL_ASISTENTE_DEPENDENCIA, ROL_ASISTENTE_PLANEACION];
     this.usuarios = [];
     this.banderaTabla = false;
     this.rolSelected = false;
