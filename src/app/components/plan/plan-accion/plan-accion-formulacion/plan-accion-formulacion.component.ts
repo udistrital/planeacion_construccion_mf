@@ -103,7 +103,7 @@ export class PlanAccionFormulacionComponent implements OnInit, AfterViewInit {
       },
     });
     await new Promise((resolve, reject) => {
-      if (this.rol == 'PLANEACION' || this.rol == 'JEFE_DEPENDENCIA') {
+      if (this.rol == 'PLANEACION') {
         this.request.get(environment.PLANES_FORMULACION_MID, `/formulacion/planes_accion`).subscribe(
           (data) => {
             const allData: ResumenPlan[] = data.Data;
