@@ -1,0 +1,30 @@
+.textGuide{
+    background-color: #ffff;
+    border: 1px solid var(--primary);
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: var(--primary) 3px 4px 0;
+    color: #0a0a0a;
+    display: inline-block;
+    font-size: 1.1em;
+    padding: 1%;
+    text-decoration: none;
+    margin-bottom: 1%!important;
+    width: 97%;
+}
+
+mat-option {
+  font-family: 'Raleway', 'Open Sans', sans-serif;
+}
+
+mat-card-footer button {
+  background-color: var(--primary);
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+mat-card-actions button{
+  background-color: var(--primary);
+  color: white;
+  padding: 10px;
+}

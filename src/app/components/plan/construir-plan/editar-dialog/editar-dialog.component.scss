@@ -1,0 +1,50 @@
+*{
+    font-family: 'Raleway', 'Open Sans', sans-serif;
+}
+
+mat-hint {
+    color: gray;
+    font-size: 70%;
+}
+
+.example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 1px 30px;
+}
+  
+.example-radio-button {
+    margin: 20px;
+}
+
+.requerido-radio-group-label{
+    padding-left: 50px;
+}
+
+.requerido-radio-button{
+    margin: 20px;
+}
+
+#ng-container{
+    margin-top: 2%;
+}
+
+.mat-form-field{
+    display: block;
+    margin: 2%;
+}
+
+mat-card-actions {
+    justify-content: center;
+}
+
+mat-card-actions button{
+  background-color: var(--primary);
+  color: white;
+  padding: 10px;
+  margin: 10px;
+}
+
+#tipo-radio-group-label {
+    color: var(--primary);
+}

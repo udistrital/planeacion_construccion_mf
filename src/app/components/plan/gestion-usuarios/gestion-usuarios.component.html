@@ -1,0 +1,107 @@
+<mat-card class="card-oas" [style.width.%]="97">
+	<div class="container-border">
+		<mat-card-header>
+			<mat-card-title>Gestión de Usuarios</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+			<u class="textGuide">
+				En esta sección usted podrá consultar los usuarios asociados al sistema SISGPLAN, realizando la búsqueda por rol o correo.
+			</u>
+		</mat-card-content>
+		<mat-card-content>
+			<div class="container-border">
+				<mat-card-header>
+					<mat-card-title>Búsqueda de usuarios</mat-card-title>
+				</mat-card-header>
+				<mat-card-content>
+					<form [formGroup]="formUsuarios">
+						<mat-form-field appearance="fill" [style.width.%]="100">
+							<mat-label>Correo electrónico</mat-label>
+							<input matInput formControlName="correo" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+							<mat-error *ngIf="formUsuarios.get('correo').hasError('required')">
+								El campo Correo es obligatorio.
+						</mat-error>
+							<mat-error *ngIf="formUsuarios.get('correo').hasError('pattern')">
+								Por favor, introduce un correo electrónico válido.
+						</mat-error>
+						</mat-form-field>
+						<!-- <mat-form-field appearance="fill" [style.width.%]="100">
+							<mat-label id="tipo-input-label">Seleccione el Rol</mat-label>
+							<mat-select (selectionChange)="onChangeRol($event.value)" formControlName="selectRol">
+								<mat-option>--</mat-option>
+								<mat-option *ngFor="let rol of roles" [value]="rol">
+									{{rol}}
+								</mat-option>
+							</mat-select>
+							<mat-error *ngIf="formUsuarios.get('selectRol').invalid">
+								El campo Rol es obligatorio.
+							</mat-error>
+						</mat-form-field> -->
+					</form>
+				</mat-card-content>
+			</div>
+			<div class="botones" style="text-align: center;">
+				<button mat-raised-button color="primary" [disabled]="!formUsuarios.valid" (click)="buscar()">Buscar</button>
+				<button mat-raised-button color="primary" (click)="limpiarForm()">Limpiar</button>
+			</div>
+		</mat-card-content>
+		<mat-card-content *ngIf="!errorEnPeticion">
+			<div class="container-border" [hidden]="!banderaTabla">
+				<mat-card-header *ngIf="banderaTabla">
+					<mat-card-title>Usuarios encontrados</mat-card-title>
+				</mat-card-header>
+				<mat-card-content *ngIf="banderaTabla">
+					<u class="textGuide">
+						En esta sección usted podrá visualizar los usuarios encontrados asociados al sistema SISGPLAN de la consulta que realizó.
+					</u>
+				</mat-card-content>
+				<div [hidden]="!banderaTabla">
+					<mat-form-field appearance="fill" [style.width.%]="50">
+						<mat-label>Búsqueda</mat-label>
+						<input matInput (keyup)="applyFilter($event)" placeholder="Ej. correo@udistrital.edu.co" #input>
+					</mat-form-field>
+				</div>
+				<div>
+					<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="banderaTabla">
+						<ng-container matColumnDef="Usuario">
+							<th mat-header-cell *matHeaderCellDef> Usuario </th>
+							<td mat-cell *matCellDef="let row"> {{row.email}} </td>
+						</ng-container>
+						<ng-container matColumnDef="Roles">
+							<th mat-header-cell *matHeaderCellDef> Roles </th>
+							<td mat-cell *matCellDef="let row"> {{formatearRoles(row.role)  || 'Sin roles asociados a SISGPLAN'}} </td>
+						</ng-container>
+						<ng-container matColumnDef="Vinculacion">
+							<th mat-header-cell *matHeaderCellDef> Vinculación </th>
+							<td mat-cell *matCellDef="let row">
+								<mat-form-field>
+									<mat-select [(value)]="row.VinculacionSeleccionadaId" (ngModelChange)="capturarVinculacion(row)">
+										<mat-option>--</mat-option>
+										<mat-option *ngFor="let vinculacion of row.Vinculacion" [value]="vinculacion.Id">
+											{{ vinculacion.Periodo }} - {{ vinculacion.Dependencia }}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</td>
+						</ng-container>
+						<ng-container matColumnDef="actions">
+							<th mat-header-cell *matHeaderCellDef class="tituloAcciones">Acciones</th>
+							<td mat-cell *matCellDef="let row" class="botonesAcciones">
+								<button mat-icon-button (click)="editar(row)"><mat-icon>edit</mat-icon></button>
+							</td>
+						</ng-container>
+						<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+						<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+						<tr class="mat-row" *matNoDataRow>
+							<td class="mat-cell" colspan="5">No se han encontrado resultados para la búsqueda "{{input.value}}"</td>
+						</tr>
+					</table>
+					<div [hidden]="!banderaTabla">
+						<mat-paginator class="paginator" #paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+					</div>
+				</div>
+			</div>
+		</mat-card-content>
+	</div>
+	<app-form-usuarios *ngIf="banderaFormEdicion && !errorEnPeticion" (errorEnPeticion)="recibirErrorPeticion($event)" [usuario]="usuario"></app-form-usuarios>
+</mat-card>

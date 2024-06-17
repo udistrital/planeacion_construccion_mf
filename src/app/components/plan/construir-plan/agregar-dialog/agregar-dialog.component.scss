@@ -1,0 +1,55 @@
+*{
+    font-family: 'Raleway', 'Open Sans', sans-serif;
+}
+
+mat-hint {
+    color: gray;
+    font-size: 70%;
+}
+
+.example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 1px 30px;
+}
+  
+.example-radio-button {
+    margin: 20px;
+}
+
+.requerido-radio-group-label{
+    padding-left: 50px;
+}
+
+.requerido-radio-button{
+    margin: 20px;
+}
+
+.textGuide{
+    background-color: #ffff;
+    border: 1px solid var(--primary);
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: var(--primary) 3px 4px 0;
+    color: #0a0a0a;
+    display: inline-block;
+    font-size: 1.1em;
+    padding: 1%;
+    text-decoration: none;
+    margin-bottom: 1%!important;
+    width: 97%;
+}
+
+mat-card-actions {
+    justify-content: center;
+}
+
+mat-card-actions button{
+  background-color: var(--primary);
+  color: white;
+  padding: 10px;
+  margin: 10px;
+}
+
+#tipo-radio-group-label {
+    color: var(--primary);
+}

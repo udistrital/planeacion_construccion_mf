@@ -1,0 +1,26 @@
+<mat-card class="card-oas">
+    <mat-card-header>
+      <mat-card-title>Consultar Proyecto / Plan</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <u class="textGuide">
+        En esta sección usted podrá visualizar los planes construidos y sus características, solo lectura
+      </u>
+    </mat-card-content>
+    <mat-card-content>
+      <mat-form-field appearance="fill" [style.width.%]="100">
+        <mat-label id="tipo-input-label">{{nombrePlan}}</mat-label>
+          <mat-select>
+            <mat-option>{{nombrePlan}}</mat-option>
+          </mat-select>
+      </mat-form-field>
+      <app-arbol [tipoPlanId]="tipo_plan_id" [idPlan]="planId" [consulta]="true"></app-arbol>
+    </mat-card-content>
+    <mat-card-actions>
+      <div style="margin: 1rem;">
+          <button mat-raised-button color="primary" (click)="volver()" class="col-3 mt-2 mb-3">
+              Regresar
+          </button>
+      </div>
+  </mat-card-actions>
+  </mat-card>
