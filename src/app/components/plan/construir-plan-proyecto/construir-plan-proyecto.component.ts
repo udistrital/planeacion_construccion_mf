@@ -179,7 +179,6 @@ export class ConstruirPlanProyectoComponent implements OnInit{
     this.request.get(environment.PLANES_FORMULACION_MID, `formulacion/planes`).subscribe(
       (data: any) => {
         if (data){
-          console.log(data);
           this.planes = data.Data;
           this.ajustarData();
           this.cerrarMensajeCarga();
