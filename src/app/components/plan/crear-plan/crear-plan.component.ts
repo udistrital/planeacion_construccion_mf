@@ -5,6 +5,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
+import { CodigosService } from '@udistrital/planeacion-utilidades-module';
 
 @Component({
   selector: 'app-crear-plan',
@@ -20,6 +21,8 @@ export class CrearPlanComponent implements OnInit {
   vigencias!: any[];
   documento: any;
   auxDocumento!: string;
+
+  private codigosService = new CodigosService();
 
   constructor(
     private request: RequestManager,
@@ -116,9 +119,9 @@ export class CrearPlanComponent implements OnInit {
     }
   }
 
-  select(tipo: any) {
+  async select(tipo: any) {
     this.tipoPlan = tipo;
-    if (tipo._id !== "611af8464a34b3599e3799a2" && tipo._id !== "623cb06616511e41ef5d798c") { // diferente de proyecto
+    if (tipo._id !== await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP') && tipo._id !== await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PUI_SP')) { // diferente de proyecto
       this.nombrePlan = tipo.nombre;
       this.banderaFormato = true;
       this.formCrearPlan.get('radioFormato').enable();

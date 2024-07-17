@@ -9,6 +9,7 @@ import { EditarDialogComponent } from '../construir-plan/editar-dialog/editar-di
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { CrearPlanComponent } from '../crear-plan/crear-plan.component';
+import { CodigosService } from '@udistrital/planeacion-utilidades-module';
 
 @Component({
   selector: 'app-construir-plan-proyecto',
@@ -25,6 +26,8 @@ export class ConstruirPlanProyectoComponent implements OnInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  private codigosService = new CodigosService();
 
   constructor(
     public dialog: MatDialog,
@@ -89,6 +92,7 @@ export class ConstruirPlanProyectoComponent implements OnInit{
         showCancelButton: true,
         confirmButtonText: `Si`,
         cancelButtonText: `No`,
+        allowOutsideClick: false,
       }).then((result) => {
           if (result.isConfirmed) {
             this.request.put(environment.PLANES_CRUD, `plan`, res, this.uid).subscribe((data: any) => {
@@ -131,6 +135,7 @@ export class ConstruirPlanProyectoComponent implements OnInit{
       showCancelButton: true,
       confirmButtonText: `Si`,
       cancelButtonText: `No`,
+      allowOutsideClick: false,
     }).then((result) => {
         if (result.isConfirmed) {
           this.request.delete(environment.PLANES_ARBOL_MID, `arbol/plan/` + this.uid + `/desactivar`, ``).subscribe((data: any) => {
@@ -174,7 +179,8 @@ export class ConstruirPlanProyectoComponent implements OnInit{
     this.request.get(environment.PLANES_FORMULACION_MID, `formulacion/planes`).subscribe(
       (data: any) => {
         if (data){
-          this.planes = data.data;
+          console.log(data);
+          this.planes = data.Data;
           this.ajustarData();
           this.cerrarMensajeCarga();
         }
@@ -237,12 +243,12 @@ export class ConstruirPlanProyectoComponent implements OnInit{
     } 
   }
 
-  inactivar(fila: any):void{
+  async inactivar(fila: any){
     this.uid = fila._id;
     if (fila.activo == 'Activo'){
-      if (fila.tipo_plan_id != '611af8464a34b3599e3799a2'){
+      if (fila.tipo_plan_id != await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP')){
         this.deleteData();
-      } else if (fila.tipo_plan_id == '611af8464a34b3599e3799a2'){
+      } else {
         let res = {
           activo: false,
         }
@@ -280,7 +286,7 @@ export class ConstruirPlanProyectoComponent implements OnInit{
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit(){
     this.loadData();
   }
 }
