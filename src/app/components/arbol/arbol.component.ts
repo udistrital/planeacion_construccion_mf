@@ -12,6 +12,7 @@ import { RequestManager } from '../services/requestManager';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { ImplicitAutenticationService } from '@udistrital/planeacion-utilidades-module';
+import { CodigosService } from '@udistrital/planeacion-utilidades-module';
 
 interface Subgrupo {
   activo: string;
@@ -38,7 +39,7 @@ interface Nodo {
 
 const Checked: string = 'done';
 const Unchecked: string = 'compare_arrows';
-const No_Aplica: string = "no aplica"
+const No_Aplica: string = "no aplica";
 
 @Component({
   selector: 'app-arbol',
@@ -46,6 +47,7 @@ const No_Aplica: string = "no aplica"
   styleUrls: ['./arbol.component.scss'],
 })
 export class ArbolComponent implements OnInit {
+  ID_TIPO_PROYECTO!: string;
 
   selectedFiles: any;
   dataRow: any;
@@ -110,6 +112,8 @@ export class ArbolComponent implements OnInit {
 
   private autenticationService = new ImplicitAutenticationService();
 
+  private codigosService = new CodigosService();
+
   constructor(
     private formBuilder: FormBuilder,
     private request: RequestManager,
@@ -130,8 +134,8 @@ export class ArbolComponent implements OnInit {
     }
   }
 
-  ngOnChanges(changes: any) {
-    if (this.tipoPlanId !== '611af8464a34b3599e3799a2') {
+  async ngOnChanges(changes: any) {
+    if (this.tipoPlanId !== await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP')) {
       if (this.idPlan !== this.planActual) {
         this.loadArbolMid();
         this.planActual = this.idPlan;
@@ -367,11 +371,12 @@ export class ArbolComponent implements OnInit {
 
   hasChild = (_: number, node: Nodo) => node.expandable;
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.formConstruirPUI = this.formBuilder.group({
       infoControl: ['', Validators.required],
       requiredfile: ['', Validators.required]
     });
     this.planActual = '';
+    this.ID_TIPO_PROYECTO = await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP')
   }
 }

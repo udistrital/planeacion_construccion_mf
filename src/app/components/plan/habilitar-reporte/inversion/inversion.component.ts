@@ -6,6 +6,7 @@ import { DataRequest } from 'src/app/@core/interfaces/DataRequest.interface';
 import { RequestManager } from 'src/app/components/services/requestManager';
 import { HabilitarReporteService } from '../habilitar-reporte.service';
 import { Periodo, PeriodoSeguimiento, PlanInteres, PROCESO_INVERSION_FORMULACION, PROCESO_INVERSION_SEGUIMIENTO, Unidad, Usuario, Vigencia } from '../utils';
+import { CodigosService } from '@udistrital/planeacion-utilidades-module';
 
 @Component({
   selector: 'app-inversion',
@@ -36,8 +37,13 @@ export class InversionComponent implements OnInit{
   selectTipo = new FormControl();
   selectFiltro = new FormControl();
 
+  CODIGO_TIPO_SEGUIMIENTO_SI!: string;
+  CODIGO_TIPO_SEGUIMIENTO_FI!: string;
+
   @Input() formFechas!: FormGroup | any; // Propiedad que se recibe desde el componente padre habilitar-reporte.component.ts
   @Input() vigencias!: Vigencia[]; // Propiedad que se recibe desde el componente padre habilitar-reporte.component.ts
+
+  private codigosService = new CodigosService();
 
   constructor(
     private request: RequestManager,
@@ -51,18 +57,21 @@ export class InversionComponent implements OnInit{
     this.periodoSeguimientoListarUnidades = {} as PeriodoSeguimiento;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const storedData = localStorage.getItem('user')
     this.user =  storedData ? JSON.parse(atob(storedData)) : null;
+
+    this.CODIGO_TIPO_SEGUIMIENTO_SI = await this.codigosService.getId('PLANES_CRUD', 'tipo-seguimiento', 'SI_SP');
+    this.CODIGO_TIPO_SEGUIMIENTO_FI = await this.codigosService.getId('PLANES_CRUD', 'tipo-seguimiento', 'FI_SP');
   }
 
   manejarCambiosUnidadesInteres(nuevasUnidades: Unidad[]) {
     this.unidadesInteres = nuevasUnidades;
     if(this.tipo == PROCESO_INVERSION_FORMULACION) {
-      this.periodoSeguimientoListarPlan.tipo_seguimiento_id = "6389efac6a0d190ffb883f71";
+      this.periodoSeguimientoListarPlan.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_FI;
       this.periodoSeguimientoListarPlan.periodo_id = this.vigencia.Id.toString();
     } else {
-      this.periodoSeguimientoListarPlan.tipo_seguimiento_id = "6385fa136a0d19d7888837ed";
+      this.periodoSeguimientoListarPlan.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_SI;
       this.periodoSeguimientoListarPlan.periodo_id = this.periodos[0].Id.toString();
     }
     this.periodoSeguimientoListarPlan.unidades_interes = JSON.stringify(this.unidadesInteres);
@@ -73,10 +82,10 @@ export class InversionComponent implements OnInit{
   manejarCambiosPlanesInteres(nuevosPlanes: PlanInteres[]) {
     this.planesInteres = nuevosPlanes;
     if(this.tipo == PROCESO_INVERSION_FORMULACION) {
-      this.periodoSeguimientoListarUnidades.tipo_seguimiento_id = "6389efac6a0d190ffb883f71";
+      this.periodoSeguimientoListarUnidades.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_FI;
       this.periodoSeguimientoListarUnidades.periodo_id = this.vigencia.Id.toString();
     } else {
-      this.periodoSeguimientoListarUnidades.tipo_seguimiento_id = "6385fa136a0d19d7888837ed";
+      this.periodoSeguimientoListarUnidades.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_SI;
       this.periodoSeguimientoListarUnidades.periodo_id = this.periodos[0].Id.toString();
     }
     this.periodoSeguimientoListarUnidades.planes_interes = JSON.stringify(this.planesInteres);
@@ -154,7 +163,7 @@ export class InversionComponent implements OnInit{
           timer: 2500,
         });
       }
-      this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,tipo_seguimiento_id:6389efac6a0d190ffb883f71`).subscribe((data: DataRequest) => {
+      this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,tipo_seguimiento_id:${this.CODIGO_TIPO_SEGUIMIENTO_FI}`).subscribe((data: DataRequest) => {
         if (data) {
           if (data.Data.length != 0) {
             let formulacionSeguimiento: PeriodoSeguimiento = data.Data[0];
@@ -180,7 +189,7 @@ export class InversionComponent implements OnInit{
       if (this.periodos && this.periodos.length > 0) {
         this.readUnidades();
         for (let i = 0; i < this.periodos.length; i++) {
-          this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,periodo_id:` + this.periodos[i].Id + `,tipo_seguimiento_id:6385fa136a0d19d7888837ed`).subscribe((data: DataRequest) => {
+          this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,periodo_id:` + this.periodos[i].Id + `,tipo_seguimiento_id:${this.CODIGO_TIPO_SEGUIMIENTO_SI}`).subscribe((data: DataRequest) => {
             if (data.Data.length != 0) {
               let seguimiento: PeriodoSeguimiento = data.Data[0];
               let fechaInicio = new Date(seguimiento.fecha_inicio);
@@ -273,7 +282,7 @@ export class InversionComponent implements OnInit{
   }
 
   readUnidadesForm() {
-    this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,periodo_id:` + this.periodos[0].Id + `,tipo_seguimiento_id:6389efac6a0d190ffb883f71`).subscribe((data: DataRequest) => {
+    this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,periodo_id:` + this.periodos[0].Id + `,tipo_seguimiento_id:${this.CODIGO_TIPO_SEGUIMIENTO_FI}`).subscribe((data: DataRequest) => {
       if (data) {
         if (data.Data.length != 0) {
           this.unidadesInteres = JSON.parse(data.Data[0].unidades_interes);
@@ -296,7 +305,7 @@ export class InversionComponent implements OnInit{
   }
 
   readUnidades() {
-    this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,periodo_id:` + this.periodos[0].Id + `,tipo_seguimiento_id:6385fa136a0d19d7888837ed`).subscribe((data: DataRequest) => {
+    this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,periodo_id:` + this.periodos[0].Id + `,tipo_seguimiento_id:${this.CODIGO_TIPO_SEGUIMIENTO_SI}`).subscribe((data: DataRequest) => {
       if (data) {
         if (data.Data.length != 0) {
           this.unidadesInteres = JSON.parse(data.Data[0].unidades_interes);
@@ -342,7 +351,7 @@ export class InversionComponent implements OnInit{
     }
 
     if (this.tipo == PROCESO_INVERSION_FORMULACION) {
-      const tipo_seguimiento_id: string = "6389efac6a0d190ffb883f71";
+      const tipo_seguimiento_id: string = this.CODIGO_TIPO_SEGUIMIENTO_FI;
       var periodo_seguimiento_inversion: PeriodoSeguimiento = {} as PeriodoSeguimiento; // Declara el objeto periodo_seguimiento_inversion
       
       Swal.fire({
@@ -454,7 +463,6 @@ export class InversionComponent implements OnInit{
   }
 
   actualizarPeriodo(i: number, periodoId: number) {
-    const tipo_seguimiento_id: string = "6385fa136a0d19d7888837ed"
     var periodo_seguimiento_seguimiento: PeriodoSeguimiento = {} as PeriodoSeguimiento;
     let fecha_inicio: any;
     let fecha_fin: any;
@@ -482,7 +490,7 @@ export class InversionComponent implements OnInit{
     periodo_seguimiento_seguimiento.periodo_id = periodoId.toString();
     periodo_seguimiento_seguimiento.fecha_inicio = fecha_inicio.toISOString();
     periodo_seguimiento_seguimiento.fecha_fin = fecha_fin.toISOString();
-    periodo_seguimiento_seguimiento.tipo_seguimiento_id = tipo_seguimiento_id;
+    periodo_seguimiento_seguimiento.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_SI;
     periodo_seguimiento_seguimiento.unidades_interes = JSON.stringify(this.unidadesInteres);
     periodo_seguimiento_seguimiento.planes_interes = JSON.stringify(this.planesInteres);
     periodo_seguimiento_seguimiento.usuario_modificacion = this.user.userService.documento ? this.user.userService.documento : '';
