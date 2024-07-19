@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
@@ -36,6 +36,7 @@ export class PlanAccionSeguimientoComponent implements OnInit, AfterViewInit {
   rol!: string;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('root', { static: false }) root!: ElementRef;
 
   private autenticationService = new ImplicitAutenticationService();
 
@@ -82,7 +83,7 @@ export class PlanAccionSeguimientoComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.inputsFiltros = document.querySelectorAll('th.mat-header-cell input');
+    this.inputsFiltros = this.root.nativeElement.querySelectorAll('th.mat-header-cell input');
   }
 
   aplicarFiltro(event: Event): void {
@@ -111,11 +112,20 @@ export class PlanAccionSeguimientoComponent implements OnInit, AfterViewInit {
     });
     this.estadoDescarga = true;
     await new Promise((resolve, reject) => {
-      if (this.rol == 'PLANEACION' || this.rol == 'JEFE_DEPENDENCIA') {
+      if (this.rol == 'PLANEACION') {
         this.request.get(environment.PLANES_FORMULACION_MID, `formulacion/planes_accion`).subscribe(
           (data) => {
             const allData: any[] = data.Data;
-            this.planes = allData.filter(plan => plan.fase === "Seguimiento" && plan.dependencia_nombre === unidad);
+            const seenPlans = new Set();
+            this.planes = [];
+            allData.forEach(plan => {
+              if (plan.fase === "Seguimiento" && plan.dependencia_nombre === unidad) {
+                if (!seenPlans.has(plan.nombre)) { // Verifica si el nombre del plan ya ha sido visto
+                  this.planes.push(plan); // Añade el plan a la lista de planes
+                  seenPlans.add(plan.nombre); // Marca el nombre del plan como visto
+                }
+              }
+            });
             if (this.planes.length != 0) {
               Swal.close();
             } else {
@@ -191,34 +201,32 @@ export class PlanAccionSeguimientoComponent implements OnInit, AfterViewInit {
                           timer: 2500,
                         });
                       } else {
-                        idDependencia = data.Data['DependenciaId'];
-                        this.request
-                        .get(
-                          environment.PLANES_FORMULACION_MID,
-                          `/formulacion/planes_accion/${idDependencia}`
-                        )
-                          .subscribe(
-                            (data) => {
-                              const allData = data.Data;
-                              this.planes = allData.filter((plan: { fase: string; }) => plan.fase === "Seguimiento");
-                              if (this.planes.length != 0) {
-                                Swal.close();
+                        const vinculaciones = data.Data;
+                        let promesas = [];
+
+                        for (let i = 0; i < vinculaciones.length; i++) {
+                          promesas.push(new Promise((PromesaResolve, PromesaReject) => {
+                            idDependencia = vinculaciones[i].DependenciaId;
+
+                            this.request.get(environment.PLANES_FORMULACION_MID, `/formulacion/planes_accion/${idDependencia}`).subscribe((data) => {
+                              if (data && data.Success) {
+                                PromesaResolve(data.Data)
                               } else {
-                                this.estadoDescarga = false;
                                 Swal.close();
+                                this.estadoDescarga = false;
                                 Swal.fire({
-                                  title: 'No existen registros',
-                                  icon: 'info',
-                                  text: 'No existen proyectos con registros en fase de seguimiento asociados a la unidad seleccionada',
-                                  showConfirmButton: true,
+                                  title:
+                                    'Error al intentar obtener los planes de acción',
+                                  icon: 'error',
+                                  text: 'Ingresa más tarde',
+                                  showConfirmButton: false,
+                                  timer: 2500,
                                 });
+                                PromesaReject();
                               }
-                              resolve(this.planes);
-                            },
-                            (error) => {
+                            }, (error) => {
                               Swal.close();
                               this.estadoDescarga = false;
-                              this.planes = [];
                               console.error(error);
                               Swal.fire({
                                 title:
@@ -228,9 +236,57 @@ export class PlanAccionSeguimientoComponent implements OnInit, AfterViewInit {
                                 showConfirmButton: false,
                                 timer: 2500,
                               });
-                              reject();
+                              PromesaReject();
                             }
-                          );
+                            );
+                          }));
+                        }
+                        Promise.all(promesas).then(resultados => {
+                          let resultadoPlanes: any = [];
+
+                          if (resultados.length != 0) {
+                            for (let i = 0; i < resultados.length; i++) {
+                              let resultadoUnico: any = [];
+                              const nombresUnidades: { [key: string]: boolean } = {};
+
+                              (resultados[i] as any[]).forEach(plan => {
+                                if (plan.fase === "Seguimiento") {
+                                  const clave = `${plan.nombre}-${plan.unidad}`;
+                                  if (!nombresUnidades[clave]) {
+                                    nombresUnidades[clave] = true;
+                                    resultadoUnico.push(plan);
+                                  }
+                                }
+                              });
+
+                              resultadoPlanes = [...resultadoPlanes, ...resultadoUnico];
+                            }
+                            this.planes = resultadoPlanes;
+                            resolve(this.planes);
+                            Swal.close();
+                          } else {
+                            this.estadoDescarga = false;
+                            Swal.close();
+                            Swal.fire({
+                              title: 'No existen registros',
+                              icon: 'info',
+                              text: 'No existen proyectos con registros en fase de seguimiento asociados a la unidad seleccionada',
+                              showConfirmButton: true,
+                            });
+                          }
+                        }).catch(error => {
+                          Swal.fire({
+                            title:
+                              'Error al intentar obtener los planes de acción',
+                            icon: 'error',
+                            text: 'Ingresa más tarde',
+                            showConfirmButton: false,
+                            timer: 2500,
+                          });
+                          console.error('Ocurrió un error:', error);
+                          reject()
+                        })
+
                       }
                     },
                     (error) => {

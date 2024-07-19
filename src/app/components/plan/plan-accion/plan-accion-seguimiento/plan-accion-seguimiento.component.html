@@ -2,7 +2,7 @@
   <mat-card-header>
     <mat-card-title>Tabla de procesos de seguimiento realizados</mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content #root>
 
     <div class="funtionsContainer">
       <mat-select *ngIf="rol=='PLANEACION'" class="input-search" placeholder="Seleccione la Unidad" (selectionChange)="ajustarData($event)">
