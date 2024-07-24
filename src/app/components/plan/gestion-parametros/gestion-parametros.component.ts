@@ -102,6 +102,10 @@ export class GestionParametrosComponent implements OnInit, OnDestroy {
     this.request.get(environment.PARAMETROS_SERVICE, `/parametro_periodo?query=ParametroId.TipoParametroId.CodigoAbreviacion:P_SISGPLAN,Activo:true`).subscribe(
       (data: DataRequest) => {
         if (data) {
+          for (var i = 0; i < data.Data.length; i++) {
+            data.Data[i].Nombre = data.Data[i].ParametroId.Nombre.toLowerCase()
+            data.Data[i].Valor = JSON.parse(data.Data[i].Valor).Valor
+          }
           this.parametros = data.Data;
           this.cerrarMensajeCarga()
         }
