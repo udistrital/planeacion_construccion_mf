@@ -14,7 +14,7 @@ import { DataRequest } from 'src/app/@core/interfaces/DataRequest.interface';
   templateUrl: './gestion-parametros.component.html',
   styleUrls: ['./gestion-parametros.component.scss']
 })
-export class GestionParametrosComponent implements OnInit, OnDestroy{
+export class GestionParametrosComponent implements OnInit, OnDestroy {
   displayedColumns!: string[];
   parametros!: ParametroPeriodo[] | any;
   banderaAdicion!: boolean;
@@ -55,8 +55,8 @@ export class GestionParametrosComponent implements OnInit, OnDestroy{
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     //this.sort.sort({
-     // id: 'Id', start: 'asc',
-     // disableClear: false
+    // id: 'Id', start: 'asc',
+    // disableClear: false
     //});
     Swal.close();
   }
@@ -71,7 +71,7 @@ export class GestionParametrosComponent implements OnInit, OnDestroy{
   }
 
   onChange(event: any) {
-    if(event == 'agregarParametro') {
+    if (event == 'agregarParametro') {
       this.banderaAdicion = true;
       this.banderaEdicion = false;
     } else if (event == 'editarParametro') {
@@ -130,6 +130,7 @@ export class GestionParametrosComponent implements OnInit, OnDestroy{
       showCancelButton: true,
       confirmButtonText: `Si`,
       cancelButtonText: `No`,
+      allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
         this.request.delete(environment.PARAMETROS_SERVICE, `parametro_periodo/`, parametroPeriodo.Id).subscribe((data: any) => {

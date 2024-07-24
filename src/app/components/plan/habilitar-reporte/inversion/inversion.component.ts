@@ -13,7 +13,7 @@ import { CodigosService } from '@udistrital/planeacion-utilidades-module';
   templateUrl: './inversion.component.html',
   styleUrls: ['./inversion.component.scss']
 })
-export class InversionComponent implements OnInit{
+export class InversionComponent implements OnInit {
   vigenciaSelected: boolean;
   tipoSelected!: boolean;
   reporteHabilitado!: boolean;
@@ -59,7 +59,7 @@ export class InversionComponent implements OnInit{
 
   async ngOnInit(): Promise<void> {
     const storedData = localStorage.getItem('user')
-    this.user =  storedData ? JSON.parse(atob(storedData)) : null;
+    this.user = storedData ? JSON.parse(atob(storedData)) : null;
 
     this.CODIGO_TIPO_SEGUIMIENTO_SI = await this.codigosService.getId('PLANES_CRUD', 'tipo-seguimiento', 'SI_SP');
     this.CODIGO_TIPO_SEGUIMIENTO_FI = await this.codigosService.getId('PLANES_CRUD', 'tipo-seguimiento', 'FI_SP');
@@ -67,7 +67,7 @@ export class InversionComponent implements OnInit{
 
   manejarCambiosUnidadesInteres(nuevasUnidades: Unidad[]) {
     this.unidadesInteres = nuevasUnidades;
-    if(this.tipo == PROCESO_INVERSION_FORMULACION) {
+    if (this.tipo == PROCESO_INVERSION_FORMULACION) {
       this.periodoSeguimientoListarPlan.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_FI;
       this.periodoSeguimientoListarPlan.periodo_id = this.vigencia.Id.toString();
     } else {
@@ -81,7 +81,7 @@ export class InversionComponent implements OnInit{
   // Función para manejar los cambios en los planes de interés
   manejarCambiosPlanesInteres(nuevosPlanes: PlanInteres[]) {
     this.planesInteres = nuevosPlanes;
-    if(this.tipo == PROCESO_INVERSION_FORMULACION) {
+    if (this.tipo == PROCESO_INVERSION_FORMULACION) {
       this.periodoSeguimientoListarUnidades.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_FI;
       this.periodoSeguimientoListarUnidades.periodo_id = this.vigencia.Id.toString();
     } else {
@@ -146,6 +146,7 @@ export class InversionComponent implements OnInit{
       title: 'Cargando Fechas',
       timerProgressBar: true,
       showConfirmButton: false,
+      allowOutsideClick: false,
       willOpen: () => {
         Swal.showLoading();
       },
@@ -317,19 +318,19 @@ export class InversionComponent implements OnInit{
         }
       }
     }, (error) => {
-    Swal.fire({
-      title: 'Error en la operación',
-      text: `No se encontraron datos registrados ${JSON.stringify(error)}`,
-      icon: 'warning',
-      showConfirmButton: false,
-          timer: 2500,
-        });
-      }
+      Swal.fire({
+        title: 'Error en la operación',
+        text: `No se encontraron datos registrados ${JSON.stringify(error)}`,
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500,
+      });
+    }
     );
   }
 
   guardar() {
-    if(this.unidadesInteres == undefined || this.unidadesInteres.length == 0){
+    if (this.unidadesInteres == undefined || this.unidadesInteres.length == 0) {
       Swal.fire({
         title: 'Error en la operación',
         text: `Por favor seleccione las unidades de interés para continuar`,
@@ -339,7 +340,7 @@ export class InversionComponent implements OnInit{
       });
       return;
     }
-    if(this.planesInteres == undefined || this.planesInteres.length == 0){
+    if (this.planesInteres == undefined || this.planesInteres.length == 0) {
       Swal.fire({
         title: 'Error en la operación',
         text: `Por favor seleccione los planes de interés para continuar`,
@@ -353,13 +354,14 @@ export class InversionComponent implements OnInit{
     if (this.tipo == PROCESO_INVERSION_FORMULACION) {
       const tipo_seguimiento_id: string = this.CODIGO_TIPO_SEGUIMIENTO_FI;
       var periodo_seguimiento_inversion: PeriodoSeguimiento = {} as PeriodoSeguimiento; // Declara el objeto periodo_seguimiento_inversion
-      
+
       Swal.fire({
         title: 'Habilitar Fechas',
         text: `¿Desea habilitar la formulación de planes para la vigencia ` + this.vigencia.Nombre + ` ?`,
         showCancelButton: true,
         confirmButtonText: `Sí`,
         cancelButtonText: `No`,
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           if (this.formFechas.get('fecha19').value != "" && this.formFechas.get('fecha20').value != "") {
@@ -371,7 +373,7 @@ export class InversionComponent implements OnInit{
             periodo_seguimiento_inversion.planes_interes = JSON.stringify(this.planesInteres);
             periodo_seguimiento_inversion.usuario_modificacion = this.user.userService.documento ? this.user.userService.documento : '';
             periodo_seguimiento_inversion.activo = true;
-    
+
             this.request.post(environment.PLANES_FORMULACION_MID, 'formulacion/habilitar_fechas', periodo_seguimiento_inversion).subscribe((data: DataRequest) => {
               if (data) {
                 Swal.fire({
@@ -417,6 +419,7 @@ export class InversionComponent implements OnInit{
         showCancelButton: true,
         confirmButtonText: `Sí`,
         cancelButtonText: `No`,
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           if (
@@ -450,15 +453,15 @@ export class InversionComponent implements OnInit{
           }
         }
       }),
-      (error: any) => {
-        Swal.fire({
-          title: 'Error en la operación',
-          icon: 'error',
-          text: `${JSON.stringify(error)}`,
-          showConfirmButton: false,
-          timer: 2500,
-        });
-      };
+        (error: any) => {
+          Swal.fire({
+            title: 'Error en la operación',
+            icon: 'error',
+            text: `${JSON.stringify(error)}`,
+            showConfirmButton: false,
+            timer: 2500,
+          });
+        };
     }
   }
 
@@ -506,14 +509,14 @@ export class InversionComponent implements OnInit{
         });
       }
     }, (error) => {
-        Swal.fire({
-          title: 'Error en la operación',
-          icon: 'error',
-          text: `Hubo un problema al procesar la solicitud. Por favor, inténtelo de nuevo.`,
-          showConfirmButton: false,
-          timer: 2500,
-        });
-      }
+      Swal.fire({
+        title: 'Error en la operación',
+        icon: 'error',
+        text: `Hubo un problema al procesar la solicitud. Por favor, inténtelo de nuevo.`,
+        showConfirmButton: false,
+        timer: 2500,
+      });
+    }
     );
   }
 
