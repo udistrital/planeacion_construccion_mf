@@ -22,6 +22,7 @@ export class HabilitarReporteService {
       title: 'Cargando períodos',
       timerProgressBar: true,
       showConfirmButton: false,
+      allowOutsideClick: false,
       willOpen: () => {
         Swal.showLoading();
       },
@@ -45,7 +46,7 @@ export class HabilitarReporteService {
   isValidObjectId(id: string): boolean {
     // Utiliza una expresión regular para verificar el formato del ObjectId
     const objectIdRegex = /^[0-9a-fA-F]{24}$/;
-    
+
     // Verifica si el id tiene el formato correcto
     return objectIdRegex.test(id);
   }

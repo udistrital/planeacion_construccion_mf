@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './form-usuarios.component.html',
   styleUrls: ['./form-usuarios.component.scss']
 })
-export class FormUsuariosComponent implements OnInit{
+export class FormUsuariosComponent implements OnInit {
 
   rolesUsuario: Rol[] = [];
   rolesSistema: Rol[] = [
@@ -46,10 +46,11 @@ export class FormUsuariosComponent implements OnInit{
       showCancelButton: true,
       confirmButtonText: `Si`,
       cancelButtonText: `No`,
+      allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
         const successfulResponses: any[] = []; // Variable para almacenar las respuestas exitosas
-        
+
         rolesSeleccionados.reduce((promiseChain, rol, index) => {
           return promiseChain.then(() => {
             return new Promise((resolve, reject) => {
@@ -58,7 +59,7 @@ export class FormUsuariosComponent implements OnInit{
                 "rol": rol.rol
               };
               this.mostrarMensajeCarga();
-        
+
               this.request.post(`${environment.AUTENTICACION_MID}/rol/add`, '', body)
                 .subscribe((data: any) => {
                   if (data != null && data != undefined && data != "") {
@@ -82,27 +83,27 @@ export class FormUsuariosComponent implements OnInit{
             });
           });
         }, Promise.resolve())
-        .then(async () => {
-          for (const response of successfulResponses) {
-            if (response != null && response != undefined) {
-              if (response.data != "" && response.status === 200) {
-                if (!this.rolesUsuario.find(i => i.rol === response.rolUsuario.rol)) {
-                  this.rolesUsuario.push({ ...response.rolUsuario });
+          .then(async () => {
+            for (const response of successfulResponses) {
+              if (response != null && response != undefined) {
+                if (response.data != "" && response.status === 200) {
+                  if (!this.rolesUsuario.find(i => i.rol === response.rolUsuario.rol)) {
+                    this.rolesUsuario.push({ ...response.rolUsuario });
+                  }
+                  this.rolesSistema = this.rolesSistema.filter(item => !item.selected);
+                  await this.mostrarMensajeExito(response.rolUsuario.rol, 'vincular');
+                } else if (response.status === 400 && response.success == false) {
+                  this.mostrarMensajeError(`El usuario ya tiene el rol ${response.rolUsuario.rol} asignado`);
+                } else {
+                  this.mostrarMensajeError(`No se pudo vincular el rol ${response.rolUsuario.rol} al usuario`);
                 }
-                this.rolesSistema = this.rolesSistema.filter(item => !item.selected);
-                await this.mostrarMensajeExito(response.rolUsuario.rol, 'vincular');
-              } else if (response.status === 400 && response.success == false) {
-                this.mostrarMensajeError(`El usuario ya tiene el rol ${response.rolUsuario.rol} asignado`);
-              } else {
-                this.mostrarMensajeError(`No se pudo vincular el rol ${response.rolUsuario.rol} al usuario`);
               }
             }
-          }
-          this.clearSelection();
-        }).catch(error => {});
+            this.clearSelection();
+          }).catch(error => { });
 
         const promises = rolesSeleccionados.map((rol) => {
-          if (this.usuario.VinculacionSeleccionadaId != undefined ){
+          if (this.usuario.VinculacionSeleccionadaId != undefined) {
             return new Promise((resolve, reject) => {
               let bodyVinculacion = {
                 "user": this.usuario,
@@ -133,7 +134,7 @@ export class FormUsuariosComponent implements OnInit{
             return Promise.resolve(null);
           }
         });
-        
+
         Promise.all(promises)
           .catch(error => {
             console.error('Error en alguna de las peticiones para cambiar CargoId:', error);
@@ -159,10 +160,11 @@ export class FormUsuariosComponent implements OnInit{
       showCancelButton: true,
       confirmButtonText: `Si`,
       cancelButtonText: `No`,
+      allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
         const successfulResponses: any[] = []; // Variable para almacenar las respuestas exitosas
-  
+
         rolesSeleccionados.reduce((promiseChain, rol, index) => {
           return promiseChain.then(() => {
             return new Promise((resolve, reject) => {
@@ -171,7 +173,7 @@ export class FormUsuariosComponent implements OnInit{
                 "rol": rol.rol
               };
               this.mostrarMensajeCarga();
-  
+
               this.request.post(`${environment.AUTENTICACION_MID}/rol/remove`, '', body)
                 .subscribe((data: any) => {
                   if (data != null && data != undefined && data != "") {
@@ -195,28 +197,28 @@ export class FormUsuariosComponent implements OnInit{
             });
           });
         }, Promise.resolve())
-        .then(async () => {
-          for (const response of successfulResponses) {
-            if (response != null && response != undefined) {
-              if (response.data != "" && response.status === 200) {
-                if (!this.rolesSistema.find(i => i.rol === response.rolUsuario.rol)) {
-                  this.rolesSistema.push({ ...response.rolUsuario });
+          .then(async () => {
+            for (const response of successfulResponses) {
+              if (response != null && response != undefined) {
+                if (response.data != "" && response.status === 200) {
+                  if (!this.rolesSistema.find(i => i.rol === response.rolUsuario.rol)) {
+                    this.rolesSistema.push({ ...response.rolUsuario });
+                  }
+                  this.rolesUsuario = this.rolesUsuario.filter(item => !item.selected);
+                  await this.mostrarMensajeExito(response.rolUsuario.rol, 'desvincular');
+                } else if (response.status === 400 && response.success == false) {
+                  this.mostrarMensajeError(`El usuario no tiene el rol ${response.rolUsuario.rol} asignado`);
+                } else {
+                  this.mostrarMensajeError(`No se pudo desvincular el rol ${response.rolUsuario.rol} del usuario`);
                 }
-                this.rolesUsuario = this.rolesUsuario.filter(item => !item.selected);
-                await this.mostrarMensajeExito(response.rolUsuario.rol, 'desvincular');
-              } else if (response.status === 400 && response.success == false) {
-                this.mostrarMensajeError(`El usuario no tiene el rol ${response.rolUsuario.rol} asignado`);
-              } else {
-                this.mostrarMensajeError(`No se pudo desvincular el rol ${response.rolUsuario.rol} del usuario`);
               }
             }
-          }
-          this.clearSelection();
-        })
-        .catch(error => {});
+            this.clearSelection();
+          })
+          .catch(error => { });
 
         const promises = rolesSeleccionados.map((rol) => {
-          if (this.usuario.VinculacionSeleccionadaId != undefined ){
+          if (this.usuario.VinculacionSeleccionadaId != undefined) {
             return new Promise((resolve, reject) => {
               let bodyVinculacion = {
                 "user": this.usuario,
@@ -247,7 +249,7 @@ export class FormUsuariosComponent implements OnInit{
             return Promise.resolve(null);
           }
         });
-        
+
         Promise.all(promises)
           .catch(error => {
             console.error('Error en alguna de las peticiones para cambiar CargoId:', error);
@@ -281,7 +283,7 @@ export class FormUsuariosComponent implements OnInit{
   mostrarMensajeExito(rol: string, tipo: string) {
     let mensaje = '';
     tipo == 'vincular' ? mensaje = `Rol ${rol} vinculado correctamente` : mensaje = `Rol ${rol} desvinculado correctamente`;
-  
+
     return new Promise(resolve => {
       Swal.fire({
         title: 'Operación exitosa',
@@ -311,7 +313,7 @@ export class FormUsuariosComponent implements OnInit{
 
   formatearRoles(usuario: Usuario) {
     return usuario.role.filter(rol => rol !== 'Internal/everyone' && rol !== 'Internal/selfsignup')
-                              .map(rol => ({ "rol": rol, "selected": false }));
+      .map(rol => ({ "rol": rol, "selected": false }));
   }
 
   validarRoles(rolesUsuario: Rol[], rolesSistema: Rol[]) {
