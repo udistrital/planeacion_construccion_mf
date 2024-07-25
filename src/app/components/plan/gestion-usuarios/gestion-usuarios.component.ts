@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './gestion-usuarios.component.html',
   styleUrls: ['./gestion-usuarios.component.scss']
 })
-export class GestionUsuariosComponent implements OnInit{
+export class GestionUsuariosComponent implements OnInit {
 
   formUsuarios!: FormGroup | any;
   displayedColumns!: string[];
@@ -82,10 +82,10 @@ export class GestionUsuariosComponent implements OnInit{
     }
   }
 
-  buscar(){
+  buscar() {
     this.errorEnPeticion = false;
     this.banderaFormEdicion = false;
-    if(this.validarEmail(this.formUsuarios.get('correo').value)){
+    if (this.validarEmail(this.formUsuarios.get('correo').value)) {
       let body = {
         "user": this.formUsuarios.get('correo').value
       }
@@ -98,34 +98,34 @@ export class GestionUsuariosComponent implements OnInit{
             this.request.get(environment.PLANES_FORMULACION_MID, `formulacion/vinculacion_tercero_email/${this.formUsuarios.get('correo').value}`).subscribe(
               (data: any) => {
                 if (data != null && data != undefined && data != "") {
-                  if(data.Data && data.Data != null && data.Data != undefined && data.Data != "") {
+                  if (data.Data && data.Data != null && data.Data != undefined && data.Data != "") {
                     this.vinculacionesUsuario = data.Data;
                     for (const vinculacion of this.vinculacionesUsuario) {
                       this.request.get(environment.PARAMETROS_SERVICE, `periodo?query=Activo:true,Id:${vinculacion.PeriodoId}`).subscribe((data: any) => {
-                          if (data != null && data != undefined && data != "") {
-                            let vigencia: Vigencia = data.Data[0];
-                            const vinculacionEncontrada = this.vinculacionesUsuario.find(vinculacionUsuario => vinculacionUsuario.Id == vinculacion.Id);
-                            if (vinculacionEncontrada) {
-                                vinculacionEncontrada.Periodo = vigencia.Nombre;
-                            }
-                            this.cerrarMensajeCarga()
+                        if (data != null && data != undefined && data != "") {
+                          let vigencia: Vigencia = data.Data[0];
+                          const vinculacionEncontrada = this.vinculacionesUsuario.find(vinculacionUsuario => vinculacionUsuario.Id == vinculacion.Id);
+                          if (vinculacionEncontrada) {
+                            vinculacionEncontrada.Periodo = vigencia.Nombre;
                           }
-                        }, (error) => {
-                          Swal.fire({
-                            title: 'Error en la operación',
-                            text: 'No se encontraron datos registrados',
-                            icon: 'warning',
-                            showConfirmButton: false,
-                            timer: 2500
-                          })
+                          this.cerrarMensajeCarga()
                         }
+                      }, (error) => {
+                        Swal.fire({
+                          title: 'Error en la operación',
+                          text: 'No se encontraron datos registrados',
+                          icon: 'warning',
+                          showConfirmButton: false,
+                          timer: 2500
+                        })
+                      }
                       );
                       this.request.get(environment.OIKOS_SERVICE, `dependencia_tipo_dependencia?query=DependenciaId:` + vinculacion.DependenciaId).subscribe((dataUnidad: any) => {
                         if (dataUnidad) {
                           let unidad: Dependencia = dataUnidad[0];
                           const vinculacionEncontrada = this.vinculacionesUsuario.find(vinculacionUsuario => vinculacionUsuario.Id == vinculacion.Id);
                           if (vinculacionEncontrada && vinculacionEncontrada.DependenciaId) {
-                              vinculacionEncontrada.Dependencia = unidad.DependenciaId.Nombre;
+                            vinculacionEncontrada.Dependencia = unidad.DependenciaId.Nombre;
                           }
                           Swal.close();
                         }
@@ -178,7 +178,7 @@ export class GestionUsuariosComponent implements OnInit{
     return valido ? true : false;
   }
 
-  limpiarForm(){
+  limpiarForm() {
     this.formUsuarios.reset();
     this.banderaTabla = false;
     this.rol = undefined;
@@ -198,9 +198,21 @@ export class GestionUsuariosComponent implements OnInit{
   }
 
   editar(usuario: Usuario) {
-    this.errorEnPeticion = false;
-    this.usuario = usuario;
-    this.banderaFormEdicion = true;
+    if (usuario.VinculacionSeleccionadaId == null) {
+      this.banderaFormEdicion = false;
+      Swal.fire({
+        title: 'Error en la operación',
+        text: 'Debe seleccionar la vinculación del usuario',
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      })
+    } else {
+      this.errorEnPeticion = false;
+      this.usuario = usuario;
+      this.usuario.encodedEmail = encodeURIComponent(this.usuario.email);
+      this.banderaFormEdicion = true;
+    }
   }
 
   recibirErrorPeticion(error: any) {
