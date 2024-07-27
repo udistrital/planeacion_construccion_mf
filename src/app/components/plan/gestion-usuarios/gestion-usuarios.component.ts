@@ -123,7 +123,9 @@ export class GestionUsuariosComponent implements OnInit {
                       this.request.get(environment.OIKOS_SERVICE, `dependencia_tipo_dependencia?query=DependenciaId:` + vinculacion.DependenciaId).subscribe((dataUnidad: any) => {
                         if (dataUnidad) {
                           let unidad: Dependencia = dataUnidad[0];
-                          this.vinculacionesUsuario.find(vinculacionUsuario => vinculacionUsuario.Id == vinculacion.Id)!.Dependencia = unidad.DependenciaId.Nombre;
+                          let vinculacionEncontrada = this.vinculacionesUsuario.find(vinculacionUsuario => vinculacionUsuario.Id == vinculacion.Id);
+                          vinculacionEncontrada!.Dependencia = unidad.DependenciaId.Nombre;
+                          vinculacionEncontrada!.DependenciaCorreo = unidad.DependenciaId.CorreoElectronico;
                           Swal.close();
                         }
                       });
