@@ -24,6 +24,7 @@ export interface Vinculacion {
   CargoId: number;
   DependenciaId: number;
   Dependencia?: string;
+  DependenciaCorreo?: string;
   Soporte: number;
   PeriodoId: number;
   Periodo?: string;
