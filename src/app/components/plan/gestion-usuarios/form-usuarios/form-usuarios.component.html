@@ -15,23 +15,23 @@
 					</mat-card-header>
 					<mat-card-content class="listaRoles">
 						<div *ngFor="let item of rolesUsuario">
-								<mat-checkbox [checked]="item.selected" (change)="seleccionarRol(item)">{{item.rol}}</mat-checkbox>
+                <mat-radio-button [selected]="item.selected" (change)="seleccionarRolDesvincular(item)">{{item.rol}}</mat-radio-button>
 						</div>
 					</mat-card-content>
 			</div>
-			
+
 			<div class="button-container">
 				<button mat-raised-button class="azul-oscuro" (click)="vincularRol()"><mat-icon>arrow_left</mat-icon>Vincular</button>
 				<button mat-raised-button color="primary" (click)="desvincularRol()">Desvincular<mat-icon>arrow_right</mat-icon></button>
 			</div>
-			
+
 			<div class="right-menu container-border">
 					<mat-card-header>
 							<mat-card-title>Roles <b>SISGPLAN</b> (Roles que se pueden asignar)</mat-card-title>
 					</mat-card-header>
 					<mat-card-content class="listaRoles">
 							<div *ngFor="let item of rolesSistema">
-									<mat-checkbox [checked]="item.selected" (change)="seleccionarRol(item)">{{item.rol}}</mat-checkbox>
+                  <mat-radio-button [selected]="item.selected" (change)="seleccionarRolVincular(item)">{{item.rol}}</mat-radio-button>
 							</div>
 					</mat-card-content>
 			</div>
