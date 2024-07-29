@@ -12,9 +12,9 @@ import Swal from 'sweetalert2';
   templateUrl: './form-parametros.component.html',
   styleUrls: ['./form-parametros.component.scss']
 })
-export class FormParametrosComponent implements OnInit, OnChanges{
+export class FormParametrosComponent implements OnInit, OnChanges {
   formParametros!: FormGroup | any;
-  
+
   vigencia!: Vigencia | any;
   vigenciaSelected!: boolean;
   areaTipo!: AreaTipo;
@@ -28,21 +28,23 @@ export class FormParametrosComponent implements OnInit, OnChanges{
   constructor(
     private request: RequestManager,
     private fb: FormBuilder,
-    ) {
-      this.formParametros = this.fb.group({
-        concepto: ['', Validators.required],
-        valor: ['', Validators.required],
-        selectVigencia: ['', Validators.required]
-      }) ;
-    }
+  ) {
+    this.formParametros = this.fb.group({
+      concepto: ['', Validators.required],
+      codigoAbreviacion: ['', Validators.required],
+      valor: ['', Validators.required],
+      selectVigencia: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
     this.formParametros = new FormGroup({
       concepto: new FormControl(),
+      codigoAbreviacion: new FormControl(),
       valor: new FormControl(),
       selectVigencia: new FormControl(),
     })
-    if(this.banderaEdicion) {
+    if (this.banderaEdicion) {
       this.formParametros.reset();
       this.loadDataEdicion();
     } else {
@@ -96,7 +98,13 @@ export class FormParametrosComponent implements OnInit, OnChanges{
   }
 
   loadDataEdicion() {
+    if (this.parametroPeriodoEdicion.ParametroId.CodigoAbreviacion === 'CORREO_OAP') {
+      this.formParametros.get('codigoAbreviacion').disable();
+    } else {
+      this.formParametros.get('codigoAbreviacion').enable();
+    }
     this.formParametros.get('concepto').setValue(this.parametroPeriodoEdicion.ParametroId.Nombre);
+    this.formParametros.get('codigoAbreviacion').setValue(this.parametroPeriodoEdicion.ParametroId.CodigoAbreviacion);
     this.formParametros.get('valor').setValue(this.parametroPeriodoEdicion.Valor);
     this.vigencia = this.vigencias.find(vigencia => vigencia.Id === this.parametroPeriodoEdicion.PeriodoId.Id);
     this.formParametros.get('selectVigencia').setValue(this.vigencia);
@@ -120,11 +128,14 @@ export class FormParametrosComponent implements OnInit, OnChanges{
 
   guardar() {
     if (this.formParametros.valid) {
-      if(this.banderaAdicion) {
+      if (this.banderaAdicion) {
+        let valorParametro = {
+          Valor: this.formParametros.get('valor').value
+        };
         this.tipoParametro.AreaTipoId = this.areaTipo;
         var parametro: Parametro = {
           Activo: true,
-          CodigoAbreviacion: '',
+          CodigoAbreviacion: this.formParametros.get('codigoAbreviacion').value,
           Descripcion: this.formParametros.get('concepto').value,
           Nombre: this.formParametros.get('concepto').value,
           NumeroOrden: 0,
@@ -135,7 +146,7 @@ export class FormParametrosComponent implements OnInit, OnChanges{
           Activo: true,
           ParametroId: undefined,
           PeriodoId: this.vigencia,
-          Valor: this.formParametros.get('valor').value,
+          Valor: JSON.stringify(valorParametro),
         }
         this.agregar(parametro, parametroPeriodo);
       } else if (this.banderaEdicion) {
@@ -187,9 +198,13 @@ export class FormParametrosComponent implements OnInit, OnChanges{
     var parametro: Parametro = parametroPeriodo.ParametroId;
     parametro.Nombre = this.formParametros.get('concepto').value;
     parametro.Descripcion = this.formParametros.get('concepto').value;
+    parametro.CodigoAbreviacion = this.formParametros.get('codigoAbreviacion').value;
     this.request.put(environment.PARAMETROS_SERVICE, `parametro`, parametro, parametro.Id).subscribe((data: DataRequest) => {
       if (data) {
-        parametroPeriodo.Valor = this.formParametros.get('valor').value;
+        let valorParametro = {
+          Valor: this.formParametros.get('valor').value
+        };
+        parametroPeriodo.Valor = JSON.stringify(valorParametro);
         parametroPeriodo.PeriodoId = this.vigencia;
         parametroPeriodo.ParametroId = parametro;
         this.request.put(environment.PARAMETROS_SERVICE, `parametro_periodo`, parametroPeriodo, parametroPeriodo.Id).subscribe((data: DataRequest) => {

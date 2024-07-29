@@ -14,9 +14,16 @@
 			<form [formGroup]="formParametros">
 				<mat-form-field appearance="fill" [style.width.%]="100">
 					<mat-label>Concepto</mat-label>
-					<input matInput formControlName="concepto"  required>
+					<input matInput formControlName="concepto" required>
 					<mat-error *ngIf="formParametros.get('concepto').invalid">
 						El campo Concepto es obligatorio.
+					</mat-error>
+				</mat-form-field>
+        <mat-form-field appearance="fill" [style.width.%]="100">
+					<mat-label>Código de Abreviación</mat-label>
+					<input matInput formControlName="codigoAbreviacion" required>
+					<mat-error *ngIf="formParametros.get('codigoAbreviacion').invalid">
+						El campo Código de Abreviación es obligatorio.
 					</mat-error>
 				</mat-form-field>
 				<mat-form-field appearance="fill" [style.width.%]="100">

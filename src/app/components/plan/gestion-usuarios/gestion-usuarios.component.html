@@ -16,13 +16,13 @@
 				<mat-card-content>
 					<form [formGroup]="formUsuarios">
 						<mat-form-field appearance="fill" [style.width.%]="100">
-							<mat-label>Correo electrónico</mat-label>
-							<input matInput formControlName="correo" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
-							<mat-error *ngIf="formUsuarios.get('correo').hasError('required')">
-								El campo Correo es obligatorio.
+							<mat-label>Documento de identificación</mat-label>
+							<input matInput formControlName="identificacion" required>
+							<mat-error *ngIf="formUsuarios.get('identificacion').hasError('required')">
+								El campo Identificación es obligatorio.
 						</mat-error>
-							<mat-error *ngIf="formUsuarios.get('correo').hasError('pattern')">
-								Por favor, introduce un correo electrónico válido.
+							<mat-error *ngIf="formUsuarios.get('identificacion').hasError('pattern')">
+								Por favor, introduce un número válido.
 						</mat-error>
 						</mat-form-field>
 						<!-- <mat-form-field appearance="fill" [style.width.%]="100">
@@ -78,7 +78,7 @@
 									<mat-select [(value)]="row.VinculacionSeleccionadaId" (ngModelChange)="capturarVinculacion(row)">
 										<mat-option>--</mat-option>
 										<mat-option *ngFor="let vinculacion of row.Vinculacion" [value]="vinculacion.Id">
-											{{ vinculacion.Periodo }} - {{ vinculacion.Dependencia }}
+                      {{ vinculacion.Periodo }} - {{ vinculacion.Dependencia || 'No se pudo obtener el nombre de la dependencia'}}
 										</mat-option>
 									</mat-select>
 								</mat-form-field>

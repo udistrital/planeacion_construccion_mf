@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import { EditarDialogComponent } from './editar-dialog/editar-dialog.component';
 import { AgregarDialogComponent } from './agregar-dialog/agregar-dialog.component';
+import { CodigosService } from '@udistrital/planeacion-utilidades-module';
 
 @Component({
   selector: 'app-construir-plan',
@@ -14,6 +15,8 @@ import { AgregarDialogComponent } from './agregar-dialog/agregar-dialog.componen
   styleUrls: ['./construir-plan.component.scss']
 })
 export class ConstruirPlanComponent implements OnInit{
+  ID_TIPO_PROYECTO!: string;
+
   formConstruirPlan!: FormGroup;
   tipo_plan_id!: string; // id tipo plan
   nombrePlan!: string;
@@ -26,6 +29,9 @@ export class ConstruirPlanComponent implements OnInit{
   padreSub!: string;
 
   @Output() eventChange = new EventEmitter();
+
+  private codigosService = new CodigosService();
+
   constructor(
     private formBuilder: FormBuilder,
     public dialog: MatDialog,
@@ -434,7 +440,7 @@ export class ConstruirPlanComponent implements OnInit{
   }
 
   loadPlanes() {
-    this.request.get(environment.PLANES_CRUD, `plan?query=formato:true`).subscribe((data: any) => {
+    this.request.get(environment.PLANES_CRUD, `plan?query=formato:true`).subscribe(async (data: any) => {
       if (data) {
         this.planes = data.Data;
         this.planes = this.filterActivos(this.planes);
@@ -443,7 +449,7 @@ export class ConstruirPlanComponent implements OnInit{
         this.planes = this.planes.concat(data.Data);
         this.planes = this.filterActivos(this.planes);
       })
-      this.request.get(environment.PLANES_CRUD, `plan?query=tipo_plan_id:6239117116511e20405d408b`).subscribe((data: any) => {
+      this.request.get(environment.PLANES_CRUD, `plan?query=tipo_plan_id:${await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PLI_SP')}`).subscribe((data: any) => {
         this.planes = this.planes.concat(data.Data);
         this.planes = this.filterActivos(this.planes);
       })
@@ -466,9 +472,10 @@ export class ConstruirPlanComponent implements OnInit{
     this.router.navigate(['construir-plan-proyecto']);
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.formConstruirPlan = this.formBuilder.group({
       planControl: ['', Validators.required],
     });
+    this.ID_TIPO_PROYECTO = await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP')
   }
 }

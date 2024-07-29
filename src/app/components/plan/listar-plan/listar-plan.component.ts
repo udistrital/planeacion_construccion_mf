@@ -4,12 +4,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { RequestManager } from '../../services/requestManager';
 import { Router } from '@angular/router';
-import { MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { PeriodoSeguimiento } from '../habilitar-reporte/utils/habilitar-reporte.models';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { EditarDialogComponent } from '../construir-plan/editar-dialog/editar-dialog.component';
 import { DataRequest } from 'src/app/@core/interfaces/DataRequest.interface';
+import { CodigosService } from '@udistrital/planeacion-utilidades-module';
 
 export interface Planes {
   _id: string
@@ -35,7 +36,7 @@ export interface Plan {
   templateUrl: './listar-plan.component.html',
   styleUrls: ['./listar-plan.component.scss']
 })
-export class ListarPlanComponent implements OnInit{
+export class ListarPlanComponent implements OnInit {
   displayedColumns!: string[];
   dataSource!: MatTableDataSource<any>;
   uid!: number; // id del objeto
@@ -56,6 +57,8 @@ export class ListarPlanComponent implements OnInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  private codigosService = new CodigosService();
+
   constructor(
     public dialog: MatDialog,
     private request: RequestManager,
@@ -69,8 +72,8 @@ export class ListarPlanComponent implements OnInit{
 
   ngOnInit(): void {
     this.planesMostrar = [];
-    if(this.banderaPlanesAccionFuncionamiento === true){
-      if(this.filtroPlan === true){
+    if (this.banderaPlanesAccionFuncionamiento === true) {
+      if (this.filtroPlan === true) {
         this.displayedColumns = ['nombre', 'descripcion', 'tipo_plan', 'activo', 'actions'];
       } else {
         this.displayedColumns = ['nombre', 'descripcion', 'tipo_plan', 'activo', 'fecha_modificacion', 'actions']
@@ -106,7 +109,7 @@ export class ListarPlanComponent implements OnInit{
     });
   }
 
-  putData(res:any, bandera: any) {
+  putData(res: any, bandera: any) {
     if (bandera == 'editar') {
       this.request.put(environment.PLANES_CRUD, `plan`, res, this.uid).subscribe((data: any) => {
         if (data) {
@@ -141,6 +144,7 @@ export class ListarPlanComponent implements OnInit{
         showCancelButton: true,
         confirmButtonText: `Si`,
         cancelButtonText: `No`,
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           this.request.put(environment.PLANES_CRUD, `plan`, res, this.uid).subscribe((data: any) => {
@@ -183,6 +187,7 @@ export class ListarPlanComponent implements OnInit{
       showCancelButton: true,
       confirmButtonText: `Si`,
       cancelButtonText: `No`,
+      allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
         this.request.delete(environment.PLANES_ARBOL_MID, `arbol/plan/` + this.uid + `/desactivar`, ``).subscribe((data: any) => {
@@ -263,7 +268,7 @@ export class ListarPlanComponent implements OnInit{
 
   ajustarData() {
     this.cambiarValor("activo", true, "Activo");
-    if(this.banderaPlanesAccionFuncionamiento){
+    if (this.banderaPlanesAccionFuncionamiento) {
       this.planes = this.planes.filter((plan: Planes) => plan.activo == "Activo");
       this.cambiarValor("iconSelected", undefined, "compare_arrows");
     } else {
@@ -295,12 +300,12 @@ export class ListarPlanComponent implements OnInit{
       }
   }
 
-  inactivar(fila: any): void {
+  async inactivar(fila: any) {
     this.uid = fila._id;
     if (fila.activo == 'Activo') {
-      if (fila.tipo_plan_id != '611af8464a34b3599e3799a2') {
+      if (fila.tipo_plan_id != await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP')) {
         this.deleteData();
-      } else if (fila.tipo_plan_id == '611af8464a34b3599e3799a2') {
+      } else if (fila.tipo_plan_id == await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP')) {
         let res = {
           activo: false,
         }
@@ -324,7 +329,7 @@ export class ListarPlanComponent implements OnInit{
   }
 
   changeIcon(row: Planes) {
-    if(!row.iconSelected){
+    if (!row.iconSelected) {
       row.iconSelected = this.iconoPlanesAccionFuncionamiento;
     }
     if (row.iconSelected == 'compare_arrows') {
@@ -375,8 +380,8 @@ export class ListarPlanComponent implements OnInit{
     this.planesInteresSeleccionados.emit(this.planesInteres);
   }
 
-  cambiarDataTabla(){
-    if(this.textBotonMostrarData === 'Mostrar Planes Interés Habilitados/Reporte'){
+  cambiarDataTabla() {
+    if (this.textBotonMostrarData === 'Mostrar Planes Interés Habilitados/Reporte') {
       Swal.fire({
         title: 'Cargando datos...',
         allowEscapeKey: false,
@@ -388,7 +393,7 @@ export class ListarPlanComponent implements OnInit{
       this.request.post(environment.PLANES_CRUD, 'periodo-seguimiento/buscar-unidad-planes/5', this.periodoSeguimiento).subscribe(
         (data: DataRequest) => {
           if (data) {
-            if(data.Data !== null){
+            if (data.Data !== null) {
               var periodoSeguimiento = data.Data;
               this.textBotonMostrarData = 'Mostrar todos los planes';
               let planesMostrar: any = [];
@@ -401,7 +406,7 @@ export class ListarPlanComponent implements OnInit{
                 });
                 planesMostrar = planesMostrar.concat(planesFiltrados);
               });
-  
+
               planesMostrar = [...new Set(planesMostrar)];
               this.planesMostrar = planesMostrar;
               this.dataSource = new MatTableDataSource(this.planesMostrar);

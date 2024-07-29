@@ -14,7 +14,7 @@ import { DataRequest } from 'src/app/@core/interfaces/DataRequest.interface';
   templateUrl: './gestion-parametros.component.html',
   styleUrls: ['./gestion-parametros.component.scss']
 })
-export class GestionParametrosComponent implements OnInit, OnDestroy{
+export class GestionParametrosComponent implements OnInit, OnDestroy {
   displayedColumns!: string[];
   parametros!: ParametroPeriodo[] | any;
   banderaAdicion!: boolean;
@@ -33,7 +33,7 @@ export class GestionParametrosComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.banderaAdicion = false;
     this.banderaEdicion = false;
-    this.displayedColumns = ['Id', 'Nombre', 'Valor', 'Vigencia', 'actions'];
+    this.displayedColumns = ['Id', 'Nombre', 'CodigoAbreviacion', 'Valor', 'Vigencia', 'actions'];
     this.loadData();
   }
 
@@ -55,8 +55,8 @@ export class GestionParametrosComponent implements OnInit, OnDestroy{
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     //this.sort.sort({
-     // id: 'Id', start: 'asc',
-     // disableClear: false
+    // id: 'Id', start: 'asc',
+    // disableClear: false
     //});
     Swal.close();
   }
@@ -71,7 +71,7 @@ export class GestionParametrosComponent implements OnInit, OnDestroy{
   }
 
   onChange(event: any) {
-    if(event == 'agregarParametro') {
+    if (event == 'agregarParametro') {
       this.banderaAdicion = true;
       this.banderaEdicion = false;
     } else if (event == 'editarParametro') {
@@ -102,6 +102,10 @@ export class GestionParametrosComponent implements OnInit, OnDestroy{
     this.request.get(environment.PARAMETROS_SERVICE, `/parametro_periodo?query=ParametroId.TipoParametroId.CodigoAbreviacion:P_SISGPLAN,Activo:true`).subscribe(
       (data: DataRequest) => {
         if (data) {
+          for (var i = 0; i < data.Data.length; i++) {
+            data.Data[i].Nombre = data.Data[i].ParametroId.Nombre.toLowerCase()
+            data.Data[i].Valor = JSON.parse(data.Data[i].Valor).Valor
+          }
           this.parametros = data.Data;
           this.cerrarMensajeCarga()
         }
@@ -124,12 +128,24 @@ export class GestionParametrosComponent implements OnInit, OnDestroy{
   }
 
   inactivar(parametroPeriodo: ParametroPeriodo) {
+    let codigoAbreviacionParametro = parametroPeriodo.ParametroId.CodigoAbreviacion;
+    if (codigoAbreviacionParametro === 'CORREO_OAP') {
+      Swal.fire({
+        title: 'Error en la operación',
+        text: 'No es posible inactivar el parámetro CORREO_OAP, comuníquese con computo@udistrital.edu.co',
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 2500
+      })
+      return;
+    }
     Swal.fire({
       title: 'Inactivar Parámetro',
       text: `¿Está seguro de inactivar el parámetro?`,
       showCancelButton: true,
       confirmButtonText: `Si`,
       cancelButtonText: `No`,
+      allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
         this.request.delete(environment.PARAMETROS_SERVICE, `parametro_periodo/`, parametroPeriodo.Id).subscribe((data: any) => {

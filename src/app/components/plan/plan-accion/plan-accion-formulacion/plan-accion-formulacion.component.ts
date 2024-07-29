@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ResumenPlan } from 'src/app/@core/models/plan/resumen_plan';
@@ -31,6 +31,7 @@ export class PlanAccionFormulacionComponent implements OnInit, AfterViewInit {
   rol!: string;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('root', { static: false }) root!: ElementRef;
 
   private autenticationService = new ImplicitAutenticationService();
   private serviceCookies = new ServiceCookies();
@@ -75,7 +76,7 @@ export class PlanAccionFormulacionComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.inputsFiltros = document.querySelectorAll('th.mat-header-cell input');
+    this.inputsFiltros = this.root.nativeElement.querySelectorAll('th.mat-header-cell input');
   }
 
   aplicarFiltro(event: Event): void {
@@ -98,6 +99,7 @@ export class PlanAccionFormulacionComponent implements OnInit, AfterViewInit {
       title: 'Cargando planes de acción',
       timerProgressBar: true,
       showConfirmButton: false,
+      allowOutsideClick: false,
       willOpen: () => {
         Swal.showLoading();
       },

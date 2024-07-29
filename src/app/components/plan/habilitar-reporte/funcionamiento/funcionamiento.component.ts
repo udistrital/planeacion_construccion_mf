@@ -7,13 +7,14 @@ import { HabilitarReporteService } from '../habilitar-reporte.service';
 
 import { PROCESO_FUNCIONAMIENTO_FORMULACION, PROCESO_FUNCIONAMIENTO_SEGUIMIENTO, Periodo, PeriodoSeguimiento, PlanInteres, Seguimiento, Unidad, Usuario, Vigencia } from '../utils';
 import { DataRequest } from 'src/app/@core/interfaces/DataRequest.interface';
+import { CodigosService } from '@udistrital/planeacion-utilidades-module';
 
 @Component({
   selector: 'app-funcionamiento',
   templateUrl: './funcionamiento.component.html',
   styleUrls: ['./funcionamiento.component.scss']
 })
-export class FuncionamientoComponent implements OnInit{
+export class FuncionamientoComponent implements OnInit {
   vigenciaSelected: boolean;
   banderaUnidadesInteres!: boolean;
   banderaPlanesInteres!: boolean;
@@ -41,8 +42,12 @@ export class FuncionamientoComponent implements OnInit{
   selectTipo = new FormControl();
   selectFiltro = new FormControl();
 
+  CODIGO_TIPO_SEGUIMIENTO_S!: string;
+  CODIGO_TIPO_SEGUIMIENTO_F!: string;
+
   @Input() formFechas!: FormGroup | any; // Propiedad que se recibe desde el componente padre (habilitar-reporte.component.ts)
   @Input() vigencias!: Vigencia[]; // Propiedad que se recibe desde el componente padre (habilitar-reporte.component.ts)
+  private codigosService = new CodigosService();
 
   constructor(
     private request: RequestManager,
@@ -56,20 +61,22 @@ export class FuncionamientoComponent implements OnInit{
     this.periodoSeguimientoListarUnidades = {} as PeriodoSeguimiento;
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     const storedData = localStorage.getItem('user')
-    this.user =  storedData ? JSON.parse(atob(storedData)) : null;
+    this.user = storedData ? JSON.parse(atob(storedData)) : null;
+    this.CODIGO_TIPO_SEGUIMIENTO_S = await this.codigosService.getId('PLANES_CRUD', 'tipo-seguimiento', 'S_SP')
+    this.CODIGO_TIPO_SEGUIMIENTO_F = await this.codigosService.getId('PLANES_CRUD', 'tipo-seguimiento', 'F_SP')
   }
 
   // Función para manejar los cambios en las unidades de interés
   manejarCambiosUnidadesInteres(nuevasUnidades: Unidad[]) {
     this.unidadesInteres = nuevasUnidades;
-    
-    if(this.tipo == PROCESO_FUNCIONAMIENTO_FORMULACION) {
-      this.periodoSeguimientoListarPlan.tipo_seguimiento_id = "6260e975ebe1e6498f7404ee";
+
+    if (this.tipo == PROCESO_FUNCIONAMIENTO_FORMULACION) {
+      this.periodoSeguimientoListarPlan.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_F;
       this.periodoSeguimientoListarPlan.periodo_id = this.vigencia.Id.toString();
     } else {
-      this.periodoSeguimientoListarPlan.tipo_seguimiento_id = "61f236f525e40c582a0840d0";
+      this.periodoSeguimientoListarPlan.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_S;
       this.periodoSeguimientoListarPlan.periodo_id = this.periodos[0].Id.toString();
     }
     this.periodoSeguimientoListarPlan.unidades_interes = JSON.stringify(this.unidadesInteres);
@@ -80,11 +87,11 @@ export class FuncionamientoComponent implements OnInit{
   manejarCambiosPlanesInteres(nuevosPlanes: PlanInteres[]) {
     this.planesInteres = nuevosPlanes;
 
-    if(this.tipo == PROCESO_FUNCIONAMIENTO_FORMULACION) {
-      this.periodoSeguimientoListarUnidades.tipo_seguimiento_id = "6260e975ebe1e6498f7404ee";
+    if (this.tipo == PROCESO_FUNCIONAMIENTO_FORMULACION) {
+      this.periodoSeguimientoListarUnidades.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_F;
       this.periodoSeguimientoListarUnidades.periodo_id = this.vigencia.Id.toString();
     } else {
-      this.periodoSeguimientoListarUnidades.tipo_seguimiento_id = "61f236f525e40c582a0840d0";
+      this.periodoSeguimientoListarUnidades.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_S;
       this.periodoSeguimientoListarUnidades.periodo_id = this.periodos[0].Id.toString();
     }
     this.periodoSeguimientoListarUnidades.planes_interes = JSON.stringify(this.planesInteres);
@@ -155,21 +162,22 @@ export class FuncionamientoComponent implements OnInit{
       title: 'Cargando Fechas',
       timerProgressBar: true,
       showConfirmButton: false,
+      allowOutsideClick: false,
       willOpen: () => {
         Swal.showLoading();
       },
     });
     if (this.tipo === PROCESO_FUNCIONAMIENTO_FORMULACION) {
-      this.request.get(environment.PLANES_CRUD, `seguimiento?query=activo:true,tipo_seguimiento_id:6260e975ebe1e6498f7404ee`).subscribe((data: DataRequest) => {
+      this.request.get(environment.PLANES_CRUD, `seguimiento?query=activo:true,tipo_seguimiento_id:${this.CODIGO_TIPO_SEGUIMIENTO_F}`).subscribe((data: DataRequest) => {
         if (data) {
           if (data.Data.length != 0) {
             this.seguimiento = data.Data[0];
             this.formFechas.get('fecha9').setValue(new Date(this.seguimiento.fecha_inicio));
             this.formFechas.get('fecha10').setValue(new Date(this.seguimiento.fecha_fin));
-            if(this.habilitarReporteService.isValidObjectId(this.seguimiento.periodo_seguimiento_id)){
+            if (this.habilitarReporteService.isValidObjectId(this.seguimiento.periodo_seguimiento_id)) {
               this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,_id:${this.seguimiento.periodo_seguimiento_id}`).subscribe((data: DataRequest) => {
-                if(data){
-                  if(data.Data.length > 0){
+                if (data) {
+                  if (data.Data.length > 0) {
                     this.periodoSeguimiento = data.Data[0];
                     this.unidadesInteresPeriodoSeguimiento = JSON.parse(this.periodoSeguimiento.unidades_interes);
                     Swal.close();
@@ -194,7 +202,7 @@ export class FuncionamientoComponent implements OnInit{
     } else if (this.tipo === PROCESO_FUNCIONAMIENTO_SEGUIMIENTO) {
       if (this.periodos && this.periodos.length > 0) {
         for (let i = 0; i < this.periodos.length; i++) {
-          this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,periodo_id:` + this.periodos[i].Id + `,tipo_seguimiento_id:61f236f525e40c582a0840d0`).subscribe((data: DataRequest) => {
+          this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,periodo_id:` + this.periodos[i].Id + `,tipo_seguimiento_id:${this.CODIGO_TIPO_SEGUIMIENTO_S}`).subscribe((data: DataRequest) => {
             if (data.Data.length != 0) {
               let seguimiento: PeriodoSeguimiento = data.Data[0];
               this.periodoSeguimiento = data.Data[0];
@@ -245,7 +253,7 @@ export class FuncionamientoComponent implements OnInit{
     await this.habilitarReporteService.loadTrimestres(vigencia);
     this.habilitarReporteService.getTrimestresSubject().subscribe(
       (data: any) => {
-        if(data.error) {
+        if (data.error) {
           this.guardarDisabled = true;
           this.periodos = [];
           Swal.close();
@@ -257,7 +265,7 @@ export class FuncionamientoComponent implements OnInit{
             timer: 3000
           })
         } else {
-          if(data == null) {
+          if (data == null) {
             this.guardarDisabled = true;
             this.periodos = [];
             Swal.close();
@@ -287,7 +295,7 @@ export class FuncionamientoComponent implements OnInit{
   }
 
   guardar() {
-    if(this.unidadesInteres == undefined || this.unidadesInteres.length == 0){
+    if (this.unidadesInteres == undefined || this.unidadesInteres.length == 0) {
       Swal.fire({
         title: 'Error en la operación',
         text: `Por favor seleccione las unidades de interés para continuar`,
@@ -297,9 +305,9 @@ export class FuncionamientoComponent implements OnInit{
       });
       return;
     }
-    
+
     if (this.tipo == PROCESO_FUNCIONAMIENTO_FORMULACION) {
-      const tipo_seguimiento_id: string = "6260e975ebe1e6498f7404ee"
+      const tipo_seguimiento_id: string = this.CODIGO_TIPO_SEGUIMIENTO_F
       var periodo_seguimiento_formulacion: PeriodoSeguimiento = {} as PeriodoSeguimiento;
       Swal.fire({
         title: 'Habilitar Fechas',
@@ -307,6 +315,7 @@ export class FuncionamientoComponent implements OnInit{
         showCancelButton: true,
         confirmButtonText: `Sí`,
         cancelButtonText: `No`,
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           if (this.formFechas.get('fecha9').value != "" && this.formFechas.get('fecha10').value != "") {
@@ -319,46 +328,46 @@ export class FuncionamientoComponent implements OnInit{
             periodo_seguimiento_formulacion.usuario_modificacion = this.user.userService.documento ? this.user.userService.documento : '';
             periodo_seguimiento_formulacion.activo = true;
             this.request.post(environment.PLANES_FORMULACION_MID, 'formulacion/habilitar_fechas', periodo_seguimiento_formulacion)
-            .subscribe(
-              (data: DataRequest) => {
-                if (data && data.Success) {
+              .subscribe(
+                (data: DataRequest) => {
+                  if (data && data.Success) {
+                    Swal.fire({
+                      title: 'Fechas Actualizadas',
+                      icon: 'success',
+                      showConfirmButton: false,
+                      timer: 2500
+                    });
+                    this.limpiarForm()
+                  } else {
+                    Swal.fire({
+                      title: 'Error al actualizar las fechas',
+                      icon: 'error',
+                      text: 'Hubo un error al realizar el proceso de actualización de fechas, inténtelo de nuevo.',
+                      showConfirmButton: false,
+                      timer: 2500,
+                    });
+                  }
+                }, (error) => {
                   Swal.fire({
-                    title: 'Fechas Actualizadas',
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 2500
-                  });
-                  this.limpiarForm()
-                } else {
-                  Swal.fire({
-                    title: 'Error al actualizar las fechas',
+                    title: 'Error en la operación',
                     icon: 'error',
-                    text: 'Hubo un error al realizar el proceso de actualización de fechas, inténtelo de nuevo.',
+                    text: `Hubo un problema al procesar la solicitud. Por favor, inténtelo de nuevo.`,
                     showConfirmButton: false,
                     timer: 2500,
                   });
                 }
-              }, (error) => {
-                Swal.fire({
-                  title: 'Error en la operación',
-                  icon: 'error',
-                  text: `Hubo un problema al procesar la solicitud. Por favor, inténtelo de nuevo.`,
-                  showConfirmButton: false,
-                  timer: 2500,
-                });
-              }
-            );
+              );
           }
         }
       }), (error: any) => {
-          Swal.fire({
-            title: 'Error en la operación',
-            icon: 'error',
-            text: `${JSON.stringify(error)}`,
-            showConfirmButton: false,
-            timer: 2500,
-          });
-        };
+        Swal.fire({
+          title: 'Error en la operación',
+          icon: 'error',
+          text: `${JSON.stringify(error)}`,
+          showConfirmButton: false,
+          timer: 2500,
+        });
+      };
     } else {
       Swal.fire({
         title: 'Habilitar Fechas',
@@ -366,6 +375,7 @@ export class FuncionamientoComponent implements OnInit{
         showCancelButton: true,
         confirmButtonText: `Sí`,
         cancelButtonText: `No`,
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           if (
@@ -398,21 +408,20 @@ export class FuncionamientoComponent implements OnInit{
             });
           }
         }
-      }), 
-      (error: any) => {
-        Swal.fire({
-          title: 'Error en la operación',
-          icon: 'error',
-          text: `${JSON.stringify(error)}`,
-          showConfirmButton: false,
-          timer: 2500,
-        });
-      };
+      }),
+        (error: any) => {
+          Swal.fire({
+            title: 'Error en la operación',
+            icon: 'error',
+            text: `${JSON.stringify(error)}`,
+            showConfirmButton: false,
+            timer: 2500,
+          });
+        };
     }
   }
 
   actualizarPeriodo(i: number, periodoId: number) {
-    const tipo_seguimiento_id: string = "61f236f525e40c582a0840d0"
     var periodo_seguimiento_seguimiento: PeriodoSeguimiento = {} as PeriodoSeguimiento;
     let fecha_inicio: any, fecha_fin: any;
     if (i === 0) {
@@ -438,7 +447,7 @@ export class FuncionamientoComponent implements OnInit{
     periodo_seguimiento_seguimiento.periodo_id = periodoId.toString();
     periodo_seguimiento_seguimiento.fecha_inicio = fecha_inicio.toISOString();
     periodo_seguimiento_seguimiento.fecha_fin = fecha_fin.toISOString();
-    periodo_seguimiento_seguimiento.tipo_seguimiento_id = tipo_seguimiento_id;
+    periodo_seguimiento_seguimiento.tipo_seguimiento_id = this.CODIGO_TIPO_SEGUIMIENTO_S;
     periodo_seguimiento_seguimiento.unidades_interes = JSON.stringify(this.unidadesInteres);
     periodo_seguimiento_seguimiento.planes_interes = JSON.stringify(this.planesInteres);
     periodo_seguimiento_seguimiento.usuario_modificacion = this.user.userService.documento ? this.user.userService.documento : '';
@@ -454,14 +463,14 @@ export class FuncionamientoComponent implements OnInit{
         });
       }
     }, (error) => {
-        Swal.fire({
-          title: 'Error en la operación',
-          icon: 'error',
-          text: `Hubo un problema al procesar la solicitud. Por favor, inténtelo de nuevo.`,
-          showConfirmButton: false,
-          timer: 2500,
-        });
-      }
+      Swal.fire({
+        title: 'Error en la operación',
+        icon: 'error',
+        text: `Hubo un problema al procesar la solicitud. Por favor, inténtelo de nuevo.`,
+        showConfirmButton: false,
+        timer: 2500,
+      });
+    }
     );
   }
 
