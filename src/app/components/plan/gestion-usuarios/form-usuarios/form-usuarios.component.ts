@@ -112,6 +112,7 @@ export class FormUsuariosComponent implements OnInit {
                 });
             });
           }
+          return undefined;
         });
 
         // Ejecutar todas las promesas en paralelo para cambio de CargoId
