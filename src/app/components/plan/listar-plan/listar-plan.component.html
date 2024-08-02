@@ -53,7 +53,7 @@
             <div class="botonesPlanesInteres" *ngIf="banderaPlanesAccionFuncionamiento">
                 <button mat-raised-button [disabled]="banderaTodosSeleccionados" (click)="seleccionarTodos()" color="primary">Seleccionar Todos</button>
                 <button mat-raised-button [disabled]="planesInteres.length==0" (click)="borrarSeleccion()" color="primary">Borrar selección</button>
-                <button mat-raised-button *ngIf="filtroPlan == false" (click)="cambiarDataTabla()" color="primary">{{textBotonMostrarData}}</button>
+                <button mat-raised-button *ngIf="filtroPlan == false && tipo != 'seguimiento'" (click)="cambiarDataTabla()" color="primary">{{textBotonMostrarData}}</button>
             </div>
         </div>
     </mat-card-content>

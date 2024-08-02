@@ -99,7 +99,7 @@ export class GestionParametrosComponent implements OnInit, OnDestroy {
   loadData() {
     this.mostrarMensajeCarga();
     this.loadVigencias();
-    this.request.get(environment.PARAMETROS_SERVICE, `/parametro_periodo?query=ParametroId.TipoParametroId.CodigoAbreviacion:P_SISGPLAN,Activo:true`).subscribe(
+    this.request.get(environment.PARAMETROS_SERVICE, `parametro_periodo?query=ParametroId.TipoParametroId.CodigoAbreviacion:P_SISGPLAN,Activo:true`).subscribe(
       (data: DataRequest) => {
         if (data) {
           for (var i = 0; i < data.Data.length; i++) {

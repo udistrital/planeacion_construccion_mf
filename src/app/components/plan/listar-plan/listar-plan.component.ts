@@ -52,6 +52,7 @@ export class ListarPlanComponent implements OnInit {
 
   @Input() periodoSeguimiento!: PeriodoSeguimiento;
   @Input() filtroPlan: boolean | undefined;
+  @Input() tipo: any;
   @Input() banderaPlanesAccionFuncionamiento: boolean | undefined;
   @Output() planesInteresSeleccionados = new EventEmitter<any[]>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -67,6 +68,7 @@ export class ListarPlanComponent implements OnInit {
     this.banderaTodosSeleccionados = false;
     this.planesInteres = [];
     this.filtroPlan = false;
+    this.tipo = null;
     this.banderaPlanesAccionFuncionamiento = false;
   }
 

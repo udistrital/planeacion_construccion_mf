@@ -132,6 +132,7 @@ export class FuncionamientoComponent implements OnInit {
     if (filtro == undefined) {
       this.filtroSelected = false;
     } else {
+      this.filtroSelected = true;
       if (filtro === 'unidad') {
         this.filtroUnidad = true;
         this.filtroPlan = false;
