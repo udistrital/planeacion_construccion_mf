@@ -109,6 +109,7 @@ export class EditarDialogComponent implements OnInit {
       nombre: [this.nombre, Validators.required],
       activo: [this.activoS, Validators.required],
       tipo_plan_id: [this.tipoPlan, Validators.required],
+      vigencia_aplica: [[]],
       formato: [this.formatoS, Validators.required],
       parametro: ['', Validators.required],
       tipoDato: [this.tipoDato, Validators.required],
@@ -375,6 +376,29 @@ export class EditarDialogComponent implements OnInit {
         }
       );
     });
+  }
+
+  vigenciaToJson(vigencia: { Id: number, Nombre: string }): string {
+    return JSON.stringify({ Id: vigencia.Id, Nombre: vigencia.Nombre });
+  }
+
+  onOpenedChangeVigencia(isOpened: boolean) {
+    if (isOpened) {
+      Swal.fire({
+        title: 'Información',
+        text: 'Una vez guardadas las vigencias a las que aplicará el plan NO está permitido desmarcarlas. Para más información comunicarse con computo@udistrital.edu.co',
+        icon: 'info',
+        confirmButtonText: 'OK'
+      });
+    }
+  }
+
+  isDisabledVigencia(vigencia: any) {
+    if (this.vigencia_aplica_selected != null) {
+      let vigencias = JSON.parse(this.vigencia_aplica_selected);
+      return vigencias.some((v: any) => v.Id == vigencia.Id);
+    }
+    return false;
   }
 }
 

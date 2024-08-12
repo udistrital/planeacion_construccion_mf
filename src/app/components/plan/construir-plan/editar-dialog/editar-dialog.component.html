@@ -22,13 +22,27 @@
       <ng-container *ngIf="vTipoPlan">
         <mat-form-field [style.width.%]="40">
           <mat-label id="tipo-input-label">Tipo</mat-label>
-          <mat-select formControlName="tipo_plan_id" (selectionChange)="onChange($event.value)" required>
+          <mat-select formControlName="tipo_plan_id" (selectionChange)="compararTipoPlan_PED_PI()" (openedChange)="onChange($event.value)" required>
             <mat-option>--</mat-option>
             <mat-option *ngFor="let tipo of tiposPlanes" [value]="tipo._id">
               {{tipo.nombre}}
             </mat-option>
           </mat-select>
           <mat-hint>Seleccione el tipo de proyecto o plan</mat-hint>
+        </mat-form-field>
+      </ng-container>
+      <ng-container *ngIf="vVigenciaAplicaTipoPlan">
+        <mat-form-field appearance="fill" [style.width.%]="100">
+          <mat-label id="year-input-label">Vigencia a la que aplica el plan</mat-label>
+          <mat-select formControlName="vigencia_aplica" multiple (openedChange)="onOpenedChangeVigencia($event)" required>
+              <mat-option *ngFor="let vigencia of vigencias" [value]="vigenciaToJson(vigencia)" [disabled]="isDisabledVigencia(vigencia)">
+                  {{ vigencia.Nombre }}
+              </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formEditar.get('vigencia_aplica').invalid">
+              {{ getErrorMessage(formEditar.get('vigencia_aplica')) }}
+          </mat-error>
+          <mat-hint>Seleccione la vigencia a la que aplica el PI o PED</mat-hint>
         </mat-form-field>
       </ng-container>
       <ng-container *ngIf="data">
