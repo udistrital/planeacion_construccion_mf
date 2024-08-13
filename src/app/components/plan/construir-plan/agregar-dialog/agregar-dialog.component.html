@@ -55,17 +55,28 @@
             </mat-select>
           </mat-form-field>
           <ng-container *ngIf="opt">
-            <mat-form-field appearance="fill" [style.width.%]="100">
+            <mat-form-field appearance="fill" [style.width.%]="98">
               <mat-label id="opciones-input-label">Opciones</mat-label>
-              <p><i>Ingrese las opciones para la lista de selección separadas por coma, sin puntos al final y sin espacios
-                  al comienzo o al final. Ejemplo: valor1,valor2,...,valorN</i></p>
-              <input type="text" matInput formControlName="opciones"
-                placeholder="Ingrese las opciones para la lista de selección separadas por coma y sin espacios. Ejemplo: valor1,valor2,...,valorN"
-                required>
+              <p><i>Ingrese las opciones para la lista de selección, por cada opción de click en Adicionar</i></p>
+              <input type="text" matInput formControlName="opciones" placeholder="Ingrese las opciones para la lista de selección, por cada opción de click en Adicionar"
+              maxlength="80">
+              <button matSuffix (click)="adicionarOpcion()" mat-raised-button color="primary" type="button" class="col-3 mt-2 mb-3">
+                <strong>Adicionar</strong>
+              </button>
               <mat-error *ngIf="formAgregar.get('opciones').invalid">
                 {{getErrorMessage(formAgregar.get('opciones'))}}
               </mat-error>
             </mat-form-field>
+            <div class="opciones-container">
+              <mat-chip-list>
+                <mat-chip *ngFor="let opcion of listaOpciones; let i = index" removable="true" class="opcion-chip">
+                  {{ opcion }}
+                  <button mat-icon-button (click)="eliminarOpcion(i)" aria-label="Remove">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </mat-chip>
+              </mat-chip-list>
+            </div>
           </ng-container>
           <ng-container *ngIf="vObligatorio">
             <mat-label class="requerido-radio-group-label">Obligatorio:</mat-label>
@@ -80,7 +91,7 @@
       <mat-card-actions style="text-align: center;">
         <ng-container>
           <button [disabled]="!formAgregar.valid" mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3"
-            [mat-dialog-close]="formAgregar.value">
+            (click)="close()">
             Guardar
           </button>
         </ng-container>
@@ -89,7 +100,7 @@
           <button mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3" (click)="deshacer()">
             Deshacer
           </button>
-          <button mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3" (click)="close()">
+          <button mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3" (click)="closecancelar()">
             Cancelar
           </button>
         </ng-container>
