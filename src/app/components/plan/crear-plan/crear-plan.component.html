@@ -30,9 +30,24 @@
                         <mat-label id="nombre-input-label">Nombre</mat-label>
                         <input type="text" matInput formControlName="nombre"
                             placeholder="Escriba el nombre del proyecto o plan" required>
+                        <mat-icon matSuffix>create</mat-icon>
                         <mat-error *ngIf="formCrearPlan.get('nombre').invalid">
                             {{getErrorMessage(formCrearPlan.get('nombre'))}}
                         </mat-error>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile *ngIf="formCrearPlan.get('tipo').value.codigo_abreviacion == 'PD_SP' || formCrearPlan.get('tipo').value.codigo_abreviacion == 'PLI_SP'">
+                    <mat-form-field appearance="fill" [style.width.%]="200">
+                        <mat-label id="year-input-label">Vigencia a la que aplica el plan</mat-label>
+                        <mat-select formControlName="vigencia_aplica" multiple (openedChange)="onOpenedChangeVigencia($event)" required>
+                            <mat-option *ngFor="let vigencia of vigencias" [value]="vigenciaToJson(vigencia)">
+                                {{ vigencia.Nombre }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="formCrearPlan.get('vigencia_aplica').invalid">
+                            {{ getErrorMessage(formCrearPlan.get('vigencia_aplica')) }}
+                        </mat-error>
+                        <mat-hint>Seleccione la vigencia a la que aplica el PI o PED</mat-hint>
                     </mat-form-field>
                 </mat-grid-tile>
                 <mat-grid-tile>
