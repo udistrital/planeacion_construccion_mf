@@ -22,7 +22,7 @@
       <ng-container *ngIf="vTipoPlan">
         <mat-form-field [style.width.%]="40">
           <mat-label id="tipo-input-label">Tipo</mat-label>
-          <mat-select formControlName="tipo_plan_id" (selectionChange)="compararTipoPlan_PED_PI()" (openedChange)="onChange($event.value)" required>
+          <mat-select formControlName="tipo_plan_id" (selectionChange)="compararTipoPlan_PED_PI()" (openedChange)="onChange($event)" required>
             <mat-option>--</mat-option>
             <mat-option *ngFor="let tipo of tiposPlanes" [value]="tipo._id">
               {{tipo.nombre}}
