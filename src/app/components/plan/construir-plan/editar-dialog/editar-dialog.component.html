@@ -22,13 +22,27 @@
       <ng-container *ngIf="vTipoPlan">
         <mat-form-field [style.width.%]="40">
           <mat-label id="tipo-input-label">Tipo</mat-label>
-          <mat-select formControlName="tipo_plan_id" (selectionChange)="onChange($event.value)" required>
+          <mat-select formControlName="tipo_plan_id" (selectionChange)="compararTipoPlan_PED_PI()" (openedChange)="onChange($event)" required>
             <mat-option>--</mat-option>
             <mat-option *ngFor="let tipo of tiposPlanes" [value]="tipo._id">
               {{tipo.nombre}}
             </mat-option>
           </mat-select>
           <mat-hint>Seleccione el tipo de proyecto o plan</mat-hint>
+        </mat-form-field>
+      </ng-container>
+      <ng-container *ngIf="vVigenciaAplicaTipoPlan">
+        <mat-form-field appearance="fill" [style.width.%]="100">
+          <mat-label id="year-input-label">Vigencia a la que aplica el plan</mat-label>
+          <mat-select formControlName="vigencia_aplica" multiple (openedChange)="onOpenedChangeVigencia($event)" required>
+              <mat-option *ngFor="let vigencia of vigencias" [value]="vigenciaToJson(vigencia)" [disabled]="isDisabledVigencia(vigencia)">
+                  {{ vigencia.Nombre }}
+              </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formEditar.get('vigencia_aplica').invalid">
+              {{ getErrorMessage(formEditar.get('vigencia_aplica')) }}
+          </mat-error>
+          <mat-hint>Seleccione la vigencia a la que aplica el PI o PED</mat-hint>
         </mat-form-field>
       </ng-container>
       <ng-container *ngIf="data">
@@ -74,17 +88,28 @@
             </mat-select>
           </mat-form-field>
           <ng-container *ngIf="opt">
-            <mat-form-field appearance="fill" [style.width.%]="100">
+            <mat-form-field appearance="fill" [style.width.%]="96">
               <mat-label id="opciones-input-label">Opciones</mat-label>
-              <p><i>Ingrese las opciones para la lista de selección separadas por coma, sin puntos al final y sin
-                  espacios al comienzo o al final. Ejemplo: valor1,valor2,...,valorN</i></p>
-              <input type="text" matInput formControlName="opciones"
-                placeholder="Ingrese las opciones para la lista de selección separadas por coma y sin espacios. Ejemplo: valor1,valor2,...,valorN"
-                required>
+              <p><i>Ingrese las opciones para la lista de selección, por cada opción de clic en Adicionar</i></p>
+              <input type="text" matInput formControlName="opciones" placeholder="Ingrese las opciones para la lista de selección, por cada opción de clic en Adicionar"
+              maxlength="80">
+              <button matSuffix (click)="adicionarOpcion()" mat-raised-button color="primary" type="button" class="col-3 mt-2 mb-3">
+                <strong>Adicionar</strong>
+              </button>
               <mat-error *ngIf="formEditar.get('opciones').invalid">
                 {{getErrorMessage(formEditar.get('opciones'))}}
               </mat-error>
             </mat-form-field>
+            <div class="opciones-container">
+              <mat-chip-list>
+                <mat-chip *ngFor="let opcion of listaOpciones; let i = index" removable="true" class="opcion-chip">
+                  {{ opcion }}
+                  <button mat-icon-button (click)="eliminarOpcion(i)" aria-label="Remove">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </mat-chip>
+              </mat-chip-list>
+            </div>
           </ng-container>
           <ng-container *ngIf="vObligatorio">
             <mat-label class="requerido-radio-group-label">Obligatorio:</mat-label>
@@ -99,8 +124,7 @@
     </mat-card-content>
     <mat-card-actions style="text-align: center;">
       <ng-container>
-        <button [disabled]="!isFormularioModificado()" mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3"
-          [mat-dialog-close]="formEditar.value">
+        <button [disabled]="!isFormularioModificado()" mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3" (click)="close()">
           Guardar
         </button>
       </ng-container>
@@ -109,7 +133,7 @@
         <button mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3" (click)="deshacer()">
           Deshacer
         </button>
-        <button mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3" (click)="close()">
+        <button mat-raised-button color="primary" type="submit" class="col-3 mt-2 mb-3" (click)="closecancelar()">
           Cancelar
         </button>
       </ng-container>
