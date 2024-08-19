@@ -42,6 +42,10 @@ export class EditarDialogComponent implements OnInit {
   vTipoPlan!: boolean;
   vObligatorio!: boolean;
   vVigenciaAplicaTipoPlan!: boolean;
+  vCargando!: boolean;
+  hijos_formato_paf: any[] | undefined;
+  hijos_plan: any[] | undefined;
+  nivel_id: any;
 
   tipos: tipoDato[] = [
     { value: 'numeric', viewValue: 'Numérico' },
@@ -76,6 +80,7 @@ export class EditarDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<EditarDialogComponent>,
     private request: RequestManager,
     @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.vCargando = true;
     this.aplicativoId = data.sub.aplicativo_id;
     this.fechaCreacion = data.sub.fecha_creacion;
     this.nombre = data.sub.nombre;
@@ -98,10 +103,18 @@ export class EditarDialogComponent implements OnInit {
     this.vParametros = false;
     this.vBandera = false;
     this.vObligatorio = false;
+    if(data.sub.hijos){
+      this.hijos_formato_paf = data.sub.hijos.hijos_formato_paf;
+      this.hijos_plan = data.sub.hijos.hijos_plan;
+      this.nivel_id = data.sub.nivel_id;
+    } else {
+      this.hijos_formato_paf = undefined;
+      this.hijos_plan = undefined;
+      this.nivel_id = undefined;
+    }
   }
 
   async ngOnInit(): Promise<void> {
-    this.mostrarMensajeCarga();
     this.formEditar = this.formBuilder.group({
       aplicativo_id: [this.aplicativoId, Validators.required],
       fecha_creacion: [this.fechaCreacion, Validators.required],
@@ -118,9 +131,6 @@ export class EditarDialogComponent implements OnInit {
       opciones: ['', [Validators.maxLength(80)]]
     });
 
-    await this.loadPeriodos();
-    await this.loadTiposPlan();
-    await this.compararTipoPlan_PED_PI();
     this.verificarDetalle();
     // Suscribe a los cambios en el formulario
     this.formEditar.valueChanges.subscribe(() => {
@@ -259,8 +269,11 @@ export class EditarDialogComponent implements OnInit {
     }
   }
 
-  verificarDetalle() {
+  async verificarDetalle() {
     if (this.data.ban == "plan") {
+      await this.loadPeriodos();
+      await this.loadTiposPlan();
+      await this.compararTipoPlan_PED_PI();
       this.vTipo = false;
       this.vFormato = true;
       this.vTipoPlan = true;
@@ -295,6 +308,9 @@ export class EditarDialogComponent implements OnInit {
         this.formEditar.get('requerido').enable();
         this.formEditar.get('opciones').disable();
       }
+      if(this.hijos_formato_paf && this.hijos_formato_paf && this.nivel_id) {
+        await this.verificarNivelNoInactivar();
+      }
     }
     if (this.tipoDato == "undefined" || this.tipoDato == undefined) {
       this.vTipo = true;
@@ -316,6 +332,8 @@ export class EditarDialogComponent implements OnInit {
     if (this.formEditar.get('banderaTabla').value == "false") {
       this.vObligatorio = true;
     }
+    Swal.close();
+    this.vCargando = false;
   }
 
   verificarNivel(event: MatRadioChange) {
@@ -400,6 +418,63 @@ export class EditarDialogComponent implements OnInit {
       let vigencias = JSON.parse(this.vigencia_aplica_selected);
       return vigencias.some((v: any) => v.Id == vigencia.Id);
     }
+    return false;
+  }
+
+  async verificarNivelNoInactivar() { //? Función para verificar los niveles que NO se pueden inactivar de un formato de tipo PAF
+    let vDisabled: boolean = false;
+    this.hijos_plan!.forEach(hijo => {
+      if(hijo.id == this.nivel_id){
+        vDisabled = this.searchRefInArray(this.hijos_formato_paf, hijo.ref);
+      }
+      if(hijo.sub && hijo.sub.length > 0){
+        hijo.sub.forEach((subHijo:any) => {
+          if(subHijo.id == this.nivel_id){
+            vDisabled = this.searchRefInArray(this.hijos_formato_paf, subHijo.ref);
+          }
+          if(subHijo.sub && subHijo.sub.length > 0){
+            subHijo.sub.forEach((subSubHijo:any) => {
+              if(subSubHijo.id == this.nivel_id){
+                vDisabled = this.searchRefInArray(this.hijos_formato_paf, subSubHijo.ref);
+              }
+            });
+          }
+        });
+      }
+    });
+    if(vDisabled) {
+      this.formEditar.get('nombre').disable();
+      this.formEditar.get('activo').disable();
+      this.formEditar.get('parametro').disable();
+      this.formEditar.get('requerido').disable();
+    } else {
+      this.formEditar.get('nombre').enable();
+      this.formEditar.get('activo').enable();
+      this.formEditar.get('parametro').enable();
+      this.formEditar.get('requerido').enable();
+    }
+  }
+
+  searchRefInArray(array: any[] | undefined, ref: string): boolean {
+    // Recorremos el array en el nivel actual
+    if (array != undefined) {
+      for (const item of array) {
+        // Comparamos si el ref coincide con el id del item
+        if (item.id === ref) {
+          return true;
+        }
+
+        // Si el item tiene hijos (propiedad 'sub'), hacemos una búsqueda recursiva
+        if (item.sub && item.sub.length > 0) {
+          const foundInSub = this.searchRefInArray(item.sub, ref);
+          if (foundInSub) {
+            return true;
+          }
+        }
+      }
+    }
+
+    // Si no encontramos coincidencia, devolvemos false
     return false;
   }
 }
