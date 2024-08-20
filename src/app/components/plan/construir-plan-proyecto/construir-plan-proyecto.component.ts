@@ -242,6 +242,7 @@ export class ConstruirPlanProyectoComponent implements OnInit {
   }
 
   editar(fila: any): void {
+    this.mostrarMensajeCarga();
     this.uid = fila._id;
     this.request.get(environment.PLANES_CRUD, `plan/` + this.uid).subscribe((data: any) => {
       if (data) {
