@@ -12,6 +12,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -83,7 +84,8 @@ import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.c
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckboxModule,
-    MatButtonModule
+    MatButtonModule,
+    MatMenuModule
   ],
   providers: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
