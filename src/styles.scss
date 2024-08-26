@@ -44,6 +44,16 @@ button {
     border-collapse: unset;
 }
 
+.mat-calendar-body-cell-content {
+  border: none !important;
+}
+
+.mat-calendar-body-active {
+    .mat-calendar-body-today {
+        color: white;
+    }
+}
+
 .mat-mdc-text-field-wrapper{
     padding-top: 10px!important;
 }
@@ -230,6 +240,39 @@ a {
 
 .mat-mdc-row:nth-child(odd) .mat-mdc-cell {
   background-color: white;
+}
+
+.menu-button-icon {
+  color: var(--others-accent) !important;
+}
+
+.search-icon {
+  color: var(--success-base) !important;
+}
+
+.edit-icon {
+  color: var(--others-main) !important;
+}
+
+.delete-icon {
+  color: var(--primary) !important;
+}
+
+/* Estilos para el indicador de estado */
+.status-indicator {
+  margin-top: 0.3em;
+  font-weight: bold;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.3rem;
+}
+.status-indicator.active {
+  color: white;
+  background-color: var(--success-base);
+}
+.status-indicator.inactive {
+  color: white;
+  background-color: var(--danger-main);
 }
 
 @media screen and (max-width: 425px) {
