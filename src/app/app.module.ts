@@ -15,7 +15,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatDateFormats, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PlanComponent } from './components/plan/plan.component';
@@ -40,7 +40,18 @@ import { PlanAccionFormulacionComponent } from './components/plan/plan-accion/pl
 import { PlanAccionSeguimientoComponent } from './components/plan/plan-accion/plan-accion-seguimiento/plan-accion-seguimiento.component';
 import { TrimestreDialogComponent } from './components/plan/plan-accion/trimestre-dialog/trimestre-dialog.component';
 import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.component';
+import { DateFnsModule, DateFnsAdapter } from '@angular/material-date-fns-adapter';
+import { es } from 'date-fns/locale'
 
+export const DATE_FORMATS: MatDateFormats = {
+  parse: {dateInput: 'dd/MM/yyyy'},
+  display: {
+    dateInput: 'dd/MM/yyyy',
+    monthYearLabel: 'MMM yyyy',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'yyyy'
+  }
+}
 
 @NgModule({
   declarations: [
@@ -87,7 +98,11 @@ import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.c
     MatButtonModule,
     MatMenuModule
   ],
-  providers: [],
+  providers: [
+    { provide: DateAdapter, useClass: DateFnsAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: es }
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
