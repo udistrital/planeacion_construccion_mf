@@ -76,12 +76,12 @@
       </div>
       <ng-container *ngIf="tipo=='seguimiento' && vigenciaSelected && filtroSelected">
         <div class="container-border">
-          <h4 class="periodo-header">Período 1</h4>
+          <h4 class="periodo-header">Trimestre 1</h4>
           <div class="container-fecha">
-            <mat-label class="label-fecha">Período: </mat-label>
+            <mat-label class="label-fecha">Fecha: </mat-label>
             <mat-form-field appearance="fill" [style.width.%]="35">
               <mat-label>Seleccione el rango</mat-label>
-              <mat-date-range-input [formGroup]="fecha1" [rangePicker]="picker1">
+              <mat-date-range-input (click)="picker1.open()" [formGroup]="fecha1" [rangePicker]="picker1">
                 <input matStartDate formControlName="start" placeholder="Fecha Inicio">
                 <input matEndDate formControlName="end" placeholder="Fecha Final">
               </mat-date-range-input>
@@ -92,12 +92,12 @@
           </div>
         </div>
         <div class="container-border">
-          <h4 class="periodo-header">Período 2</h4>
+          <h4 class="periodo-header">Trimestre 2</h4>
           <div class="container-fecha">
-            <mat-label class="label-fecha">Período: </mat-label>
+            <mat-label class="label-fecha">Fecha: </mat-label>
             <mat-form-field appearance="fill" [style.width.%]="35">
               <mat-label>Seleccione el rango</mat-label>
-              <mat-date-range-input [formGroup]="fecha2" [rangePicker]="picker2">
+              <mat-date-range-input (click)="picker2.open()" [formGroup]="fecha2" [rangePicker]="picker2">
                 <input matStartDate formControlName="start" placeholder="Fecha Inicio">
                 <input matEndDate formControlName="end" placeholder="Fecha Final">
               </mat-date-range-input>
@@ -108,12 +108,12 @@
           </div>
         </div>
         <div class="container-border">
-          <h4 class="periodo-header">Período 3</h4>
+          <h4 class="periodo-header">Trimestre 3</h4>
           <div class="container-fecha">
-            <mat-label class="label-fecha">Período: </mat-label>
+            <mat-label class="label-fecha">Fecha: </mat-label>
             <mat-form-field appearance="fill" [style.width.%]="35">
               <mat-label>Seleccione el rango</mat-label>
-              <mat-date-range-input [formGroup]="fecha3" [rangePicker]="picker3">
+              <mat-date-range-input (click)="picker3.open()" [formGroup]="fecha3" [rangePicker]="picker3">
                 <input matStartDate formControlName="start" placeholder="Fecha Inicio">
                 <input matEndDate formControlName="end" placeholder="Fecha Final">
               </mat-date-range-input>
@@ -124,12 +124,12 @@
           </div>
         </div>
         <div class="container-border">
-          <h4 class="periodo-header">Período 4</h4>
+          <h4 class="periodo-header">Trimestre 4</h4>
           <div class="container-fecha">
-            <mat-label class="label-fecha">Período: </mat-label>
+            <mat-label class="label-fecha">Fecha: </mat-label>
             <mat-form-field appearance="fill" [style.width.%]="35">
               <mat-label>Seleccione el rango</mat-label>
-              <mat-date-range-input [formGroup]="fecha4" [rangePicker]="picker4">
+              <mat-date-range-input (click)="picker4.open()" [formGroup]="fecha4" [rangePicker]="picker4">
                 <input matStartDate formControlName="start" placeholder="Fecha Inicio">
                 <input matEndDate formControlName="end" placeholder="Fecha Final">
               </mat-date-range-input>
@@ -144,10 +144,10 @@
         <div class="container-border-for">
           <h4>Período de Formulación</h4>
           <div class="container-fecha">
-            <mat-label class="label-fecha">Período: </mat-label>
+            <mat-label class="label-fecha">Fecha: </mat-label>
             <mat-form-field appearance="fill" [style.width.%]="35">
               <mat-label>Seleccione el rango</mat-label>
-              <mat-date-range-input [formGroup]="fecha5" [rangePicker]="picker">
+              <mat-date-range-input (click)="picker.open()" [formGroup]="fecha5" [rangePicker]="picker">
                 <input matStartDate formControlName="start" placeholder="Fecha Inicio">
                 <input matEndDate formControlName="end" placeholder="Fecha Final">
               </mat-date-range-input>
