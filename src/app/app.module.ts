@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
@@ -40,8 +40,9 @@ import { PlanAccionFormulacionComponent } from './components/plan/plan-accion/pl
 import { PlanAccionSeguimientoComponent } from './components/plan/plan-accion/plan-accion-seguimiento/plan-accion-seguimiento.component';
 import { TrimestreDialogComponent } from './components/plan/plan-accion/trimestre-dialog/trimestre-dialog.component';
 import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.component';
-import { DateFnsModule, DateFnsAdapter } from '@angular/material-date-fns-adapter';
+import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { es } from 'date-fns/locale'
+import { TranslationPaginator } from './components/services/translationPaginator';
 
 export const DATE_FORMATS: MatDateFormats = {
   parse: {dateInput: 'dd/MM/yyyy'},
@@ -99,6 +100,7 @@ export const DATE_FORMATS: MatDateFormats = {
     MatMenuModule
   ],
   providers: [
+    { provide: MatPaginatorIntl, useClass: TranslationPaginator },
     { provide: DateAdapter, useClass: DateFnsAdapter },
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
     { provide: MAT_DATE_LOCALE, useValue: es }
