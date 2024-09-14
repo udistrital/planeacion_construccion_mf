@@ -37,6 +37,8 @@ export interface Plan {
   styleUrls: ['./listar-plan.component.scss']
 })
 export class ListarPlanComponent implements OnInit {
+  CODIGO_ESTADO_PR_SP!: string;
+
   displayedColumns!: string[];
   dataSource!: MatTableDataSource<any>;
   uid!: number; // id del objeto
@@ -72,7 +74,8 @@ export class ListarPlanComponent implements OnInit {
     this.banderaPlanesAccionFuncionamiento = false;
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.CODIGO_ESTADO_PR_SP = await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP');
     this.planesMostrar = [];
     if (this.banderaPlanesAccionFuncionamiento === true) {
       if (this.filtroPlan === true) {
@@ -328,9 +331,9 @@ export class ListarPlanComponent implements OnInit {
   async inactivar(fila: any) {
     this.uid = fila._id;
     if (fila.activo == 'Activo') {
-      if (fila.tipo_plan_id != await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP')) {
+      if (fila.tipo_plan_id != this.CODIGO_ESTADO_PR_SP) {
         this.deleteData();
-      } else if (fila.tipo_plan_id == await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP')) {
+      } else if (fila.tipo_plan_id == this.CODIGO_ESTADO_PR_SP) {
         let res = {
           activo: false,
         }
