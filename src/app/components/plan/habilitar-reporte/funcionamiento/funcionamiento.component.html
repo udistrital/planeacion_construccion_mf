@@ -76,101 +76,86 @@
       </div>
       <ng-container *ngIf="tipo=='seguimiento' && vigenciaSelected && filtroSelected">
         <div class="container-border">
-          <h4>Período 1</h4>
-          <mat-label class="label-fecha">Desde: </mat-label>
-          <mat-form-field appearance="fill" [style.width.%]="30">
-            <mat-label>Seleccione una fecha</mat-label>
-            <input matInput [matDatepicker]="picker1" formControlName="fecha1">
-            <mat-hint>DD/MM/AAAA</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
-          </mat-form-field>
-          <mat-label class="label-fecha">Hasta: </mat-label>
-          <mat-form-field appearance="fill" [style.width.%]="30">
-            <mat-label>Seleccione una fecha</mat-label>
-            <input matInput [matDatepicker]="picker2" formControlName="fecha2">
-            <mat-hint>DD/MM/AAAA</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-          </mat-form-field>
+          <h4 class="periodo-header">Trimestre 1</h4>
+          <div class="container-fecha">
+            <mat-label class="label-fecha">Fecha: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="35">
+              <mat-label>Seleccione el rango</mat-label>
+              <mat-date-range-input (click)="picker1.open()" [formGroup]="fecha1" [rangePicker]="picker1">
+                <input matStartDate formControlName="start" placeholder="Fecha Inicio">
+                <input matEndDate formControlName="end" placeholder="Fecha Final">
+              </mat-date-range-input>
+              <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker1></mat-date-range-picker>
+            </mat-form-field>
+          </div>
         </div>
         <div class="container-border">
-          <h4>Período 2</h4>
-          <mat-label class="label-fecha">Desde: </mat-label>
-          <mat-form-field appearance="fill" [style.width.%]="30">
-            <mat-label>Seleccione una fecha</mat-label>
-            <input matInput [matDatepicker]="picker3" formControlName="fecha3">
-            <mat-hint>DD/MM/AAAA</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-            <mat-datepicker #picker3></mat-datepicker>
-          </mat-form-field>
-          <mat-label class="label-fecha">Hasta: </mat-label>
-          <mat-form-field appearance="fill" [style.width.%]="30">
-            <mat-label>Seleccione una fecha</mat-label>
-            <input matInput [matDatepicker]="picker4" formControlName="fecha4">
-            <mat-hint>DD/MM/AAAA</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
-            <mat-datepicker #picker4></mat-datepicker>
-          </mat-form-field>
+          <h4 class="periodo-header">Trimestre 2</h4>
+          <div class="container-fecha">
+            <mat-label class="label-fecha">Fecha: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="35">
+              <mat-label>Seleccione el rango</mat-label>
+              <mat-date-range-input (click)="picker2.open()" [formGroup]="fecha2" [rangePicker]="picker2">
+                <input matStartDate formControlName="start" placeholder="Fecha Inicio">
+                <input matEndDate formControlName="end" placeholder="Fecha Final">
+              </mat-date-range-input>
+              <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker2></mat-date-range-picker>
+            </mat-form-field>
+          </div>
         </div>
         <div class="container-border">
-          <h4>Período 3</h4>
-          <mat-label class="label-fecha">Desde: </mat-label>
-          <mat-form-field appearance="fill" [style.width.%]="30">
-            <mat-label>Seleccione una fecha</mat-label>
-            <input matInput [matDatepicker]="picker5" formControlName="fecha5">
-            <mat-hint>DD/MM/AAAA</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
-            <mat-datepicker #picker5></mat-datepicker>
-          </mat-form-field>
-          <mat-label class="label-fecha">Hasta: </mat-label>
-          <mat-form-field appearance="fill" [style.width.%]="30">
-            <mat-label>Seleccione una fecha</mat-label>
-            <input matInput [matDatepicker]="picker6" formControlName="fecha6">
-            <mat-hint>DD/MM/AAAA</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
-            <mat-datepicker #picker6></mat-datepicker>
-          </mat-form-field>
+          <h4 class="periodo-header">Trimestre 3</h4>
+          <div class="container-fecha">
+            <mat-label class="label-fecha">Fecha: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="35">
+              <mat-label>Seleccione el rango</mat-label>
+              <mat-date-range-input (click)="picker3.open()" [formGroup]="fecha3" [rangePicker]="picker3">
+                <input matStartDate formControlName="start" placeholder="Fecha Inicio">
+                <input matEndDate formControlName="end" placeholder="Fecha Final">
+              </mat-date-range-input>
+              <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker3></mat-date-range-picker>
+            </mat-form-field>
+          </div>
         </div>
         <div class="container-border">
-          <h4>Período 4</h4>
-          <mat-label class="label-fecha">Desde: </mat-label>
-          <mat-form-field appearance="fill" [style.width.%]="30">
-            <mat-label>Seleccione una fecha</mat-label>
-            <input matInput [matDatepicker]="picker7" formControlName="fecha7">
-            <mat-hint>DD/MM/AAAA</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
-            <mat-datepicker #picker7></mat-datepicker>
-          </mat-form-field>
-          <mat-label class="label-fecha">Hasta: </mat-label>
-          <mat-form-field appearance="fill" [style.width.%]="30">
-            <mat-label>Seleccione una fecha</mat-label>
-            <input matInput [matDatepicker]="picker8" formControlName="fecha8">
-            <mat-hint>DD/MM/AAAA</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
-            <mat-datepicker #picker8></mat-datepicker>
-          </mat-form-field>
+          <h4 class="periodo-header">Trimestre 4</h4>
+          <div class="container-fecha">
+            <mat-label class="label-fecha">Fecha: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="35">
+              <mat-label>Seleccione el rango</mat-label>
+              <mat-date-range-input (click)="picker4.open()" [formGroup]="fecha4" [rangePicker]="picker4">
+                <input matStartDate formControlName="start" placeholder="Fecha Inicio">
+                <input matEndDate formControlName="end" placeholder="Fecha Final">
+              </mat-date-range-input>
+              <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker4"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker4></mat-date-range-picker>
+            </mat-form-field>
+          </div>
         </div>
       </ng-container>
       <ng-container *ngIf="tipo=='formulacion' && vigenciaSelected && filtroSelected">
         <div class="container-border-for">
           <h4>Período de Formulación</h4>
-          <mat-label class="label-fecha">Desde: </mat-label>
-          <mat-form-field appearance="fill" [style.width.%]="30">
-            <mat-label>Seleccione una fecha</mat-label>
-            <input matInput [matDatepicker]="picker9" formControlName="fecha9">
-            <mat-hint>DD/MM/AAAA</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker9"></mat-datepicker-toggle>
-            <mat-datepicker #picker9></mat-datepicker>
-          </mat-form-field>
-          <mat-label class="label-fecha">Hasta: </mat-label>
-          <mat-form-field appearance="fill" [style.width.%]="30">
-            <mat-label>Seleccione una fecha</mat-label>
-            <input matInput [matDatepicker]="picker10" formControlName="fecha10">
-            <mat-hint>DD/MM/AAAA</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker10"></mat-datepicker-toggle>
-            <mat-datepicker #picker10></mat-datepicker>
-          </mat-form-field>
+          <div class="container-fecha">
+            <mat-label class="label-fecha">Fecha: </mat-label>
+            <mat-form-field appearance="fill" [style.width.%]="35">
+              <mat-label>Seleccione el rango</mat-label>
+              <mat-date-range-input (click)="picker.open()" [formGroup]="fecha5" [rangePicker]="picker">
+                <input matStartDate formControlName="start" placeholder="Fecha Inicio">
+                <input matEndDate formControlName="end" placeholder="Fecha Final">
+              </mat-date-range-input>
+              <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+          </div>
         </div>
       </ng-container>
     </form>
