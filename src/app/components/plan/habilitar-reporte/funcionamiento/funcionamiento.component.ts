@@ -49,12 +49,6 @@ export class FuncionamientoComponent implements OnInit {
   @Input() vigencias!: Vigencia[]; // Propiedad que se recibe desde el componente padre (habilitar-reporte.component.ts)
   private codigosService = new CodigosService();
 
-  fecha1!: FormGroup;
-  fecha2!: FormGroup;
-  fecha3!: FormGroup;
-  fecha4!: FormGroup;
-  fecha5!: FormGroup;
-
   constructor(
     private request: RequestManager,
     private habilitarReporteService: HabilitarReporteService,
@@ -65,27 +59,6 @@ export class FuncionamientoComponent implements OnInit {
     this.banderaPlanesInteresPeriodoSeguimiento = false;
     this.periodoSeguimientoListarPlan = {} as PeriodoSeguimiento;
     this.periodoSeguimientoListarUnidades = {} as PeriodoSeguimiento;
-
-    this.fecha1 = new FormGroup({
-      start: new FormControl<Date | null>(null),
-      end: new FormControl<Date | null>(null),
-    });
-    this.fecha2 = new FormGroup({
-      start: new FormControl<Date | null>(null),
-      end: new FormControl<Date | null>(null),
-    });
-    this.fecha3 = new FormGroup({
-      start: new FormControl<Date | null>(null),
-      end: new FormControl<Date | null>(null),
-    });
-    this.fecha4 = new FormGroup({
-      start: new FormControl<Date | null>(null),
-      end: new FormControl<Date | null>(null),
-    });
-    this.fecha5 = new FormGroup({
-      start: new FormControl<Date | null>(null),
-      end: new FormControl<Date | null>(null),
-    });
   }
 
   async ngOnInit() {
@@ -200,12 +173,8 @@ export class FuncionamientoComponent implements OnInit {
         if (data) {
           if (data.Data.length != 0) {
             this.seguimiento = data.Data[0];
-            let inicioFecha = new Date(this.seguimiento.fecha_inicio);
-            let finFecha = new Date(this.seguimiento.fecha_fin);
-            this.fecha5.patchValue({
-              start: inicioFecha,
-              end: finFecha
-            });
+            this.formFechas.get('fecha9').setValue(new Date(this.seguimiento.fecha_inicio));
+            this.formFechas.get('fecha10').setValue(new Date(this.seguimiento.fecha_fin));
             if (this.habilitarReporteService.isValidObjectId(this.seguimiento.periodo_seguimiento_id)) {
               this.request.get(environment.PLANES_CRUD, `periodo-seguimiento?query=activo:true,_id:${this.seguimiento.periodo_seguimiento_id}`).subscribe((data: DataRequest) => {
                 if (data) {
@@ -242,25 +211,17 @@ export class FuncionamientoComponent implements OnInit {
               let fechaFin = new Date(seguimiento.fecha_fin);
               this.unidadesInteresPeriodoSeguimiento = JSON.parse(this.periodoSeguimiento.unidades_interes);
               if (i == 0) {
-                this.fecha1.patchValue({
-                  start: fechaInicio,
-                  end: fechaFin
-                });
+                this.formFechas.get('fecha1').setValue(fechaInicio);
+                this.formFechas.get('fecha2').setValue(fechaFin);
               } else if (i == 1) {
-                this.fecha2.patchValue({
-                  start: fechaInicio,
-                  end: fechaFin
-                });
+                this.formFechas.get('fecha3').setValue(fechaInicio);
+                this.formFechas.get('fecha4').setValue(fechaFin);
               } else if (i == 2) {
-                this.fecha3.patchValue({
-                  start: fechaInicio,
-                  end: fechaFin
-                });
+                this.formFechas.get('fecha5').setValue(fechaInicio);
+                this.formFechas.get('fecha6').setValue(fechaFin);
               } else if (i == 3) {
-                this.fecha4.patchValue({
-                  start: fechaInicio,
-                  end: fechaFin
-                });
+                this.formFechas.get('fecha7').setValue(fechaInicio);
+                this.formFechas.get('fecha8').setValue(fechaFin);
                 Swal.close();
               }
             } else {
@@ -358,10 +319,10 @@ export class FuncionamientoComponent implements OnInit {
         allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
-          if (this.fecha5.get('start')?.value != "" && this.fecha5.get('end')?.value != "") {
+          if (this.formFechas.get('fecha9').value != "" && this.formFechas.get('fecha10').value != "") {
             periodo_seguimiento_formulacion.periodo_id = this.vigencia.Id.toString();
-            periodo_seguimiento_formulacion.fecha_inicio = this.fecha5.get('start')?.value;
-            periodo_seguimiento_formulacion.fecha_fin = this.fecha5.get('end')?.value;
+            periodo_seguimiento_formulacion.fecha_inicio = this.formFechas.get('fecha9').value;
+            periodo_seguimiento_formulacion.fecha_fin = this.formFechas.get('fecha10').value;
             periodo_seguimiento_formulacion.tipo_seguimiento_id = tipo_seguimiento_id;
             periodo_seguimiento_formulacion.unidades_interes = JSON.stringify(this.unidadesInteres);
             periodo_seguimiento_formulacion.planes_interes = JSON.stringify(this.planesInteres);
@@ -419,14 +380,14 @@ export class FuncionamientoComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           if (
-            this.fecha1.get('start')?.value != '' &&
-            this.fecha1.get('end')?.value != '' &&
-            this.fecha2.get('start')?.value != '' &&
-            this.fecha2.get('end')?.value != '' &&
-            this.fecha3.get('start')?.value != '' &&
-            this.fecha3.get('end')?.value != '' &&
-            this.fecha4.get('start')?.value != '' &&
-            this.fecha4.get('end')?.value != ''
+            this.formFechas.get('fecha1').value != '' &&
+            this.formFechas.get('fecha2').value != '' &&
+            this.formFechas.get('fecha3').value != '' &&
+            this.formFechas.get('fecha4').value != '' &&
+            this.formFechas.get('fecha5').value != '' &&
+            this.formFechas.get('fecha6').value != '' &&
+            this.formFechas.get('fecha7').value != '' &&
+            this.formFechas.get('fecha8').value != ''
           ) {
             for (let i = 0; i < this.periodos.length; i++) {
               this.actualizarPeriodo(i, this.periodos[i].Id);
@@ -465,17 +426,17 @@ export class FuncionamientoComponent implements OnInit {
     var periodo_seguimiento_seguimiento: PeriodoSeguimiento = {} as PeriodoSeguimiento;
     let fecha_inicio: any, fecha_fin: any;
     if (i === 0) {
-      fecha_inicio = new Date(this.fecha1.get('start')?.value);
-      fecha_fin = new Date(this.fecha1.get('end')?.value);
+      fecha_inicio = new Date(this.formFechas.get('fecha1').value);
+      fecha_fin = new Date(this.formFechas.get('fecha2').value);
     } else if (i === 1) {
-      fecha_inicio = new Date(this.fecha2.get('start')?.value);
-      fecha_fin = new Date(this.fecha2.get('end')?.value);
+      fecha_inicio = new Date(this.formFechas.get('fecha3').value);
+      fecha_fin = new Date(this.formFechas.get('fecha4').value);
     } else if (i === 2) {
-      fecha_inicio = new Date(this.fecha3.get('start')?.value);
-      fecha_fin = new Date(this.fecha3.get('end')?.value);
+      fecha_inicio = new Date(this.formFechas.get('fecha5').value);
+      fecha_fin = new Date(this.formFechas.get('fecha6').value);
     } else if (i === 3) {
-      fecha_inicio = new Date(this.fecha4.get('start')?.value);
-      fecha_fin = new Date(this.fecha4.get('end')?.value);
+      fecha_inicio = new Date(this.formFechas.get('fecha7').value);
+      fecha_fin = new Date(this.formFechas.get('fecha8').value);
     }
 
     if (fecha_fin.getHours() == 19) {
@@ -529,27 +490,17 @@ export class FuncionamientoComponent implements OnInit {
     this.filtroUnidad = false;
 
     // Limpieza de fechas para proceso de formulacion
-    this.fecha5.patchValue({
-      start: '',
-      end: ''
-    });
+    this.formFechas.get('fecha9').setValue('');
+    this.formFechas.get('fecha10').setValue('');
 
     // Limpieza de fechas para proceso de seguimiento
-    this.fecha1.patchValue({
-      start: '',
-      end: ''
-    });
-    this.fecha2.patchValue({
-      start: '',
-      end: ''
-    });
-    this.fecha3.patchValue({
-      start: '',
-      end: ''
-    });
-    this.fecha4.patchValue({
-      start: '',
-      end: ''
-    });
+    this.formFechas.get('fecha1').setValue('');
+    this.formFechas.get('fecha2').setValue('');
+    this.formFechas.get('fecha3').setValue('');
+    this.formFechas.get('fecha4').setValue('');
+    this.formFechas.get('fecha5').setValue('');
+    this.formFechas.get('fecha6').setValue('');
+    this.formFechas.get('fecha7').setValue('');
+    this.formFechas.get('fecha8').setValue('');
   }
 }

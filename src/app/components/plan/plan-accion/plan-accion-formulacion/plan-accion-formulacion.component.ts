@@ -182,30 +182,32 @@ export class PlanAccionFormulacionComponent implements OnInit, AfterViewInit {
                           timer: 2500,
                         });
                       } else {
-                        const vinculaciones = data.Data;
-                        let promesas = [];
-
-                        for (let i = 0; i < vinculaciones.length; i++) {
-                          promesas.push(new Promise((PromesaResolve, PromesaReject) => {
-                            idDependencia = vinculaciones[i].DependenciaId;
-
-                            this.request.get(environment.PLANES_FORMULACION_MID, `/formulacion/planes_accion/${idDependencia}`).subscribe((data) => {
-                              if (data && data.Success) {
-                                PromesaResolve(data.Data)
+                        idDependencia = data.Data['DependenciaId'];
+                        this.request
+                          .get(
+                            environment.PLANES_FORMULACION_MID,
+                            `/formulacion/planes_accion/${idDependencia}`
+                          )
+                          .subscribe(
+                            (data) => {
+                              this.planes = data.Data;
+                              if (this.planes.length != 0) {
+                                Swal.close();
                               } else {
                                 Swal.close();
                                 Swal.fire({
-                                  title:
-                                    'Error al intentar obtener los planes de acción',
-                                  icon: 'error',
-                                  text: 'Ingresa más tarde',
+                                  title: 'No existen registros',
+                                  icon: 'info',
+                                  text: 'No hay planes en formulación',
                                   showConfirmButton: false,
                                   timer: 2500,
                                 });
-                                PromesaReject();
                               }
-                            }, (error) => {
+                              resolve(this.planes);
+                            },
+                            (error) => {
                               Swal.close();
+                              this.planes = [];
                               console.error(error);
                               Swal.fire({
                                 title:
@@ -215,33 +217,9 @@ export class PlanAccionFormulacionComponent implements OnInit, AfterViewInit {
                                 showConfirmButton: false,
                                 timer: 2500,
                               });
-                              PromesaReject();
-                            });
-                          }));
-                        }
-                        Promise.all(promesas).then((resultados: any) => {
-                          let resultadoPlanes: any[] = [];
-
-                          if (resultados.length != 0) {
-                            for (let i = 0; i < resultados.length; i++) {
-                              let resultado = [];
-                              resultado = resultados[i].filter((plan: any) => plan.fase === "Formulación");
-                              resultadoPlanes = [...resultadoPlanes, ...resultado];
+                              reject();
                             }
-                            this.planes = resultadoPlanes;
-                            resolve(this.planes);
-                            Swal.close();
-                          } else {
-                            Swal.close();
-                            Swal.fire({
-                              title: 'No existen registros',
-                              icon: 'info',
-                              text: 'No hay planes en formulación',
-                              showConfirmButton: false,
-                              timer: 2500,
-                            });
-                          }
-                        })
+                          );
                       }
                     },
                     (error) => {

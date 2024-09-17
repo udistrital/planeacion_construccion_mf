@@ -24,8 +24,6 @@ export class ConstruirPlanProyectoComponent implements OnInit {
   plan: any;
   cargando = true;
 
-  CODIGO_ESTADO_PR_SP!: string;
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -244,7 +242,6 @@ export class ConstruirPlanProyectoComponent implements OnInit {
   }
 
   editar(fila: any): void {
-    this.mostrarMensajeCarga();
     this.uid = fila._id;
     this.request.get(environment.PLANES_CRUD, `plan/` + this.uid).subscribe((data: any) => {
       if (data) {
@@ -270,7 +267,7 @@ export class ConstruirPlanProyectoComponent implements OnInit {
   async inactivar(fila: any) {
     this.uid = fila._id;
     if (fila.activo == 'Activo') {
-      if (fila.tipo_plan_id != this.CODIGO_ESTADO_PR_SP) {
+      if (fila.tipo_plan_id != await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP')) {
         this.deleteData();
       } else {
         let res = {
@@ -311,7 +308,6 @@ export class ConstruirPlanProyectoComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.CODIGO_ESTADO_PR_SP = await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP');
     this.loadData();
   }
 }

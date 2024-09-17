@@ -16,7 +16,6 @@ import { CodigosService } from '@udistrital/planeacion-utilidades-module';
 })
 export class ConstruirPlanComponent implements OnInit{
   ID_TIPO_PROYECTO!: string;
-  CODIGO_ESTADO_PLI_SP! : string;
 
   formConstruirPlan!: FormGroup;
   tipo_plan_id!: string; // id tipo plan
@@ -47,7 +46,7 @@ export class ConstruirPlanComponent implements OnInit{
     });
   }
 
-  actualizarEstructuraPlanes() {
+  actualizarEstructuraPlanes() {    
     Swal.fire({
       title: 'Actualizar Planes',
       text: `¿Desea actualizar las estructuras de los planes que están asociados a esta plantilla?`,
@@ -205,7 +204,7 @@ export class ConstruirPlanComponent implements OnInit{
   };
 
   openDialogEditar(sub: any, subDetalle: any): void {
-    this.padreSub = sub.padre;
+    this.padreSub = sub.padre;    
     const dialogRef = this.dialog.open(EditarDialogComponent, {
       width: 'calc(80vw - 60px)',
       height: 'calc(40vw - 60px)',
@@ -226,8 +225,8 @@ export class ConstruirPlanComponent implements OnInit{
       nombre: res.nombre,
       descripcion: res.descripcion,
       activo: res.activo,
-      bandera_tabla: res.banderaTabla
-    }
+      bandera_tabla: res.banderaTabla      
+    }    
     if (res.hasOwnProperty("opciones")) {
       var array = res.opciones.split(",");
       let jsonArray = []
@@ -258,7 +257,7 @@ export class ConstruirPlanComponent implements OnInit{
       subgrupoDetalle["descripcion"] = subgrupo.descripcion;
       subgrupoDetalle["nombre"] = subgrupo.nombre;
       subgrupo["padre"] = this.padreSub;
-      subgrupo["fecha_creacion"] = data.Data[0].fecha_creacion;
+      subgrupo["fecha_creacion"] = data.Data[0].fecha_creacion;      
       if (data.Data.length > 0) {
         this.request.put(environment.PLANES_CRUD, `subgrupo-detalle`, subgrupoDetalle, data.Data[0]._id).subscribe((data: any) => {
           this.request.put(environment.PLANES_CRUD, `subgrupo`, subgrupo, this.uid).subscribe((data: any) => {
@@ -450,7 +449,7 @@ export class ConstruirPlanComponent implements OnInit{
         this.planes = this.planes.concat(data.Data);
         this.planes = this.filterActivos(this.planes);
       })
-      this.request.get(environment.PLANES_CRUD, `plan?query=tipo_plan_id:${this.CODIGO_ESTADO_PLI_SP}`).subscribe((data: any) => {
+      this.request.get(environment.PLANES_CRUD, `plan?query=tipo_plan_id:${await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PLI_SP')}`).subscribe((data: any) => {
         this.planes = this.planes.concat(data.Data);
         this.planes = this.filterActivos(this.planes);
       })
@@ -477,7 +476,6 @@ export class ConstruirPlanComponent implements OnInit{
     this.formConstruirPlan = this.formBuilder.group({
       planControl: ['', Validators.required],
     });
-    this.CODIGO_ESTADO_PLI_SP = await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PLI_SP');
     this.ID_TIPO_PROYECTO = await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP')
   }
 }
