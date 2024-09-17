@@ -1,7 +1,9 @@
+@use '../../styles/global';
+
 table,
 .paginator {
   width: 99%;
-  margin-left: 1%;
+  // margin-left: 1%;
 }
 
 th {
@@ -34,6 +36,10 @@ th {
   text-decoration: none;
   margin-bottom: 1% !important;
   width: 77%;
+}
+
+.mat-mdc-paginator {
+  width: 100%;
 }
 
 .mat-mdc-row td {

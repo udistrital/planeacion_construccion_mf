@@ -5,13 +5,16 @@
   <mat-card-content #root>
 
     <div class="funtionsContainer">
-      <mat-select *ngIf="rol=='PLANEACION'" class="input-search" placeholder="Seleccione la Unidad" (selectionChange)="ajustarData($event)">
-        <mat-option>--</mat-option>
-        <mat-option *ngFor="let unidad of auxUnidades" [value]="unidad.Nombre">
-          {{unidad.Nombre}}
-        </mat-option>
-      </mat-select>
-      <button mat-raised-button color="primary" [disabled]="!estadoDescarga" (click)="descargarData()">Descargar Seguimientos (.xlsx)</button>
+      <mat-form-field *ngIf="rol == 'PLANEACION' || rol == 'ASISTENTE_PLANEACION'" appearance="fill" [style.width.%]="50">
+        <mat-label>Seleccione la Unidad</mat-label>
+        <mat-select *ngIf="rol=='PLANEACION'" class="input-search" (selectionChange)="ajustarData($event)">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let unidad of auxUnidades" [value]="unidad.Nombre">
+            {{unidad.Nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary" style="color: white;" [disabled]="!estadoDescarga" (click)="descargarData()">Descargar Seguimientos (.xlsx)</button>
     </div>
 
     <div class="mat-elevation-z8">
@@ -84,7 +87,7 @@
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef="let plan">
             <button mat-icon-button (click)="consultar(plan, true)" [disabled]="plan.version === -1 || plan.vigencia === 0">
-              <mat-icon>search</mat-icon>
+              <mat-icon class="menu-button-icon">search</mat-icon>
             </button>
           </td>
         </ng-container>
