@@ -13,9 +13,6 @@ import { CodigosService } from '@udistrital/planeacion-utilidades-module';
   styleUrls: ['./crear-plan.component.scss'],
 })
 export class CrearPlanComponent implements OnInit {
-  CODIGO_ESTADO_PR_SP! : string;
-  CODIGO_ESTADO_PUI_SP! : string;
-
   formCrearPlan: any;
   tipos!: any[]
   tipoPlan: any;
@@ -131,7 +128,7 @@ export class CrearPlanComponent implements OnInit {
 
   async select(tipo: any) {
     this.tipoPlan = tipo;
-    if (tipo._id !== this.CODIGO_ESTADO_PR_SP && tipo._id !== this.CODIGO_ESTADO_PUI_SP) { // diferente de proyecto
+    if (tipo._id !== await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP') && tipo._id !== await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PUI_SP')) { // diferente de proyecto
       this.nombrePlan = tipo.nombre;
       this.banderaFormato = true;
       this.formCrearPlan.get('radioFormato').enable();
@@ -141,6 +138,7 @@ export class CrearPlanComponent implements OnInit {
       this.banderaFormato = false;
       this.formCrearPlan.get('vigencia').enable();
       this.formCrearPlan.get('radioFormato').disable();
+      this.loadPeriodos();
     }
   }
 
@@ -270,8 +268,6 @@ export class CrearPlanComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.CODIGO_ESTADO_PR_SP = await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PR_SP');
-    this.CODIGO_ESTADO_PUI_SP = await this.codigosService.getId('PLANES_CRUD', 'tipo-plan', 'PUI_SP');
     this.loadPeriodos();
     this.formCrearPlan = this.formBuilder.group({
       nombre: ['', Validators.required],

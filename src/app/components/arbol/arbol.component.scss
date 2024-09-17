@@ -1,5 +1,3 @@
-@use '../styles/global';
-
 table {
   width: 100%;
 }
@@ -101,7 +99,7 @@ p {
 .mat-mdc-row:nth-child(even), .mat-mdc-row:nth-child(even) button{
   background-color:#E7D6D6!important;
 }
-
+        
 .mat-mdc-row:nth-child(odd), .mat-mdc-row:nth-child(odd) button{
   background-color: white!important;
 }
