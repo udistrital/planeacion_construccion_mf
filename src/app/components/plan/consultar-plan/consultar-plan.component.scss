@@ -1,7 +1,12 @@
+@use '../../styles/global';
+
 .mat-card{
     background-color: #F1F5F8;
   }
-  
+
+.mainBody {
+  margin-top: 1%;
+}
 
 .textGuide{
     background-color: #ffff;

@@ -1,24 +1,26 @@
+@use '../../styles/global';
+
 table {
   width: 100%;
 }
-  
+
 th {
   color: white;
   text-align: center !important;
 }
-  
-  
+
+
 .td-align-right{
   text-align: right;
   justify-content: flex-end;
 }
-  
+
 .header-align-right{
   display: flex;
   padding: 21px 0;
   justify-content: flex-end;
 }
-  
+
 .textGuide{
   background-color: #ffff;
   border: 1px solid var(--primary);
@@ -33,6 +35,12 @@ th {
   width: 97%;
 }
 
+.botonesAcciones {
+  width: 20%;
+  text-align: center;
+  justify-content: center;
+}
+
 .tituloAcciones {
   justify-content: center;
 }
@@ -40,7 +48,7 @@ th {
 .mat-mdc-row:nth-child(even), .mat-mdc-row:nth-child(even) button{
   background-color:#E7D6D6!important;
 }
-        
+
 .mat-mdc-row:nth-child(odd), .mat-mdc-row:nth-child(odd) button{
   background-color: white!important;
 }

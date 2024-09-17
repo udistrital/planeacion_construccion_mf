@@ -60,8 +60,9 @@ export class PlanAccionSeguimientoComponent implements OnInit, AfterViewInit {
   async ngOnInit() {
     if (this.rol == 'PLANEACION') {
       await this.loadUnidades();
+    } else {
+      await this.cargarPlanes("");
     }
-    // await this.cargarPlanes("");
     this.informacionTabla = new MatTableDataSource<ResumenPlan>(this.planes);
     this.informacionTabla.filterPredicate = (plan: ResumenPlan | any, _) => {
       let filtrosPasados: number = 0;

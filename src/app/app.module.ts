@@ -4,16 +4,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatDateFormats, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PlanComponent } from './components/plan/plan.component';
@@ -38,7 +40,19 @@ import { PlanAccionFormulacionComponent } from './components/plan/plan-accion/pl
 import { PlanAccionSeguimientoComponent } from './components/plan/plan-accion/plan-accion-seguimiento/plan-accion-seguimiento.component';
 import { TrimestreDialogComponent } from './components/plan/plan-accion/trimestre-dialog/trimestre-dialog.component';
 import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.component';
+import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
+import { es } from 'date-fns/locale'
+import { TranslationPaginator } from './components/services/translationPaginator';
 
+export const DATE_FORMATS: MatDateFormats = {
+  parse: {dateInput: 'dd/MM/yyyy'},
+  display: {
+    dateInput: 'dd/MM/yyyy',
+    monthYearLabel: 'MMM yyyy',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'yyyy'
+  }
+}
 
 @NgModule({
   declarations: [
@@ -81,9 +95,16 @@ import { PlanAccionComponent } from './components/plan/plan-accion/plan-accion.c
     BrowserAnimationsModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatButtonModule,
+    MatMenuModule
   ],
-  providers: [],
+  providers: [
+    { provide: MatPaginatorIntl, useClass: TranslationPaginator },
+    { provide: DateAdapter, useClass: DateFnsAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: es }
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
